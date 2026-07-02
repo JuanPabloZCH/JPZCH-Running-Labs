@@ -6,7 +6,7 @@ const JPZCH_App = (() => {
       description: 'Convierte y calcula ritmos por km, milla y distancias personalizadas. Ideal para sesiones de series y control de esfuerzo.',
       category: 'calculadoras',
       icon: 'timer',
-      status: 'available',
+      status: 'coming-soon',
       accent: '#CCFF00',
       url: '/tools/pace-calculator/',
       features: ['Ritmo/km', 'Ritmo/milla', 'Series', 'Tiempo total']
@@ -17,7 +17,7 @@ const JPZCH_App = (() => {
       description: 'Predice tu tiempo en cualquier distancia basado en tu mejor marca reciente. Usa las fórmulas de Riegel y Cameron.',
       category: 'calculadoras',
       icon: 'trending-up',
-      status: 'available',
+      status: 'coming-soon',
       accent: '#FF5722',
       url: '/tools/race-predictor/',
       features: ['5K', '10K', 'Media', 'Maratón']
@@ -28,7 +28,7 @@ const JPZCH_App = (() => {
       description: 'Estima tu consumo máximo de oxígeno usando test de Cooper, Rockport o tiempo de carrera.',
       category: 'calculadoras',
       icon: 'heart',
-      status: 'available',
+      status: 'coming-soon',
       accent: '#CCFF00',
       url: '/tools/vo2max-calculator/',
       features: ['Test Cooper', 'Rockport', 'Carrera', 'Percentiles']
@@ -39,7 +39,7 @@ const JPZCH_App = (() => {
       description: 'Calcula tus zonas de frecuencia cardíaca y ritmo objetivo según tu perfil fisiológico y umbrales.',
       category: 'planificadores',
       icon: 'activity',
-      status: 'available',
+      status: 'coming-soon',
       accent: '#FF5722',
       url: '/tools/training-zones/',
       features: ['FC Zones', 'Ritmo objetivo', 'Umbral', 'Recuperación']
@@ -61,7 +61,7 @@ const JPZCH_App = (() => {
       description: 'Calcula tus necesidades de hidratación según clima, distancia, peso y tasa de sudoración.',
       category: 'calculadoras',
       icon: 'droplet',
-      status: 'available',
+      status: 'coming-soon',
       accent: '#3B82F6',
       url: '/tools/hydration-calculator/',
       features: ['Pérdida agua', 'Electrolitos', 'Clima cálido', 'Plan']
@@ -72,7 +72,7 @@ const JPZCH_App = (() => {
       description: 'Calcula el costo real por kilómetro de tus zapatillas y equipo. Toma decisiones inteligentes.',
       category: 'calculadoras',
       icon: 'dollar-sign',
-      status: 'available',
+      status: 'coming-soon',
       accent: '#CCFF00',
       url: '/tools/running-cost/',
       features: ['$/km', 'Vida útil', 'Comparativa', 'Ahorro anual']
@@ -94,7 +94,7 @@ const JPZCH_App = (() => {
       description: 'Proyecta tu mejora en distancias basada en tu volumen semanal y experiencia de entrenamiento.',
       category: 'planificadores',
       icon: 'trending-up',
-      status: 'available',
+      status: 'coming-soon',
       accent: '#CCFF00',
       url: '/tools/progression-calculator/',
       features: ['Proyección', 'Volumen', 'Carga', 'Periodización']
@@ -194,7 +194,7 @@ const JPZCH_App = (() => {
   function renderStats() {
     const stats = [
       { value: '12', label: 'Herramientas', suffix: '' },
-      { value: '8', label: 'Disponibles', suffix: '' },
+      { value: '1', label: 'Disponible', suffix: '' },
       { value: '6', label: 'Categorías', suffix: '' },
       { value: '100', label: 'Gratuito', suffix: '%' }
     ];

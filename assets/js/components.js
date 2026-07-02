@@ -24,7 +24,28 @@ const JPZCH_Components = (() => {
     placeholder.outerHTML = resolveURLs(JPZCH_FOOTER);
   }
 
+  function setupMobileDropdowns() {
+    document.querySelectorAll('.mobile-dd-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const dd = btn.closest('.mobile-dd');
+        const content = dd?.querySelector('.mobile-dd-content');
+        const chevron = btn.querySelector('.mobile-dd-chevron');
+        const isOpen = content && !content.classList.contains('hidden');
+        if (content) content.classList.toggle('hidden');
+        if (chevron) chevron.style.transform = isOpen ? '' : 'rotate(180deg)';
+        document.querySelectorAll('.mobile-dd').forEach(other => {
+          if (other !== dd) {
+            other.querySelector('.mobile-dd-content')?.classList.add('hidden');
+            other.querySelector('.mobile-dd-chevron')?.style.removeProperty('transform');
+          }
+        });
+      });
+    });
+  }
+
   function setupNavbarEvents() {
+    setupMobileDropdowns();
     const menuBtn = document.getElementById('mobileMenuBtn');
     const mobileMenu = document.getElementById('mobileMenu');
 

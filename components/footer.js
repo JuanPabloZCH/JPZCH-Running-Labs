@@ -5,7 +5,7 @@ const JPZCH_FOOTER = `
     <div class="grid grid-cols-1 md:grid-cols-4 gap-10 md:gap-8">
       <div class="md:col-span-1">
         <div class="flex items-center gap-2.5 mb-4">
-          <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-[#CCFF00] to-[#99CC00] flex items-center justify-center font-black text-[#0B0F19] text-lg">J</div>
+          <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-[#CCFF00] to-[#99CC00] flex items-center justify-center font-black text-[#0B0F19] text-lg">JP</div>
           <div>
             <span class="text-white font-bold text-base">JPZCH</span>
             <span class="text-[#94A3B8] text-xs ml-1">Running Labs</span>
@@ -21,20 +21,20 @@ const JPZCH_FOOTER = `
       <div>
         <h4 class="text-white font-semibold text-sm uppercase tracking-wider mb-4">Herramientas</h4>
         <ul class="space-y-3">
-          <li><a href="/tools/pace-calculator/" class="text-[#64748B] hover:text-[#CCFF00] text-sm transition-colors duration-300">Calculadora de Ritmo</a></li>
-          <li><a href="/tools/race-predictor/" class="text-[#64748B] hover:text-[#CCFF00] text-sm transition-colors duration-300">Predictor de Carreras</a></li>
-          <li><a href="/tools/vo2max-calculator/" class="text-[#64748B] hover:text-[#CCFF00] text-sm transition-colors duration-300">Calculadora VO₂Max</a></li>
-          <li><a href="/tools/training-zones/" class="text-[#64748B] hover:text-[#CCFF00] text-sm transition-colors duration-300">Zonas de Entreno</a></li>
-          <li><a href="/tools/gpx-dashboard/" class="text-[#64748B] hover:text-[#CCFF00] text-sm transition-colors duration-300">Analizador GPX</a></li>
+          <li><a href="/tools/cadence-analyzer/" class="text-[#64748B] hover:text-[#CCFF00] text-sm transition-colors duration-300">Analizador de Cadencia</a></li>
+          <li><span class="text-[#475569] text-sm cursor-default">Calculadora de Ritmo</span></li>
+          <li><span class="text-[#475569] text-sm cursor-default">Predictor de Carreras</span></li>
+          <li><span class="text-[#475569] text-sm cursor-default">VO₂Max + Zonas</span></li>
+          <li><span class="text-[#475569] text-sm cursor-default">Y más (próximamente)</span></li>
         </ul>
       </div>
       <div>
         <h4 class="text-white font-semibold text-sm uppercase tracking-wider mb-4">Recursos</h4>
         <ul class="space-y-3">
-          <li><a href="#" class="text-[#64748B] hover:text-[#CCFF00] text-sm transition-colors duration-300">Blog Técnico</a></li>
           <li><a href="#" class="text-[#64748B] hover:text-[#CCFF00] text-sm transition-colors duration-300">Tabla de Ritmos</a></li>
-          <li><a href="#" class="text-[#64748B] hover:text-[#CCFF00] text-sm transition-colors duration-300">Conversión de Distancias</a></li>
-          <li><a href="#" class="text-[#64748B] hover:text-[#CCFF00] text-sm transition-colors duration-300">Guía de Entrenamiento</a></li>
+          <li><a href="#" class="text-[#64748B] hover:text-[#CCFF00] text-sm transition-colors duration-300">Zonas Cardíacas</a></li>
+          <li><a href="#" class="text-[#64748B] hover:text-[#CCFF00] text-sm transition-colors duration-300">Guía de Entrenamientos</a></li>
+          <li><a href="#" class="text-[#64748B] hover:text-[#CCFF00] text-sm transition-colors duration-300">Glosario Runner</a></li>
         </ul>
       </div>
       <div>

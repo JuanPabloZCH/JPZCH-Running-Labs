@@ -1,1 +1,769 @@
-<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Cadencia — JPZCH Running Labs</title><meta name="theme-color" content="#0B0F19"><script src="https://cdn.tailwindcss.com"></script><link rel="stylesheet" href="/assets/css/styles.css"></head><body><div id="navbar-placeholder"></div><main class="min-h-screen pt-24 pb-12"><div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8"><div class="text-center mb-10"><h1 class="text-3xl md:text-4xl font-black text-white mb-3">Analizador de Cadencia</h1></div><div class="glass rounded-2xl p-6 md:p-8 text-center"><p class="text-[#94A3B8]">Próximamente.</p><a href="/" class="btn-secondary mt-6 inline-flex">Volver</a></div></div></main><div id="footer-placeholder"></div><script src="/assets/js/config.js"></script><script src="/assets/js/store.js"></script><script src="/components/navbar.js"></script><script src="/components/footer.js"></script><script src="/assets/js/components.js"></script></body></html>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Analizador de Cadencia — JPZCH Running Labs</title>
+  <meta name="description" content="Analiza tu cadencia de carrera, descubre tu eficiencia de zancada y entrena con metrónomo integrado basado en la ciencia de Jack Daniels.">
+  <meta name="theme-color" content="#0B0F19">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/assets/css/styles.css">
+  <style>
+    .slider-card {
+      background: linear-gradient(145deg, rgba(19, 26, 43, 0.8), rgba(26, 35, 50, 0.6));
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 1.25rem;
+      padding: 1.5rem;
+      backdrop-filter: blur(12px);
+    }
+    .slider-group { margin-bottom: 1.25rem; }
+    .slider-group:last-child { margin-bottom: 0; }
+    .slider-label {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+    }
+    .slider-label-text {
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: #F1F5F9;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .slider-value {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #CCFF00;
+      background: rgba(204, 255, 0, 0.08);
+      padding: 0.125rem 0.75rem;
+      border-radius: 0.5rem;
+      border: 1px solid rgba(204, 255, 0, 0.12);
+      min-width: 4.5rem;
+      text-align: center;
+      font-variant-numeric: tabular-nums;
+      transition: all 0.15s ease;
+    }
+    .slider-value.pulse {
+      transform: scale(1.08);
+      box-shadow: 0 0 16px rgba(204, 255, 0, 0.2);
+    }
+    .slider-track {
+      position: relative;
+      width: 100%;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: 3px;
+    }
+    .slider-fill {
+      position: absolute;
+      height: 100%;
+      border-radius: 3px;
+      transition: width 0.1s ease;
+      pointer-events: none;
+    }
+    .slider-input {
+      -webkit-appearance: none;
+      appearance: none;
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: transparent;
+      cursor: pointer;
+      z-index: 2;
+      margin: 0;
+    }
+    .slider-input::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      background: #CCFF00;
+      cursor: pointer;
+      border: 3px solid #0B0F19;
+      box-shadow: 0 0 0 2px rgba(204, 255, 0, 0.3), 0 4px 12px rgba(0,0,0,0.4);
+      transition: all 0.2s ease;
+    }
+    .slider-input::-webkit-slider-thumb:hover {
+      transform: scale(1.15);
+      box-shadow: 0 0 0 4px rgba(204, 255, 0, 0.2), 0 4px 20px rgba(204,255,0,0.3);
+    }
+    .slider-input::-moz-range-thumb {
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      background: #CCFF00;
+      cursor: pointer;
+      border: 3px solid #0B0F19;
+      box-shadow: 0 0 0 2px rgba(204, 255, 0, 0.3);
+    }
+    .slider-unit { font-size: 0.75rem; color: #64748B; margin-top: 0.25rem; font-weight: 500; }
+    .diag-card {
+      background: linear-gradient(145deg, rgba(19, 26, 43, 0.8), rgba(26, 35, 50, 0.6));
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 1.25rem;
+      padding: 1.5rem;
+      backdrop-filter: blur(12px);
+      transition: border-color 0.4s ease, box-shadow 0.4s ease;
+    }
+    .diag-icon {
+      width: 3rem; height: 3rem;
+      border-radius: 1rem;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      transition: all 0.3s ease;
+    }
+    .metric-tile {
+      background: rgba(11, 15, 25, 0.5);
+      border: 1px solid rgba(255,255,255,0.04);
+      border-radius: 0.875rem;
+      padding: 0.75rem 0.5rem;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+    .metric-tile .value {
+      font-size: 1.5rem;
+      font-weight: 800;
+      line-height: 1.2;
+      transition: all 0.2s ease;
+    }
+    .metric-tile .label {
+      font-size: 0.625rem;
+      color: #64748B;
+      font-weight: 500;
+      margin-top: 0.2rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+    .metro-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.625rem;
+      padding: 0.875rem 2rem;
+      font-weight: 600;
+      font-size: 0.9375rem;
+      border: none;
+      border-radius: 0.875rem;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      width: 100%;
+      position: relative;
+      overflow: hidden;
+    }
+    .metro-btn-start { background: #CCFF00; color: #0B0F19; }
+    .metro-btn-start:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(204, 255, 0, 0.25); }
+    .metro-btn-stop { background: rgba(239,68,68,0.15); color: #EF4444; border: 1px solid rgba(239,68,68,0.2); }
+    .metro-btn-stop:hover { background: rgba(239,68,68,0.25); }
+    .beep-indicator { width: 12px; height: 12px; border-radius: 50%; background: #CCFF00; flex-shrink: 0; opacity: 0; transform: scale(0); transition: all 0.04s ease; }
+    .beep-indicator.flash { opacity: 1; transform: scale(1); }
+    .methodology-ref {
+      font-size: 0.75rem;
+      color: #64748B;
+      line-height: 1.7;
+    }
+    .methodology-ref strong { color: #94A3B8; }
+    .methodology-ref a { color: #CCFF00; text-decoration: none; }
+    .methodology-ref a:hover { text-decoration: underline; }
+    .diag-metro-grid { display: grid; gap: 1.5rem; }
+    .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(90px, 1fr)); gap: 0.75rem; }
+    @media (min-width: 768px) {
+      .diag-metro-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 767px) {
+      .metric-tile .value { font-size: 1.25rem; }
+    }
+  </style>
+</head>
+<body>
+  <div id="navbar-placeholder"></div>
+
+  <main class="min-h-screen pt-24 pb-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+
+      <!-- ●● Header ●● -->
+      <div class="text-center mb-8 md:mb-10">
+        <span class="inline-block text-[#FF5722] text-xs font-semibold uppercase tracking-[0.2em] mb-3">Herramienta interactiva</span>
+        <h1 class="text-3xl md:text-4xl font-black text-white mb-2">
+          Analizador de <span class="text-gradient-orange">Cadencia</span>
+        </h1>
+        <p class="text-[#94A3B8] text-sm md:text-base max-w-xl mx-auto">
+          Basado en la investigación de <strong class="text-white">Jack Daniels</strong> y <strong class="text-white">Heiderscheit (2011)</strong> — ajusta tu cadencia según tu zona y reduce el impacto en cada zancada.
+        </p>
+      </div>
+
+      <div class="flex flex-col md:flex-row gap-6 mb-6">
+        <div class="flex-1 min-w-0">
+          <div class="slider-card">
+            <h2 class="text-white font-semibold text-sm uppercase tracking-wider mb-5">
+              <span class="text-[#CCFF00]">●</span> Controles
+            </h2>
+
+            <div class="slider-group">
+              <div class="slider-label">
+                <span class="slider-label-text">
+                  <svg class="w-4 h-4 text-[#FF5722]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                  Cadencia Actual
+                </span>
+                <span id="cadenceDisplay" class="slider-value">175</span>
+              </div>
+              <div class="slider-track">
+                <div id="cadenceFill" class="slider-fill" style="width:73%;background:linear-gradient(90deg,#EF4444 0%,#EAB308 60%,#22C55E 73.3%,#06B6D4 86.7%,#06B6D4 100%)"></div>
+                <input type="range" id="cadenceSlider" class="slider-input" min="120" max="195" value="175" step="1">
+              </div>
+              <div class="flex justify-between text-[10px] text-[#475569] font-medium mt-1">
+                <span>120 SPM</span>
+                <span>195 SPM</span>
+              </div>
+            </div>
+
+            <div class="slider-group">
+              <div class="slider-label">
+                <span class="slider-label-text">
+                  <svg class="w-4 h-4 text-[#CCFF00]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                  Estatura
+                </span>
+                <span id="heightDisplay" class="slider-value">175</span>
+              </div>
+              <div class="slider-track">
+                <div id="heightFill" class="slider-fill" style="width:44%;background:linear-gradient(90deg,#CCFF00,#22C55E)"></div>
+                <input type="range" id="heightSlider" class="slider-input" min="110" max="230" value="175" step="1">
+              </div>
+              <div class="flex justify-between text-[10px] text-[#475569] font-medium mt-1">
+                <span>1.10 m</span>
+                <span>2.30 m</span>
+              </div>
+            </div>
+
+            <div class="slider-group">
+              <div class="slider-label">
+                <span class="slider-label-text">
+                  <svg class="w-4 h-4 text-[#FF5722]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                  Ritmo Actual
+                </span>
+                <span id="paceDisplay" class="slider-value">5:00</span>
+              </div>
+              <div class="slider-track">
+                <div id="paceFill" class="slider-fill" style="width:40%;background:linear-gradient(90deg,#FF5722,#22C55E)"></div>
+                <input type="range" id="paceSlider" class="slider-input" min="105" max="900" value="300" step="1">
+              </div>
+              <div class="flex justify-between text-[10px] text-[#475569] font-medium mt-1">
+                <span>1:45 /km</span>
+                <span>15:00 /km</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="flex-1 min-w-0">
+          <div class="slider-card">
+            <h2 class="text-white font-semibold text-sm uppercase tracking-wider mb-1">
+              <span class="text-[#CCFF00]">●</span> Métricas en vivo
+            </h2>
+            <p class="text-[10px] text-[#475569] mb-4">Los 3 controles inferiores afectan estas 5 métricas en tiempo real.</p>
+            <div class="metrics-grid" id="metricsGrid">
+              <div class="metric-tile">
+                <div class="value" id="mCadence" style="color:#CCFF00">175</div>
+                <div class="label">Cadencia actual</div>
+              </div>
+              <div class="metric-tile">
+                <div class="value" id="mTarget" style="color:#22C55E">184</div>
+                <div class="label">Objetivo dinámico</div>
+              </div>
+              <div class="metric-tile">
+                <div class="value" id="mStride" style="color:#F1F5F9">1.12</div>
+                <div class="label">Zancada (m)</div>
+              </div>
+              <div class="metric-tile">
+                <div class="value" id="mStrideRatio" style="color:#22C55E">72%</div>
+                <div class="label">Zancada relativa</div>
+              </div>
+              <div class="metric-tile">
+                <div class="value" id="mRisk" style="color:#22C55E">Bajo</div>
+                <div class="label">Riesgo overstriding</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ●● Diagnóstico + Metrónomo ●● -->
+      <div class="diag-metro-grid mb-6">
+
+        <!-- ●● Diagnóstico ●● -->
+        <div id="diagnosticCard" class="diag-card">
+          <div class="flex items-start gap-4">
+            <div id="diagIcon" class="diag-icon" style="background:rgba(34,197,94,0.1);color:#22C55E;border:1px solid rgba(34,197,94,0.15)">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </div>
+            <div class="flex-1 min-w-0">
+              <h3 id="diagTitle" class="text-white font-semibold text-base mb-1">Diagnóstico</h3>
+              <p id="diagText" class="text-[#94A3B8] text-sm leading-relaxed">Ajusta los sliders para ver el análisis combinado de cadencia, estatura y ritmo.</p>
+              <div id="diagMetrics" class="flex flex-wrap gap-x-4 gap-y-1.5 mt-3 pt-3 border-t border-white/5"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ●● Metrónomo ●● -->
+        <div class="slider-card">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-10 h-10 rounded-xl bg-[#CCFF00]/10 border border-[#CCFF00]/20 flex items-center justify-center">
+              <svg class="w-5 h-5 text-[#CCFF00]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+            </div>
+            <div>
+              <h3 class="text-white font-semibold text-base">Metrónomo de Práctica</h3>
+              <p class="text-[#64748B] text-xs">Entrena al BPM exacto. Recomendación dinámica según tu zona de cadencia.</p>
+            </div>
+          </div>
+
+          <!-- Selector de modo -->
+          <div class="flex gap-2 mb-4">
+            <button id="metroModeCurrent" class="flex-1 text-xs font-semibold py-2 rounded-lg bg-white/5 text-[#64748B] border border-white/10 hover:border-[#CCFF00]/30 transition-all">Cadencia actual</button>
+            <button id="metroModeTarget" class="flex-1 text-xs font-semibold py-2 rounded-lg bg-[#CCFF00] text-[#0B0F19] transition-all">+5% <span id="metroModeTargetInc" class="opacity-70 text-[11px]"> ● +9 SPM</span></button>
+          </div>
+
+          <div class="bg-[#0B0F19]/60 rounded-xl p-4 mb-4 border border-white/5">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-[#94A3B8] text-sm">Beep al ritmo de</span>
+              <span id="metroBpmDisplay" class="text-lg font-bold text-[#CCFF00] font-mono tabular-nums">175 BPM</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <div id="beepLight" class="beep-indicator"></div>
+              <div class="flex-1 h-1.5 bg-white/5 rounded-full overflow-hidden">
+                <div id="metroProgress" class="h-full bg-[#CCFF00] rounded-full transition-all duration-75" style="width:0%"></div>
+              </div>
+              <span class="text-[10px] text-[#64748B] w-16 text-right" id="metroIntervalDisplay">343 ms</span>
+            </div>
+          </div>
+
+          <button id="metroToggleBtn" class="metro-btn metro-btn-start">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <span id="metroBtnText">Activar Metrónomo</span>
+          </button>
+
+          <div class="flex items-center justify-between mt-3 pt-3 border-t border-white/5">
+            <div class="flex items-center gap-2">
+              <span class="text-[10px] text-[#475569]">Heiderscheit:</span>
+              <span id="metroIncreaseDisplay" class="text-xs font-bold text-[#CCFF00]">+9 SPM</span>
+            </div>
+            <button id="metroApplyBtn" class="text-xs font-semibold text-[#0B0F19] bg-[#CCFF00] hover:bg-[#CCFF00]/90 transition-all px-4 py-1.5 rounded-lg">
+              Aplicar sugerencia
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ●● Metodología / Referencias ●● -->
+      <div class="slider-card">
+        <div class="flex items-center gap-3 mb-3">
+          <div class="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center">
+            <svg class="w-4 h-4 text-[#94A3B8]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+          </div>
+          <h3 class="text-white font-semibold text-sm uppercase tracking-wider">Metodología y referencias científicas</h3>
+        </div>
+        <div class="methodology-ref space-y-2">
+          <p><strong>Metodologías científicas y justificación fisiológica:</strong></p>
+          <p>● <strong>Jack Daniels — VDOT Method (1984)</strong> — define las <strong>zonas de cadencia</strong> estandarizadas: &lt;165 SPM (Baja/Eficiencia muy baja), 165-174 (Moderada/Recreativa), 175-185 (Óptima/Zona dulce biomecánica), &gt;185 (Alta/Elite). Se muestra en el badge del diagnóstico.</p>
+          <p>● <strong>Riesgo de overstriding (Sobrezancada)</strong> — cálculo <strong>personalizado</strong> que cruza las tres variables. Cuando la cadencia es baja y el ritmo rápido, el corredor se ve obligado a alargar la zancada, aterrizando el pie delante de la rodilla y actuando como freno. La fórmula compara tu zancada real contra la zancada ideal esperada para tu estatura. Si es &gt;12% más larga → Alto riesgo de impacto en tibia, rodilla y cadera. &gt;4% → Moderado.</p>
+          <p>● <strong>Heiderscheit et al. (2011) — Incremento dinámico</strong> — la recomendación de aumento varía por zona: <strong>&lt;165 SPM → +8%</strong> (reducir drásticamente el overstriding), <strong>165-174 → +5%</strong> (optimizar economía), <strong>175-179 → +2%</strong> (velocidad específica), <strong>≥180 → 0%</strong> (mantenimiento). Tope absoluto: 195 SPM. Ningún incremento supera el +10% del valor actual.</p>
+          <p><strong>Resumen visual:</strong> Las métricas en vivo cambian con TODOS los sliders. El badge en el diagnóstico identifica el método aplicado. El "Freno de la Perfección" desactiva recomendaciones al alcanzar ≥180 SPM.</p>
+          <p class="text-[#475569] text-[11px] pt-1">Referencias: Daniels, J. (2014). <em>Daniels' Running Formula</em>, 4th ed. Human Kinetics · Heiderscheit, B.C. et al. (2011). "Effects of step rate manipulation on joint mechanics during running." <em>Med Sci Sports Exerc</em>, 43(2), 296-302.</p>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <div id="footer-placeholder"></div>
+
+  <script src="/assets/js/config.js"></script>
+  <script src="/assets/js/store.js"></script>
+  <script src="/components/navbar.js"></script>
+  <script src="/components/footer.js"></script>
+  <script src="/assets/js/profile-modal.js"></script>
+  <script src="/assets/js/components.js"></script>
+
+  <script>
+    (() => {
+      const $ = (id) => document.getElementById(id);
+
+      const DOM = {
+        cadenceSlider: $('cadenceSlider'),
+        heightSlider: $('heightSlider'),
+        paceSlider: $('paceSlider'),
+        cadenceDisplay: $('cadenceDisplay'),
+        heightDisplay: $('heightDisplay'),
+        paceDisplay: $('paceDisplay'),
+        cadenceFill: $('cadenceFill'),
+        heightFill: $('heightFill'),
+        paceFill: $('paceFill'),
+
+        diagCard: $('diagnosticCard'),
+        diagIcon: $('diagIcon'),
+        diagTitle: $('diagTitle'),
+        diagText: $('diagText'),
+        diagMetrics: $('diagMetrics'),
+        metricsGrid: $('metricsGrid'),
+        mCadence: $('mCadence'),
+        mTarget: $('mTarget'),
+        mStride: $('mStride'),
+        mStrideRatio: $('mStrideRatio'),
+        mRisk: $('mRisk'),
+        metroToggleBtn: $('metroToggleBtn'),
+        metroBtnText: $('metroBtnText'),
+        metroBpmDisplay: $('metroBpmDisplay'),
+        metroProgress: $('metroProgress'),
+        metroIntervalDisplay: $('metroIntervalDisplay'),
+        metroIncreaseDisplay: $('metroIncreaseDisplay'),
+        metroModeTargetInc: $('metroModeTargetInc'),
+        metroApplyBtn: $('metroApplyBtn'),
+        metroModeCurrent: $('metroModeCurrent'),
+        metroModeTarget: $('metroModeTarget'),
+        beepLight: $('beepLight')
+      };
+
+      let audioCtx = null;
+      let metroRunning = false;
+      let metroTimer = null;
+      let metroUseTarget = true;
+
+      const STATE = { cadence: 175, height: 175, pace: 300 };
+
+      function init() {
+        const profile = JPZCH_Store.getProfile();
+        if (profile.height) {
+          const h = parseFloat(profile.height);
+          if (h >= 110 && h <= 230) { STATE.height = h; DOM.heightSlider.value = h; }
+        }
+        bindSliders();
+        bindMetroMode();
+        bindMetroToggle();
+        bindMetroApply();
+        actualizarAnalisis();
+      }
+
+      /* ●● Sliders ●● */
+      function bindSliders() {
+        DOM.cadenceSlider.addEventListener('input', () => {
+          STATE.cadence = parseInt(DOM.cadenceSlider.value);
+          pulseEl(DOM.cadenceDisplay);
+          actualizarAnalisis();
+        });
+        DOM.heightSlider.addEventListener('input', () => {
+          STATE.height = parseInt(DOM.heightSlider.value);
+          pulseEl(DOM.heightDisplay);
+          actualizarAnalisis();
+        });
+        DOM.paceSlider.addEventListener('input', () => {
+          STATE.pace = parseInt(DOM.paceSlider.value);
+          pulseEl(DOM.paceDisplay);
+          actualizarAnalisis();
+        });
+      }
+
+      function pulseEl(el) {
+        el.classList.add('pulse');
+        setTimeout(() => el.classList.remove('pulse'), 200);
+      }
+
+      function formatPace(s) {
+        return `${Math.floor(s/60)}:${(s%60).toString().padStart(2,'0')}`;
+      }
+      function getDynamicTarget(c) {
+        if (c >= 180) return c;
+        if (c < 165) return Math.min(Math.round(c * 1.08), 195);
+        if (c < 175) return Math.min(Math.round(c * 1.05), 195);
+        return Math.min(Math.round(c * 1.02), 195);
+      }
+
+      function actualizarAnalisis() {
+        const c = STATE.cadence, h = STATE.height, p = STATE.pace;
+
+        DOM.cadenceDisplay.textContent = c;
+        DOM.heightDisplay.textContent = h;
+        DOM.paceDisplay.textContent = formatPace(p);
+
+        const fc = (c-120)/75, fh = (h-110)/120, fp = (p-105)/795;
+        DOM.cadenceFill.style.width = `${fc*100}%`;
+        DOM.heightFill.style.width = `${fh*100}%`;
+        DOM.paceFill.style.width = `${fp*100}%`;
+
+        const target = getDynamicTarget(c);
+        updateMetrics(c, h, p, target);
+        updateDiagnostic(c, h, p, target);
+        updateMetroDisplay(c, target);
+      }
+
+      /* ●● Zona ●● */
+      function getZone(c) {
+        if (c < 165) return { id:'red', label:'Baja', color:'#EF4444', tc:'#EF4444', bg:'rgba(239,68,68,0.1)', bc:'rgba(239,68,68,0.15)' };
+        if (c < 175) return { id:'yellow', label:'Moderada', color:'#EAB308', tc:'#EAB308', bg:'rgba(234,179,8,0.1)', bc:'rgba(234,179,8,0.15)' };
+        if (c < 186) return { id:'green', label:'Óptima', color:'#22C55E', tc:'#22C55E', bg:'rgba(34,197,94,0.1)', bc:'rgba(34,197,94,0.15)' };
+        return { id:'cyan', label:'Alta', color:'#06B6D4', tc:'#06B6D4', bg:'rgba(6,182,212,0.1)', bc:'rgba(6,182,212,0.15)' };
+      }
+
+      /* ●● Métricas ●● */
+      function computeStride(c, h, p) {
+        const speedMs = 1000 / p;
+        const strideM = speedMs * 60 / c;
+        return strideM;
+      }
+
+      function getOverstrideRisk(c, h, p) {
+        const stride = computeStride(c, h, p);
+        const heightM = h / 100;
+        const expectedStride = 1.35 + (heightM - 1.70) * 0.75;
+        const ratio = stride / expectedStride;
+
+        if (ratio > 1.12) return { level: 'Alto', color: '#EF4444', desc: 'Alto', ratio, expectedStride };
+        if (ratio > 1.04) return { level: 'Medio', color: '#EAB308', desc: 'Medio', ratio, expectedStride };
+        return { level: 'Bajo', color: '#22C55E', desc: 'Bajo', ratio, expectedStride };
+      }
+
+      function updateMetrics(c, h, p, target) {
+        const stride = computeStride(c, h, p);
+        const risk = getOverstrideRisk(c, h, p);
+        const heightM = h / 100;
+        const relativeRatio = stride / heightM;
+        const ratioPct = Math.round(relativeRatio * 100);
+
+        DOM.mCadence.textContent = c;
+        DOM.mTarget.textContent = target;
+        DOM.mStride.textContent = stride.toFixed(2);
+        DOM.mStrideRatio.textContent = ratioPct + '%';
+        DOM.mStrideRatio.style.color = ratioPct > 90 ? '#EF4444' : ratioPct > 85 ? '#EAB308' : '#22C55E';
+
+        const riskEl = DOM.mRisk;
+        riskEl.textContent = risk.desc;
+        riskEl.style.color = risk.color;
+      }
+
+      /* ●● Diagnóstico ●● */
+      function updateDiagnostic(c, h, p, target) {
+        const z = getZone(c);
+        const risk = getOverstrideRisk(c, h, p);
+        const stride = computeStride(c, h, p);
+        let icon, title, text, metrics, badge;
+
+        const setStyle = (bgC, tc, bc) => {
+          DOM.diagCard.style.borderColor = bc;
+          DOM.diagCard.style.boxShadow = `0 0 30px ${bgC.replace('0.1','0.03')}`;
+          DOM.diagIcon.style.background = bgC;
+          DOM.diagIcon.style.color = tc;
+          DOM.diagIcon.style.borderColor = bc;
+        };
+
+        const methBadge = (name, color) =>
+          `<span style="background:${color}15;color:${color};border:1px solid ${color}30" class="text-[10px] font-semibold px-2 py-0.5 rounded-full ml-2">${name}</span>`;
+
+        if (c >= 180) {
+          title = 'Mantenimiento y Eficiencia';
+          text = `Estás en ${c} SPM. Has alcanzado el rango de excelencia biomecánica. No necesitas incrementar tu frecuencia. Enfócate en mantener este patrón motor en colinas y terrenos técnicos.`;
+          icon = '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>';
+          setStyle('rgba(34,197,94,0.1)', '#22C55E', 'rgba(34,197,94,0.2)');
+          badge = methBadge('Mantenimiento', '#22C55E');
+          metrics = [
+            ['Cadencia', `${c} SPM`, '#22C55E'],
+            ['Incremento', '0%', '#94A3B8'],
+            ['Zancada', `${stride.toFixed(2)}m`, '#CCFF00'],
+            ['Ritmo', `${formatPace(p)} /km`, '#CCFF00']
+          ];
+        } else if (c < 165) {
+          title = '⚠️ Alerta de Impacto Elevado (Overstriding)';
+          text = `Tu frecuencia de pasos actual (${c} SPM) es baja para tu ritmo de ${formatPace(p)}/km. Esto indica que estás dando pasos demasiado largos, impactando fuertemente el talón contra el suelo y sobrecargando tus rodillas.${risk.level !== 'Bajo' ? ' Tu zancada de '+stride.toFixed(2)+'m excede en un '+(risk.ratio*100-100).toFixed(0)+'% el ideal para tu estatura.' : ''} Plan: 1) Reduce la longitud del paso conscientemente sin disminuir la velocidad. 2) Usa el metrónomo a ${target} SPM (+8%) durante rodajes suaves 1-2 veces por semana.`;
+          icon = '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.34 16.5c-.77.833.192 2.5 1.732 2.5z"/></svg>';
+          setStyle('rgba(239,68,68,0.1)', '#EF4444', 'rgba(239,68,68,0.2)');
+          badge = methBadge('Daniels · <165 SPM', '#EF4444');
+          metrics = [
+            ['Cadencia', `${c} SPM`, '#EF4444'],
+            ['Objetivo +8%', `${target} SPM`, '#CCFF00'],
+            ['Zancada', `${stride.toFixed(2)}m`, '#94A3B8'],
+            ['Ritmo', `${formatPace(p)} /km`, '#94A3B8']
+          ];
+        } else if (c < 175) {
+          title = '⬍️ Ritmo Estable con Margen de Mejora';
+          text = `Te encuentras en el rango recreativo estándar (${c} SPM). Tu técnica es segura para ritmos controlados.${risk.level !== 'Bajo' ? ' Sin embargo, tu zancada de '+stride.toFixed(2)+'m es algo larga para tu estatura ('+h+' cm) al ritmo de '+formatPace(p)+'/km.' : ''} Si buscas mejorar en 10K o Media Maratón, un aumento a ${target} SPM (+5%) te ahorrará energía valiosa. Plan: 1) Enfócate en una transición de pie más rápida del suelo. 2) Entrena con el metrónomo a ${target} SPM en intervalos de 1 minuto durante tus entrenamientos de ritmo tempo.`;
+          icon = '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>';
+          setStyle('rgba(234,179,8,0.1)', '#EAB308', 'rgba(234,179,8,0.2)');
+          badge = methBadge('Daniels · 165-174 SPM', '#EAB308');
+          metrics = [
+            ['Cadencia', `${c} SPM`, '#EAB308'],
+            ['Objetivo +5%', `${target} SPM`, '#CCFF00'],
+            ['Zancada', `${stride.toFixed(2)}m`, '#94A3B8'],
+            ['Ritmo', `${formatPace(p)} /km`, '#94A3B8']
+          ];
+        } else if (z.id === 'green') {
+          title = '¡Eficiencia Mecánica Óptima!';
+          text = `¡Felicidades! Estás en la zona dulce de la biomecánica del running (${c} SPM). Tu tiempo de contacto con el suelo es mínimo y estás aprovechando perfectamente la energía elástica de tus tendones. No necesitas alterar tu frecuencia. Si deseas optimizar velocidad, prueba ${target} SPM (+2%) en sesiones específicas. Usa el metrónomo para practicar regularidad en terrenos técnicos o colinas y evitar que la cadencia caiga en las subidas.`;
+          icon = '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>';
+          setStyle('rgba(34,197,94,0.1)', '#22C55E', 'rgba(34,197,94,0.2)');
+          badge = methBadge('Daniels · 175-185 SPM', '#22C55E');
+          metrics = [
+            ['Cadencia', `${c} SPM`, '#22C55E'],
+            ['Optimización +2%', `${target} SPM`, '#94A3B8'],
+            ['Zancada', `${stride.toFixed(2)}m`, '#CCFF00'],
+            ['Ritmo', `${formatPace(p)} /km`, '#CCFF00']
+          ];
+        } else {
+          title = 'Cadencia de Alta Velocidad';
+          text = `Tu frecuencia de ${c} SPM es característica de atletas de élite, esprints finales o ritmos muy rápidos. No se recomienda incremento. Mantén tu patrón actual.`;
+          icon = '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>';
+          setStyle('rgba(6,182,212,0.1)', '#06B6D4', 'rgba(6,182,212,0.2)');
+          badge = methBadge('Daniels · >185 SPM', '#06B6D4');
+          metrics = [
+            ['Cadencia', `${c} SPM`, '#06B6D4'],
+            ['Incremento', '0%', '#94A3B8'],
+            ['Zancada', `${stride.toFixed(2)}m`, '#CCFF00'],
+            ['Ritmo', `${formatPace(p)} /km`, '#CCFF00']
+          ];
+        }
+
+        let strideWarning = '';
+        const heightM = h / 100;
+        if (stride > 0.85 * heightM && p > 270) {
+          strideWarning = `<div class="mt-2 pt-2 border-t border-[#FF5722]/20 flex items-start gap-2"><svg class="w-4 h-4 text-[#FF5722] shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg><span class="text-[11px] text-[#FF5722] leading-relaxed">Tus zancadas son demasiado largas para tu estatura (Overstriding). Zancada relativa: <strong>${Math.round(stride/heightM*100)}%</strong> de tu altura de ${heightM.toFixed(2)}m. Sube la cadencia a <strong>${target} SPM</strong> para reducir el impacto.</span></div>`;
+        }
+
+        DOM.diagIcon.innerHTML = icon;
+        DOM.diagTitle.innerHTML = title + badge;
+        DOM.diagText.innerHTML = text + strideWarning;
+        DOM.diagMetrics.innerHTML = metrics.map(m =>
+          `<div class="flex items-center gap-2"><span class="text-[10px] font-medium text-[#64748B] uppercase tracking-wider">${m[0]}</span><span class="text-xs font-semibold" style="color:${m[2]}">${m[1]}</span></div>`
+        ).join('');
+      }
+
+      /* ●● Metrónomo ●● */
+      function getMetroBPM() {
+        const c = STATE.cadence;
+        const target = getDynamicTarget(c);
+        return metroUseTarget ? target : c;
+      }
+
+      function updateMetroDisplay(c, target) {
+        const bpm = metroUseTarget ? target : c;
+        const interval = 60000 / bpm;
+        const inc = target - c;
+        DOM.metroBpmDisplay.textContent = `${bpm} BPM`;
+        DOM.metroIntervalDisplay.textContent = `${Math.round(interval)} ms`;
+        DOM.metroIncreaseDisplay.textContent = `${inc > 0 ? '+' : ''}${inc} SPM`;
+        DOM.metroModeTargetInc.textContent = ` ● +${inc} SPM`;
+      }
+
+      function bindMetroMode() {
+        DOM.metroModeCurrent.addEventListener('click', () => {
+          if (metroRunning) stopMetronome();
+          metroUseTarget = false;
+          DOM.metroModeCurrent.className = 'flex-1 text-xs font-semibold py-2 rounded-lg bg-[#CCFF00] text-[#0B0F19] transition-all';
+          DOM.metroModeTarget.className = 'flex-1 text-xs font-semibold py-2 rounded-lg bg-white/5 text-[#64748B] border border-white/10 hover:border-[#CCFF00]/30 transition-all';
+          actualizarAnalisis();
+        });
+        DOM.metroModeTarget.addEventListener('click', () => {
+          if (metroRunning) stopMetronome();
+          metroUseTarget = true;
+          DOM.metroModeTarget.className = 'flex-1 text-xs font-semibold py-2 rounded-lg bg-[#CCFF00] text-[#0B0F19] transition-all';
+          DOM.metroModeCurrent.className = 'flex-1 text-xs font-semibold py-2 rounded-lg bg-white/5 text-[#64748B] border border-white/10 hover:border-[#CCFF00]/30 transition-all';
+          actualizarAnalisis();
+        });
+      }
+
+      function bindMetroToggle() {
+        DOM.metroToggleBtn.addEventListener('click', () => {
+          metroRunning ? stopMetronome() : startMetronome();
+        });
+      }
+
+      function bindMetroApply() {
+        DOM.metroApplyBtn.addEventListener('click', () => {
+          const target = getDynamicTarget(STATE.cadence);
+          if (target === STATE.cadence) return;
+          STATE.cadence = Math.max(120, Math.min(195, target));
+          DOM.cadenceSlider.value = STATE.cadence;
+          metroUseTarget = false;
+          DOM.metroModeCurrent.click();
+          if (metroRunning) stopMetronome();
+          actualizarAnalisis();
+          pulseEl(DOM.cadenceDisplay);
+          DOM.cadenceDisplay.style.color = '#22C55E';
+          setTimeout(() => { DOM.cadenceDisplay.style.color = ''; }, 600);
+        });
+      }
+
+      function startMetronome() {
+        const bpm = getMetroBPM();
+        const interval = 60 / bpm;
+
+        try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
+        catch { alert('Tu navegador no soporta AudioContext.'); return; }
+
+        metroRunning = true;
+        DOM.metroToggleBtn.className = 'metro-btn metro-btn-stop';
+        DOM.metroToggleBtn.innerHTML = `
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 10a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z"/></svg>
+          <span>Detener Metrónomo</span>
+        `;
+
+        const gainNode = audioCtx.createGain();
+        gainNode.gain.value = 0.3;
+        gainNode.connect(audioCtx.destination);
+
+        let nextTime = audioCtx.currentTime + 0.05;
+        let running = true;
+
+        function schedule() {
+          if (!running || !metroRunning) return;
+          const now = audioCtx.currentTime;
+          if (nextTime < now) nextTime = now;
+
+          const osc = audioCtx.createOscillator();
+          const g = audioCtx.createGain();
+          osc.type = 'sine';
+          osc.frequency.value = 880;
+          osc.connect(g);
+          g.connect(gainNode);
+          g.gain.setValueAtTime(0, nextTime);
+          g.gain.linearRampToValueAtTime(0.7, nextTime + 0.003);
+          g.gain.linearRampToValueAtTime(0.3, nextTime + 0.02);
+          g.gain.linearRampToValueAtTime(0, nextTime + 0.06);
+          osc.start(nextTime);
+          osc.stop(nextTime + 0.06);
+
+          const delay = Math.max(0, (nextTime - audioCtx.currentTime) * 1000 - 20);
+          setTimeout(() => {
+            DOM.beepLight.classList.remove('flash');
+            void DOM.beepLight.offsetWidth;
+            DOM.beepLight.classList.add('flash');
+            DOM.metroProgress.style.width = '100%';
+            setTimeout(() => { DOM.metroProgress.style.width = '0%'; }, interval * 500);
+          }, delay);
+
+          nextTime += interval;
+          metroTimer = setTimeout(schedule, Math.max(0, (nextTime - audioCtx.currentTime - 0.04) * 1000));
+        }
+        schedule();
+
+        DOM.metroToggleBtn._stop = () => { running = false; };
+      }
+
+      function stopMetronome() {
+        metroRunning = false;
+        if (metroTimer) { clearTimeout(metroTimer); metroTimer = null; }
+        if (audioCtx) { audioCtx.close().catch(()=>{}); audioCtx = null; }
+        DOM.metroToggleBtn.className = 'metro-btn metro-btn-start';
+        DOM.metroToggleBtn.innerHTML = `
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          <span>Activar Metrónomo</span>
+        `;
+        DOM.metroProgress.style.width = '0%';
+        DOM.beepLight.classList.remove('flash');
+      }
+
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden && metroRunning) stopMetronome();
+      });
+
+      (document.readyState === 'loading')
+        ? document.addEventListener('DOMContentLoaded', init)
+        : init();
+    })();
+  </script>
+</body>
+</html>

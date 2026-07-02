@@ -345,7 +345,7 @@ body > * {
   inset: 0;
   background: rgba(0, 0, 0, 0.7);
   backdrop-filter: blur(8px);
-  z-index: 100;
+  z-index: 200;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -649,6 +649,20 @@ body > * {
 .no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+/* ── Navbar Dropdowns ── */
+.mobile-dd-content {
+  transition: all 0.25s ease;
+  overflow: hidden;
+}
+
+.mobile-dd-content.hidden {
+  display: none;
+}
+
+.mobile-dd-chevron {
+  transition: transform 0.3s ease;
 }
 
 /* ── Accessibility ── */
