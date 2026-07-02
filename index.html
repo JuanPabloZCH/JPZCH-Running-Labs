@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JPZCH Running Labs — Ecosistema Digital para Corredores</title>
+  <meta name="description" content="Suite de herramientas gratuitas para runners: calcula ritmos, predice carreras, analiza GPX y optimiza tu entrenamiento.">
+  <meta name="theme-color" content="#0B0F19">
+  <meta name="author" content="JPZCH Running Labs">
+
+  <meta property="og:title" content="JPZCH Running Labs">
+  <meta property="og:description" content="Ecosistema digital gratuito para corredores de alto rendimiento.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://jpzch.github.io/running-labs/">
+
+  <link rel="canonical" href="https://jpzch.github.io/running-labs/">
+
+  <!-- Tailwind CSS (CDN) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- GSAP + ScrollTrigger (CDN) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+
+  <!-- Estilos globales -->
+  <link rel="stylesheet" href="/assets/css/styles.css">
+
+  <style>
+    /* ── Tailwind Custom Config ── */
+    .tailwind-config {
+      --color-dark: #0B0F19;
+      --color-card: #131A2B;
+      --color-accent: #CCFF00;
+      --color-accent2: #FF5722;
+    }
+    .line-clamp-2 {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+  </style>
+
+  <script>
+    // ── Detectar reducción de movimiento antes de cargar ──
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      document.documentElement.classList.add('reduce-motion');
+    }
+  </script>
+</head>
+<body class="antialiased">
+
+  <!-- ══════════════════════════════════════════════════════════════
+       NAVBAR (Inyectado por components.js)
+       ══════════════════════════════════════════════════════════════ -->
+  <div id="navbar-placeholder"></div>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       HERO SECTION
+       ══════════════════════════════════════════════════════════════ -->
+  <section class="hero-gradient min-h-[90vh] md:min-h-screen flex items-center relative pt-20 md:pt-24">
+    <div id="heroParticles" class="hero-particles"></div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full py-12 md:py-20 relative z-10">
+      <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+
+        <!-- ── Hero Text ── -->
+        <div class="text-center lg:text-left">
+          <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#CCFF00]/10 border border-[#CCFF00]/20 text-[#CCFF00] text-xs font-semibold mb-6">
+            <span class="w-2 h-2 rounded-full bg-[#CCFF00] animate-pulse"></span>
+            <span>Nuevo — Suite de herramientas gratuitas</span>
+          </div>
+
+          <h1 class="hero-title text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black leading-[1.1] tracking-tight mb-5">
+            <span class="text-white">Entrena con</span>
+            <br>
+            <span class="text-gradient-green">datos, no con</span>
+            <br>
+            <span class="text-gradient-orange">suposiciones</span>
+          </h1>
+
+          <p class="hero-subtitle text-[#94A3B8] text-base sm:text-lg md:text-xl leading-relaxed max-w-xl mx-auto lg:mx-0 mb-8">
+            JPZCH Running Labs es el ecosistema digital definitivo para corredores.
+            <span class="hidden sm:inline">Calcula, predice y analiza tu rendimiento con herramientas precisas y gratuitas.</span>
+          </p>
+
+          <div class="hero-cta flex flex-col sm:flex-row items-center gap-3 justify-center lg:justify-start">
+            <a href="#tools" class="btn-primary text-base px-8 py-3.5 w-full sm:w-auto">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0l-4-4m4 4l-4 4"/></svg>
+              Explorar herramientas
+            </a>
+            <a href="#stats" class="btn-secondary text-base px-8 py-3.5 w-full sm:w-auto">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+              Ver estadísticas
+            </a>
+          </div>
+        </div>
+
+        <!-- ── Hero Visual ── -->
+        <div class="hidden lg:flex items-center justify-center">
+          <div class="relative">
+            <div class="w-72 h-72 xl:w-80 xl:h-80 rounded-[2.5rem] bg-gradient-to-br from-[#CCFF00]/10 via-[#FF5722]/5 to-transparent border border-white/10 relative overflow-hidden">
+              <div class="absolute inset-4 rounded-[2rem] border border-[#CCFF00]/20 bg-[#131A2B]/60 backdrop-blur-sm flex flex-col items-center justify-center p-6">
+                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#CCFF00] to-[#99CC00] flex items-center justify-center font-black text-[#0B0F19] text-3xl mb-4">J</div>
+                <div class="text-center">
+                  <div class="text-white font-bold text-xl">JPZCH</div>
+                  <div class="text-[#CCFF00] text-sm font-medium">Running Labs</div>
+                </div>
+                <div class="mt-6 flex gap-3">
+                  <div class="w-2 h-2 rounded-full bg-[#CCFF00] animate-pulse" style="animation-delay: 0s"></div>
+                  <div class="w-2 h-2 rounded-full bg-[#FF5722] animate-pulse" style="animation-delay: 0.3s"></div>
+                  <div class="w-2 h-2 rounded-full bg-[#3B82F6] animate-pulse" style="animation-delay: 0.6s"></div>
+                </div>
+              </div>
+            </div>
+            <div class="absolute -top-4 -right-4 w-24 h-24 rounded-2xl bg-[#1A2332] border border-white/10 flex items-center justify-center">
+              <svg class="w-10 h-10 text-[#CCFF00]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </div>
+            <div class="absolute -bottom-3 -left-3 w-20 h-20 rounded-2xl bg-[#1A2332] border border-white/10 flex items-center justify-center">
+              <svg class="w-8 h-8 text-[#FF5722]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── Scroll Indicator ── -->
+    <div class="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-[#475569] animate-bounce">
+      <span class="text-[10px] font-medium uppercase tracking-widest">Scroll</span>
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/></svg>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       STATS BANNER
+       ══════════════════════════════════════════════════════════════ -->
+  <section id="stats" class="relative -mt-16 md:-mt-20 z-20">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6">
+      <div id="heroStats" class="glass rounded-2xl p-6 md:p-8 grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8"></div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       TOOLS SECTION
+       ══════════════════════════════════════════════════════════════ -->
+  <section id="tools" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
+    <div class="section-header text-center mb-10 md:mb-14">
+      <span class="inline-block text-[#CCFF00] text-xs font-semibold uppercase tracking-[0.2em] mb-3">Ecosistema de herramientas</span>
+      <h2 class="text-3xl md:text-4xl lg:text-5xl font-black text-white mb-4">
+        Todo lo que necesitas en<br class="sm:hidden">
+        <span class="text-gradient">un solo lugar</span>
+      </h2>
+      <p class="text-[#64748B] text-sm md:text-base max-w-2xl mx-auto">
+        <span id="userGreeting" class="text-[#CCFF00] font-semibold"></span>
+        <span id="userGreetingSep" class="hidden"> — </span>
+        Desde calcular tu ritmo hasta analizar tu rendimiento. Cada herramienta está diseñada con precisión para runners que buscan mejorar.
+      </p>
+    </div>
+
+    <!-- ── Search & Filters ── -->
+    <div class="mb-8 md:mb-10 space-y-4">
+      <div class="relative max-w-xl mx-auto">
+        <svg class="absolute left-3.5 top-1/2 -translate-y-1/2 w-5 h-5 text-[#475569] pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+        <input type="text" id="searchTools" class="search-input" placeholder="Buscar herramientas por nombre, descripción o funcionalidad..." autocomplete="off">
+      </div>
+      <div id="filterTabs" class="flex flex-wrap gap-2 justify-center"></div>
+    </div>
+
+    <!-- ── Tools Grid ── -->
+    <div id="toolsGrid" class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-5"></div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       CTA SECTION
+       ══════════════════════════════════════════════════════════════ -->
+  <section class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 md:pb-24">
+    <div class="relative rounded-2xl md:rounded-3xl overflow-hidden border border-[#CCFF00]/10 bg-gradient-to-br from-[#131A2B] via-[#1A2332] to-[#131A2B] p-8 md:p-12 lg:p-16 text-center">
+      <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(204,255,0,0.03)_0%,transparent_70%)] pointer-events-none"></div>
+      <div class="relative z-10">
+        <div class="w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-gradient-to-br from-[#CCFF00]/20 to-[#FF5722]/10 border border-[#CCFF00]/20 flex items-center justify-center mx-auto mb-5">
+          <svg class="w-7 h-7 md:w-8 md:h-8 text-[#CCFF00]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        </div>
+        <h3 class="text-2xl md:text-3xl font-black text-white mb-3">¿Listo para llevar tu running al siguiente nivel?</h3>
+        <p class="text-[#94A3B8] text-sm md:text-base max-w-lg mx-auto mb-6">
+          Configura tu perfil de runner una sola vez y todas las herramientas se adaptarán a tus datos automáticamente.
+        </p>
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
+          <button onclick="JPZCH_ProfileModal.open()" class="btn-primary text-base px-8 py-3.5">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+            Configurar mi perfil
+          </button>
+          <a href="/tools/pace-calculator/" class="btn-secondary text-base px-8 py-3.5">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            Probar calculadora
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       FOOTER (Inyectado por components.js)
+       ══════════════════════════════════════════════════════════════ -->
+  <div id="footer-placeholder"></div>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       SCRIPTS
+       ══════════════════════════════════════════════════════════════ -->
+
+  <!-- Config: URLs y entorno -->
+  <script src="/assets/js/config.js"></script>
+
+  <!-- Store: Gestión de LocalStorage para datos del runner -->
+  <script src="/assets/js/store.js"></script>
+
+  <!-- Componentes: Navbar y Footer -->
+  <script src="/components/navbar.js"></script>
+  <script src="/components/footer.js"></script>
+  <script src="/assets/js/components.js"></script>
+
+  <!-- Profile Modal -->
+  <script src="/assets/js/profile-modal.js"></script>
+
+  <!-- App: Lógica del Hub -->
+  <script src="/assets/js/app.js"></script>
+
+  <!-- ── Inicialización de GSAP ScrollTrigger ── -->
+  <script>
+    if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+      gsap.registerPlugin(ScrollTrigger);
+    }
+  </script>
+
+  <!-- ── Service Worker (preparado para futuro) ── -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      // navigator.serviceWorker.register('/sw.js');
+    }
+  </script>
+</body>
+</html>
