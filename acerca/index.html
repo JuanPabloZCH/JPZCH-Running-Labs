@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Acerca del Proyecto — JPZCH Running Labs</title>
+  <meta name="description" content="Conoce JPZCH Running Labs: métricas y tecnología al alcance de todos. Rigor científico, rendimiento puro y privacidad.">
+  <meta name="theme-color" content="#0B0F19">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23CCFF00'/%3E%3Ctext x='16' y='22' font-family='Inter,system-ui,sans-serif' font-size='18' font-weight='900' fill='%230B0F19' text-anchor='middle'%3EJP%3C/text%3E%3C/svg%3E">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/assets/css/styles.css">
+  <style>
+    .card-pilar {
+      background: linear-gradient(145deg, rgba(19, 26, 43, 0.8), rgba(26, 35, 50, 0.6));
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 1.25rem;
+      padding: 1.5rem;
+      backdrop-filter: blur(12px);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .card-pilar:hover {
+      transform: translateY(-4px);
+      border-color: rgba(204, 255, 0, 0.15);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+    }
+    .card-pilar-icon {
+      width: 3rem;
+      height: 3rem;
+      border-radius: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      transition: transform 0.3s ease;
+    }
+    .card-pilar:hover .card-pilar-icon {
+      transform: scale(1.1);
+    }
+    .neon-border {
+      border: 1px solid rgba(204, 255, 0, 0.15);
+      box-shadow: 0 0 30px rgba(204, 255, 0, 0.04), inset 0 0 30px rgba(204, 255, 0, 0.02);
+    }
+    .stat-pulse {
+      animation: stat-pulse 2s ease-in-out infinite;
+    }
+    @keyframes stat-pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+    .hero-acerca {
+      min-height: 70vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-acerca::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 20% 40%, rgba(204, 255, 0, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 80% 60%, rgba(255, 87, 34, 0.04) 0%, transparent 50%);
+      pointer-events: none;
+    }
+    .grid-line {
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 20px,
+        rgba(204, 255, 0, 0.03) 20px,
+        rgba(204, 255, 0, 0.03) 21px
+      );
+    }
+    .badge-data {
+      animation: float-badge 6s ease-in-out infinite;
+    }
+    @keyframes float-badge {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+    .bar-animate {
+      animation: bar-grow 1.2s ease-out forwards;
+      transform-origin: bottom;
+    }
+    @keyframes bar-grow {
+      from { transform: scaleY(0); }
+      to { transform: scaleY(1); }
+    }
+  </style>
+</head>
+<body class="antialiased">
+
+  <div id="navbar-placeholder"></div>
+
+  <section class="hero-acerca pt-24 md:pt-28">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full py-16 md:py-24 relative z-10">
+      <div class="max-w-4xl mx-auto text-center">
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#CCFF00]/10 border border-[#CCFF00]/20 text-[#CCFF00] text-xs font-semibold mb-6 animate-fade-in">
+          <span class="w-2 h-2 rounded-full bg-[#CCFF00] animate-pulse"></span>
+          <span>Conoce el proyecto</span>
+        </div>
+
+        <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black leading-[1.1] tracking-tight mb-6 animate-fade-in-up">
+          <span class="text-white">Métricas y tecnología,</span>
+          <br>
+          <span class="text-gradient-green">al alcance de todos.</span>
+        </h1>
+
+        <p class="text-[#94A3B8] text-base sm:text-lg md:text-xl leading-relaxed max-w-3xl mx-auto mb-0 animate-fade-in-up" style="animation-delay: 0.15s">
+          JPZCH Running Labs nació con un propósito claro: acercar la ciencia deportiva avanzada a toda la comunidad runner. Desde el que empieza a trotar hasta el corredor de ultra distancia o triatletas —a todos— queremos acompañarte en cada kilómetro con herramientas rápidas, accesibles y científicamente validadas.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
+    <div class="grid md:grid-cols-2 gap-12 md:gap-16 items-center">
+      <div class="animate-fade-in-up">
+        <span class="inline-block text-[#CCFF00] text-xs font-semibold uppercase tracking-[0.2em] mb-4">Nuestra misión</span>
+        <h2 class="text-3xl md:text-4xl lg:text-5xl font-black text-white mb-6 leading-tight">
+          Democratizar el acceso a tus
+          <span class="text-gradient">datos biomecánicos</span>
+        </h2>
+        <p class="text-[#94A3B8] text-base leading-relaxed mb-4">
+          Creemos que la ciencia del rendimiento no debe ser un privilegio exclusivo ni estar oculta tras interfaces confusas. Nuestra misión es democratizar el acceso a tus datos biomecánicos y fisiológicos.
+        </p>
+        <p class="text-[#94A3B8] text-base leading-relaxed">
+          Ya busques tu primer 5K o romper tu marca en maratón, mereces herramientas precisas y transparentes que potencien tu evolución como atleta.
+        </p>
+      </div>
+
+      <div class="flex items-center justify-center animate-fade-in-up" style="animation-delay: 0.15s">
+        <div class="relative w-full max-w-sm">
+          <div class="absolute inset-0 bg-gradient-to-br from-[#CCFF00]/5 to-transparent rounded-[2rem] blur-3xl"></div>
+          <div class="relative bg-[#131A2B]/80 backdrop-blur-xl rounded-[2rem] neon-border p-6 md:p-8 overflow-hidden">
+            <div class="absolute inset-0 grid-line opacity-30 pointer-events-none"></div>
+
+            <div class="flex items-center justify-between mb-6">
+              <div class="flex items-center gap-2">
+                <div class="w-3 h-3 rounded-full bg-[#CCFF00]"></div>
+                <span class="text-white text-sm font-semibold">Analytics</span>
+              </div>
+              <div class="flex gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-[#475569]"></span>
+                <span class="w-2 h-2 rounded-full bg-[#475569]"></span>
+                <span class="w-2 h-2 rounded-full bg-[#FF5722]"></span>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-4 gap-3 mb-6 items-end">
+              <div class="flex flex-col items-center gap-1.5">
+                <div class="w-full bg-[#CCFF00]/20 rounded-t-md bar-animate" style="height: 56px; animation-delay: 0.1s"></div>
+                <span class="text-[10px] text-[#475569] font-medium">Z1</span>
+              </div>
+              <div class="flex flex-col items-center gap-1.5">
+                <div class="w-full bg-[#CCFF00]/40 rounded-t-md bar-animate" style="height: 72px; animation-delay: 0.2s"></div>
+                <span class="text-[10px] text-[#475569] font-medium">Z2</span>
+              </div>
+              <div class="flex flex-col items-center gap-1.5">
+                <div class="w-full bg-[#CCFF00] rounded-t-md bar-animate" style="height: 96px; animation-delay: 0.3s"></div>
+                <span class="text-[10px] text-[#475569] font-medium">Z3</span>
+              </div>
+              <div class="flex flex-col items-center gap-1.5">
+                <div class="w-full bg-[#FF5722] rounded-t-md bar-animate" style="height: 44px; animation-delay: 0.4s"></div>
+                <span class="text-[10px] text-[#475569] font-medium">Z4</span>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+              <div class="bg-white/5 rounded-xl p-3 border border-white/5">
+                <div class="text-[#475569] text-[10px] font-medium uppercase tracking-wider mb-1">Cadencia</div>
+                <div class="text-white font-bold text-lg">178 <span class="text-[#CCFF00] text-xs font-medium">SPM</span></div>
+                <div class="w-full bg-white/5 rounded-full h-1 mt-2 overflow-hidden">
+                  <div class="bg-[#CCFF00] h-full rounded-full" style="width: 78%"></div>
+                </div>
+              </div>
+              <div class="bg-white/5 rounded-xl p-3 border border-white/5">
+                <div class="text-[#475569] text-[10px] font-medium uppercase tracking-wider mb-1">Zancada</div>
+                <div class="text-white font-bold text-lg">1.24 <span class="text-[#FF5722] text-xs font-medium">m</span></div>
+                <div class="w-full bg-white/5 rounded-full h-1 mt-2 overflow-hidden">
+                  <div class="bg-[#FF5722] h-full rounded-full" style="width: 62%"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-4 pt-4 border-t border-white/5 flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="stat-pulse w-2 h-2 rounded-full bg-[#22C55E]"></span>
+                <span class="text-[11px] text-[#64748B]">Procesamiento local</span>
+              </div>
+              <span class="text-[11px] font-medium text-[#CCFF00]">100% seguro</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
+    <div class="text-center mb-12 md:mb-16">
+      <span class="inline-block text-[#CCFF00] text-xs font-semibold uppercase tracking-[0.2em] mb-3">Nuestros pilares</span>
+      <h2 class="text-3xl md:text-4xl lg:text-5xl font-black text-white mb-4">
+        Construido sobre <span class="text-gradient">tres principios</span>
+      </h2>
+      <p class="text-[#64748B] text-sm md:text-base max-w-2xl mx-auto">
+        Cada herramienta que creamos está fundamentada en estos valores fundamentales.
+      </p>
+    </div>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
+      <div class="card-pilar animate-fade-in-up" style="animation-delay: 0s">
+        <div class="card-pilar-icon bg-[#CCFF00]/10 text-[#CCFF00] border border-[#CCFF00]/20 mb-5">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+        </div>
+        <h3 class="text-white font-bold text-lg mb-2">Rigor Científico</h3>
+        <p class="text-[#94A3B8] text-sm leading-relaxed">
+          Algoritmos basados estrictamente en literatura de fisiología del ejercicio y biomecánica deportiva, aplicando metodologías validadas como las de Jack Daniels o Heiderscheit.
+        </p>
+      </div>
+
+      <div class="card-pilar animate-fade-in-up" style="animation-delay: 0.1s">
+        <div class="card-pilar-icon bg-[#FF5722]/10 text-[#FF5722] border border-[#FF5722]/20 mb-5">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+        </div>
+        <h3 class="text-white font-bold text-lg mb-2">Rendimiento Puro</h3>
+        <p class="text-[#94A3B8] text-sm leading-relaxed">
+          Una suite estática ultra-rápida, diseñada sin fricciones. Optimizada para funcionar en tu móvil o computadora al instante, directamente desde el navegador.
+        </p>
+      </div>
+
+      <div class="card-pilar animate-fade-in-up sm:col-span-2 lg:col-span-1" style="animation-delay: 0.2s">
+        <div class="card-pilar-icon bg-[#3B82F6]/10 text-[#3B82F6] border border-[#3B82F6]/20 mb-5">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+        </div>
+        <h3 class="text-white font-bold text-lg mb-2">Privacidad y Control</h3>
+        <p class="text-[#94A3B8] text-sm leading-relaxed">
+          Tus datos básicos te pertenecen. El procesamiento principal ocurre de forma segura y persistente en tu propio dispositivo mediante LocalStorage.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 md:pb-24">
+    <div class="relative rounded-2xl md:rounded-3xl overflow-hidden border border-[#CCFF00]/10 bg-gradient-to-br from-[#131A2B] via-[#1A2332] to-[#131A2B] p-8 md:p-12 lg:p-16 text-center">
+      <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(204,255,0,0.03)_0%,transparent_70%)] pointer-events-none"></div>
+      <div class="relative z-10">
+        <div class="w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-gradient-to-br from-[#CCFF00]/20 to-[#FF5722]/10 border border-[#CCFF00]/20 flex items-center justify-center mx-auto mb-5">
+          <svg class="w-7 h-7 md:w-8 md:h-8 text-[#CCFF00]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>
+        </div>
+        <h3 class="text-2xl md:text-3xl font-black text-white mb-3">¿Listo para explorar?</h3>
+        <p class="text-[#94A3B8] text-sm md:text-base max-w-lg mx-auto mb-6">
+          Descubre todas las herramientas que hemos preparado para ti y lleva tu entrenamiento al siguiente nivel.
+        </p>
+        <a href="/" class="btn-primary text-base px-8 py-3.5 inline-flex">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0l-4-4m4 4l-4 4"/></svg>
+          Explorar Herramientas
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <div id="footer-placeholder"></div>
+
+  <script src="/assets/js/config.js"></script>
+  <script src="/assets/js/store.js"></script>
+  <script src="/components/navbar.js"></script>
+  <script src="/components/footer.js"></script>
+  <script src="/assets/js/profile-modal.js"></script>
+  <script src="/assets/js/components.js"></script>
+
+</body>
+</html>
