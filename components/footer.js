@@ -43,7 +43,7 @@ const JPZCH_FOOTER = `
           <li><a href="/acerca/" class="text-[#64748B] hover:text-[#CCFF00] text-sm transition-colors duration-300">Acerca de</a></li>
           <li><a href="/reportar-error/" class="text-[#64748B] hover:text-[#CCFF00] text-sm transition-colors duration-300">Reportar Error</a></li>
           <li><a href="/sugerir-herramienta/" class="text-[#64748B] hover:text-[#CCFF00] text-sm transition-colors duration-300">Sugerir Herramienta</a></li>
-          <li><a href="#" class="text-[#64748B] hover:text-[#CCFF00] text-sm transition-colors duration-300">Privacidad</a></li>
+          <li><a href="/privacidad/" class="text-[#64748B] hover:text-[#CCFF00] text-sm transition-colors duration-300">Privacidad</a></li>
         </ul>
       </div>
     </div>
