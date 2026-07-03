@@ -91,9 +91,9 @@ const JPZCH_NAVBAR = `
                 <svg class="w-4 h-4 text-[#CCFF00] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                 Acerca de
               </a>
-              <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#94A3B8] hover:text-white hover:bg-white/5 transition-colors">
+              <a href="/reportar-error/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#94A3B8] hover:text-white hover:bg-white/5 transition-colors">
                 <svg class="w-4 h-4 text-[#FF5722] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4.5c-.77-.833-2.694-.833-3.464 0L3.34 16.5c-.77.833.192 2.5 1.732 2.5z"/></svg>
-                Reportar Bug
+                Reportar Error
               </a>
               <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#94A3B8] hover:text-white hover:bg-white/5 transition-colors">
                 <svg class="w-4 h-4 text-[#CCFF00] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
@@ -182,7 +182,7 @@ const JPZCH_NAVBAR = `
         </button>
         <div class="mobile-dd-content hidden bg-white/5">
           <a href="/acerca/" class="flex items-center gap-3 px-8 py-3 text-sm text-[#94A3B8] hover:text-white hover:bg-white/5 transition-colors">Acerca de</a>
-          <a href="#" class="flex items-center gap-3 px-8 py-3 text-sm text-[#94A3B8] hover:text-white hover:bg-white/5 transition-colors">Reportar Bug</a>
+          <a href="/reportar-error/" class="flex items-center gap-3 px-8 py-3 text-sm text-[#94A3B8] hover:text-white hover:bg-white/5 transition-colors">Reportar Error</a>
           <a href="#" class="flex items-center gap-3 px-8 py-3 text-sm text-[#94A3B8] hover:text-white hover:bg-white/5 transition-colors">Sugerir Herramienta</a>
           <div class="border-t border-white/5 mx-4 my-1"></div>
           <a href="#" class="flex items-center gap-3 px-8 py-3 text-sm text-[#94A3B8] hover:text-white hover:bg-white/5 transition-colors">Privacidad</a>

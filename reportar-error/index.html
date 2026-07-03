@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reportar un Error — JPZCH Running Labs</title>
+  <meta name="description" content="Reporta fallos técnicos en JPZCH Running Labs. Ayúdanos a mejorar la plataforma.">
+  <meta name="theme-color" content="#0B0F19">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23CCFF00'/%3E%3Ctext x='16' y='22' font-family='Inter,system-ui,sans-serif' font-size='18' font-weight='900' fill='%230B0F19' text-anchor='middle'%3EJP%3C/text%3E%3C/svg%3E">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/assets/css/styles.css">
+  <style>
+    .card-form {
+      background: linear-gradient(145deg, rgba(19, 26, 43, 0.8), rgba(26, 35, 50, 0.6));
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 1.25rem;
+      padding: 1.5rem;
+      backdrop-filter: blur(12px);
+    }
+    @media (min-width: 768px) {
+      .card-form { padding: 2rem; }
+    }
+    .form-input {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      background: rgba(11, 15, 25, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 0.75rem;
+      color: #F1F5F9;
+      font-size: 0.875rem;
+      outline: none;
+      transition: all 0.3s ease;
+      font-family: inherit;
+    }
+    .form-input:focus {
+      border-color: rgba(204, 255, 0, 0.3);
+      box-shadow: 0 0 0 3px rgba(204, 255, 0, 0.06);
+    }
+    .form-input::placeholder {
+      color: #475569;
+    }
+    .form-select {
+      -webkit-appearance: none;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='%23475569' viewBox='0 0 24 24'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 1rem center;
+      background-size: 1rem;
+      padding-right: 2.5rem;
+      cursor: pointer;
+    }
+    .form-select option {
+      background: #131A2B;
+      color: #F1F5F9;
+    }
+    .btn-submit {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.5rem;
+      background: #DC2626;
+      color: #fff;
+      font-weight: 600;
+      font-size: 0.875rem;
+      border: none;
+      border-radius: 0.75rem;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      width: 100%;
+    }
+    @media (min-width: 640px) {
+      .btn-submit { width: auto; }
+    }
+    .btn-submit:hover {
+      background: #EF4444;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(239, 68, 68, 0.3);
+    }
+    .btn-submit:active {
+      transform: translateY(0);
+    }
+    .btn-ghost-github {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.5rem;
+      background: rgba(255, 255, 255, 0.06);
+      color: #F1F5F9;
+      font-weight: 500;
+      font-size: 0.875rem;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 0.75rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+    }
+    .btn-ghost-github:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.15);
+      transform: translateY(-2px);
+    }
+    .hero-bug {
+      min-height: 40vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-bug::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 70% 30%, rgba(220, 38, 38, 0.04) 0%, transparent 50%),
+        radial-gradient(circle at 30% 70%, rgba(204, 255, 0, 0.03) 0%, transparent 50%);
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body class="antialiased">
+
+  <div id="navbar-placeholder"></div>
+
+  <section class="hero-bug pt-24 md:pt-28">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full py-12 md:py-20 relative z-10">
+      <div class="max-w-3xl mx-auto text-center">
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#DC2626]/10 border border-[#DC2626]/20 text-[#DC2626] text-xs font-semibold mb-5 animate-fade-in">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4.5c-.77-.833-2.694-.833-3.464 0L3.34 16.5c-.77.833.192 2.5 1.732 2.5z"/></svg>
+          <span>Reporte de errores</span>
+        </div>
+
+        <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black leading-[1.1] tracking-tight mb-4 animate-fade-in-up">
+          <span class="text-white">Reportar un</span>
+          <span class="text-[#EF4444]"> Error</span>
+        </h1>
+
+        <p class="text-[#94A3B8] text-sm sm:text-base md:text-lg leading-relaxed max-w-2xl mx-auto animate-fade-in-up" style="animation-delay: 0.15s">
+          ¿Encontraste un fallo de cálculo, un diseño roto o algo que no funciona como debería? Cuéntanos para solucionarlo cuanto antes.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 pb-8">
+    <div class="card-form animate-fade-in-up">
+      <form action="https://formspree.io/f/mbdvpzqn" method="POST" class="space-y-5">
+        <div>
+          <label for="herramienta" class="block text-[#94A3B8] text-sm font-medium mb-1.5">Herramienta afectada</label>
+          <select id="herramienta" name="herramienta" required class="form-input form-select">
+            <option value="" disabled selected>Selecciona una herramienta</option>
+            <option value="Hub Principal">Hub Principal</option>
+            <option value="Analizador de Cadencia">Analizador de Cadencia</option>
+            <option value="Navegación">Navegación</option>
+            <option value="Otra">Otra</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="email" class="block text-[#94A3B8] text-sm font-medium mb-1.5">Correo electrónico <span class="text-[#475569]">(opcional)</span></label>
+          <input type="email" id="email" name="email" placeholder="Tu correo (opcional, por si necesitamos más detalles)" class="form-input">
+        </div>
+
+        <div>
+          <label for="descripcion" class="block text-[#94A3B8] text-sm font-medium mb-1.5">Descripción del Error</label>
+          <textarea id="descripcion" name="descripcion" required rows="5" class="form-input min-h-[8rem] resize-y" placeholder="Describe el problema detalladamente. ¿Qué estabas haciendo cuando ocurrió el error?"></textarea>
+        </div>
+
+        <div class="pt-2">
+          <button type="submit" class="btn-submit">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4.5c-.77-.833-2.694-.833-3.464 0L3.34 16.5c-.77.833.192 2.5 1.732 2.5z"/></svg>
+            Enviar Reporte de Error
+          </button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <section class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 md:pb-24">
+    <div class="relative rounded-2xl border border-white/5 bg-[#131A2B]/40 backdrop-blur-sm p-6 md:p-8 text-center animate-fade-in-up" style="animation-delay: 0.1s">
+      <div class="flex items-center justify-center gap-3 mb-4">
+        <div class="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center">
+          <svg class="w-5 h-5 text-[#94A3B8]" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+        </div>
+        <span class="text-[#94A3B8] text-sm font-medium">¿Eres desarrollador?</span>
+      </div>
+      <p class="text-[#64748B] text-sm leading-relaxed mb-5 max-w-lg mx-auto">
+        ¿Tienes cuenta en GitHub? Ayúdanos abriendo un Issue directamente en nuestro repositorio.
+      </p>
+      <a href="https://github.com/JuanPabloZCH/JPZCH-Running-Labs/issues/new" target="_blank" rel="noopener noreferrer" class="btn-ghost-github">
+        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+        Abrir un Issue en GitHub
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+      </a>
+    </div>
+  </section>
+
+  <div id="footer-placeholder"></div>
+
+  <script src="/assets/js/config.js"></script>
+  <script src="/assets/js/store.js"></script>
+  <script src="/components/navbar.js"></script>
+  <script src="/components/footer.js"></script>
+  <script src="/assets/js/profile-modal.js"></script>
+  <script src="/assets/js/components.js"></script>
+
+</body>
+</html>
