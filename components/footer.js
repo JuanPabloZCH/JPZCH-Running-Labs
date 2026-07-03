@@ -33,7 +33,7 @@ const JPZCH_FOOTER = `
         <h4 class="text-white font-semibold text-sm uppercase tracking-wider mb-4">Recursos</h4>
         <ul class="space-y-3">
           <li><a href="#" class="text-[#64748B] hover:text-[#CCFF00] text-sm transition-colors duration-300">Guía de Entrenamientos</a></li>
-          <li><a href="#" class="text-[#64748B] hover:text-[#CCFF00] text-sm transition-colors duration-300">Glosario Runner</a></li>
+          <li><a href="/recursos/glosario/" class="text-[#64748B] hover:text-[#CCFF00] text-sm transition-colors duration-300">Glosario Runner</a></li>
         </ul>
       </div>
       <div>

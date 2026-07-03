@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Glosario Runner — JPZCH Running Labs</title>
+  <meta name="description" content="Diccionario interactivo de running: descifra la jerga del atletismo, la ciencia del rendimiento y los tipos de entrenamiento.">
+  <meta name="theme-color" content="#0B0F19">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23CCFF00'/%3E%3Ctext x='16' y='22' font-family='Inter,system-ui,sans-serif' font-size='18' font-weight='900' fill='%230B0F19' text-anchor='middle'%3EJP%3C/text%3E%3C/svg%3E">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/assets/css/styles.css">
+  <style>
+    .hero-glosario {
+      min-height: 38vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-glosario::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 20% 40%, rgba(204, 255, 0, 0.06) 0%, transparent 50%),
+        radial-gradient(circle at 80% 60%, rgba(255, 87, 34, 0.04) 0%, transparent 50%),
+        radial-gradient(circle at 50% 100%, rgba(59, 130, 246, 0.03) 0%, transparent 40%);
+      pointer-events: none;
+    }
+
+    .control-panel {
+      position: sticky;
+      top: 5rem;
+      z-index: 30;
+      background: rgba(11, 15, 25, 0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      transition: box-shadow 0.3s ease;
+    }
+    .control-panel.scrolled {
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    }
+
+    .spotlight-input {
+      width: 100%;
+      padding: 0.875rem 1rem 0.875rem 3rem;
+      background: rgba(19, 26, 43, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 1rem;
+      color: #F1F5F9;
+      font-size: 1rem;
+      outline: none;
+      transition: all 0.3s ease;
+    }
+    .spotlight-input:focus {
+      border-color: rgba(204, 255, 0, 0.25);
+      box-shadow: 0 0 0 4px rgba(204, 255, 0, 0.05), 0 4px 20px rgba(204, 255, 0, 0.06);
+    }
+    .spotlight-input::placeholder { color: #475569; font-weight: 400; }
+    .spotlight-wrap { position: relative; }
+    .spotlight-icon {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 1.25rem;
+      height: 1.25rem;
+      color: #475569;
+      pointer-events: none;
+      transition: color 0.3s ease;
+    }
+    .spotlight-wrap:focus-within .spotlight-icon { color: #CCFF00; }
+
+    .spotlight-shortcut {
+      position: absolute;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      align-items: center;
+      gap: 0.375rem;
+      padding: 0.25rem 0.5rem;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 0.375rem;
+      color: #475569;
+      font-size: 0.625rem;
+      font-weight: 600;
+      pointer-events: none;
+    }
+    .spotlight-shortcut kbd {
+      font-family: inherit;
+      background: rgba(255,255,255,0.06);
+      padding: 0.0625rem 0.3125rem;
+      border-radius: 0.1875rem;
+      font-size: 0.5625rem;
+    }
+
+    .filter-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      padding-bottom: 1rem;
+    }
+    .filter-pill {
+      padding: 0.5rem 1rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      background: rgba(255, 255, 255, 0.03);
+      color: #64748B;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      white-space: nowrap;
+      letter-spacing: 0.02em;
+    }
+    .filter-pill:hover {
+      background: rgba(255, 255, 255, 0.06);
+      color: #94A3B8;
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+    .filter-pill.active {
+      background: rgba(204, 255, 0, 0.1);
+      color: #CCFF00;
+      border-color: rgba(204, 255, 0, 0.2);
+      box-shadow: 0 0 20px rgba(204, 255, 0, 0.05);
+    }
+    .filter-pill .pill-count {
+      display: inline-block;
+      margin-left: 0.375rem;
+      padding: 0.0625rem 0.4375rem;
+      border-radius: 999px;
+      font-size: 0.625rem;
+      background: rgba(255,255,255,0.04);
+      color: #475569;
+    }
+    .filter-pill.active .pill-count {
+      background: rgba(204, 255, 0, 0.12);
+      color: #CCFF00;
+    }
+
+    .glosario-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+    @media (min-width: 640px) { .glosario-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (min-width: 1024px) { .glosario-grid { grid-template-columns: repeat(3, 1fr); } }
+
+    .glosario-card {
+      background: linear-gradient(145deg, rgba(19, 26, 43, 0.8), rgba(26, 35, 50, 0.6));
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 1.25rem;
+      padding: 1.25rem;
+      backdrop-filter: blur(12px);
+      transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      opacity: 1;
+      transform: scale(1);
+    }
+    .glosario-card.hidden-card {
+      opacity: 0;
+      transform: scale(0.92);
+      pointer-events: none;
+      position: absolute;
+      visibility: hidden;
+    }
+    .glosario-card:hover {
+      border-color: rgba(255,255,255,0.12);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+    }
+
+    .glosario-card .term {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #F1F5F9;
+      margin-bottom: 0.375rem;
+      line-height: 1.3;
+      letter-spacing: -0.02em;
+    }
+    .glosario-card .term-sep { display: none; }
+
+    .glosario-card .category-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.375rem;
+      padding: 0.25rem 0.625rem;
+      border-radius: 999px;
+      font-size: 0.625rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 0.75rem;
+    }
+    .category-dot {
+      display: inline-block;
+      width: 0.375rem;
+      height: 0.375rem;
+      border-radius: 50%;
+    }
+
+    .glosario-card .definition {
+      color: #94A3B8;
+      font-size: 0.8125rem;
+      line-height: 1.7;
+    }
+
+    .glosario-card .card-footer {
+      margin-top: 0.875rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.04);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .glosario-card .term-index {
+      font-size: 0.625rem;
+      font-weight: 700;
+      color: rgba(255,255,255,0.06);
+      font-feature-settings: "tnum";
+    }
+
+    .empty-state {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 1.5rem;
+      text-align: center;
+      grid-column: 1 / -1;
+    }
+    .empty-state.show { display: flex; }
+
+    .glosario-counter {
+      font-size: 0.75rem;
+      color: #475569;
+      font-weight: 500;
+    }
+    .glosario-counter strong { color: #94A3B8; font-weight: 600; }
+
+    .fade-in-card {
+      animation: cardFadeIn 0.4s ease forwards;
+    }
+    @keyframes cardFadeIn {
+      from { opacity: 0; transform: translateY(12px) scale(0.97); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+  </style>
+</head>
+<body class="antialiased">
+
+  <div id="navbar-placeholder"></div>
+
+  <section class="hero-glosario pt-24 md:pt-28">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full py-14 md:py-20 relative z-10">
+      <div class="max-w-3xl mx-auto text-center">
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#CCFF00]/10 border border-[#CCFF00]/20 text-[#CCFF00] text-xs font-semibold mb-5">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+          <span>Recurso Interactivo</span>
+        </div>
+        <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black leading-[1.1] tracking-tight mb-4">
+          <span class="text-white">Glosario</span>
+          <span class="text-gradient-green"> Runner</span>
+        </h1>
+        <p class="text-[#94A3B8] text-sm sm:text-base md:text-lg leading-relaxed max-w-2xl mx-auto">
+          El diccionario definitivo. Descifra la jerga del atletismo, la ciencia del rendimiento y los tipos de entrenamiento.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <div class="control-panel" id="controlPanel">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
+      <div class="spotlight-wrap mb-3">
+        <svg class="spotlight-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+        <input type="text" id="glosarioSearch" class="spotlight-input" placeholder="Busca cualquier término…" autocomplete="off">
+        <div class="spotlight-shortcut"><kbd>Ctrl</kbd> <kbd>K</kbd></div>
+      </div>
+      <div class="filter-pills" id="filterPills"></div>
+    </div>
+  </div>
+
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-16">
+    <div class="flex items-center justify-between mb-5">
+      <div class="glosario-counter" id="resultCounter"><strong id="visibleCount">0</strong> de <span id="totalCount">0</span> términos</div>
+    </div>
+    <div class="glosario-grid" id="glosarioGrid"></div>
+  </section>
+
+  <div id="footer-placeholder"></div>
+
+  <script src="/assets/js/config.js"></script>
+  <script src="/assets/js/store.js"></script>
+  <script src="/components/navbar.js"></script>
+  <script src="/components/footer.js"></script>
+  <script src="/assets/js/profile-modal.js"></script>
+  <script src="/assets/js/components.js"></script>
+
+  <script>
+    (function() {
+      const glosarioData = [
+        { term: 'VO₂ Max', category: 'fisiologia', definition: 'La cantidad máxima de oxígeno que tu cuerpo puede absorber, transportar y consumir por minuto durante el ejercicio máximo. Es el principal indicador de tu potencial aeróbico. Se mide en ml/kg/min y valores superiores a 60 en hombres o 50 en mujeres se consideran de élite.' },
+        { term: 'Umbral de Lactato', category: 'fisiologia', definition: 'El punto de intensidad donde el ácido láctico comienza a acumularse en la sangre más rápido de lo que el cuerpo puede eliminarlo. Entrenarlo te permite correr más rápido durante más tiempo sin fatigarte. Generalmente se sitúa entre el 85-90% de tu frecuencia cardíaca máxima.' },
+        { term: 'Cadencia', category: 'fisiologia', definition: 'La cantidad de pasos que das por minuto (SPM) al correr. Una cadencia óptima (generalmente entre 170 y 185 SPM) reduce el impacto articular y mejora la economía de carrera. Correr con una cadencia baja (<160 SPM) se asocia con mayor riesgo de lesiones.' },
+        { term: 'Overstriding', category: 'fisiologia', definition: 'Error biomecánico que ocurre cuando el pie aterriza muy por delante del centro de gravedad del cuerpo, actuando como un freno y aumentando drásticamente el riesgo de lesiones en rodillas y tibias. Se corrige aumentando la cadencia y acortando la zancada.' },
+        { term: 'Glucógeno', category: 'fisiologia', definition: 'La forma en que el cuerpo almacena los carbohidratos en los músculos y el hígado. Es tu "combustible premium" para esfuerzos intensos. Las reservas alcanzan para unos 90-120 minutos de carrera intensa. Agotarlo es la causa principal de "El Muro" en maratón.' },
+        { term: 'Ácido Láctico', category: 'fisiologia', definition: 'Subproducto metabólico que se produce cuando el cuerpo descompone glucosa para energía sin suficiente oxígeno. Contrario al mito, no es el causante de las agujetas; es una fuente de energía reutilizable. Su acumulación indica que estás superando tu umbral.' },
+        { term: 'Fartlek', category: 'entrenamiento', definition: 'Palabra sueca que significa "juego de velocidad". Es un entrenamiento continuo donde alternas intervalos de ritmo rápido y ritmo de recuperación suave, sin distancias o tiempos estructurados, guiándote por sensaciones. Perfecto para desarrollar velocidad de forma lúdica.' },
+        { term: 'Tempo Run', category: 'entrenamiento', definition: 'Un esfuerzo continuo y "cómodamente duro" (generalmente de 20 a 40 minutos) que se corre justo en tu Umbral de Lactato. Te enseña a sostener la velocidad y es clave para mejorar tu resistencia a ritmos de carrera. Debe sentirse desafiante pero sostenible.' },
+        { term: 'Tirada Larga', category: 'entrenamiento', definition: 'El entrenamiento fundamental de la semana. Se corre a un ritmo conversacional suave (Zona 2) para construir resistencia, capilarización muscular y acostumbrar al cuerpo a quemar grasa como combustible. Idealmente representa el 25-30% de tu volumen semanal.' },
+        { term: 'Tapering', category: 'entrenamiento', definition: 'La reducción planificada del volumen y la intensidad del entrenamiento en las semanas previas a una carrera objetivo. Sirve para eliminar la fatiga acumulada, reparar tejidos musculares y llegar a la línea de salida al 100%. Generalmente dura de 1 a 3 semanas.' },
+        { term: 'Series', category: 'entrenamiento', definition: 'Repeticiones de una distancia específica a un ritmo objetivo, intercaladas con descansos controlados. Ej: 8x400m al ritmo de 5K con 90 seg de recuperación. Mejoran la velocidad, la tolerancia al lactato y la eficiencia biomecánica a ritmos altos.' },
+        { term: 'Pirámide', category: 'entrenamiento', definition: 'Una progresión de distancias que sube y baja de forma simétrica. Ej: 400m-800m-1200m-800m-400m. Es un entrenamiento avanzado que combina velocidad, ritmo y resistencia en una sola sesión, aumentando el estímulo fisiológico y la concentración mental.' },
+        { term: 'El Muro', category: 'carrera', definition: 'Fenómeno fisiológico y psicológico que suele ocurrir alrededor del kilómetro 30 en un maratón. Se debe al agotamiento total de las reservas de glucógeno, obligando al cuerpo a usar grasa de forma ineficiente. Las piernas se sienten pesadas y cada zancada es un esfuerzo monumental.' },
+        { term: 'PB / PR', category: 'carrera', definition: 'Siglas de "Personal Best" o "Personal Record". Es tu mejor marca personal histórica en una distancia específica. Conseguir un PB es el objetivo de la mayoría de corredores. También se usa SB (Season Best) para la mejor marca de la temporada.' },
+        { term: 'Negative Split', category: 'carrera', definition: 'Estrategia de carrera magistral que consiste en correr la segunda mitad de la distancia más rápido que la primera mitad. Requiere disciplina, paciencia y conocimiento de tu ritmo. La mayoría de los récords mundiales se han logrado con parciales negativos.' },
+        { term: 'Liebre', category: 'carrera', definition: 'Corredor experimentado que marca un ritmo constante durante una carrera para ayudar a otros corredores a lograr un tiempo objetivo específico. Lleva un globo o cartel con el tiempo meta. Su trabajo es ser preciso y consistente, sacrificando su propia carrera.' },
+        { term: 'DNF / DNS', category: 'carrera', definition: 'Siglas oficiales en clasificaciones. DNF ("Did Not Finish" — No terminó) y DNS ("Did Not Start" — No empezó). No son fracasos; a veces la decisión más inteligente es no empezar o retirarse para evitar una lesión grave o un problema de salud.' },
+        { term: 'Split', category: 'carrera', definition: 'Tiempo parcial registrado en un punto intermedio de una carrera o entrenamiento. Ej: "Pasé el 5K en 22:30". Analizar tus splits te ayuda a identificar si estás yendo demasiado rápido al inicio (positive split) o si mantuviste una estrategia inteligente.' },
+        { term: 'Drop', category: 'equipamiento', definition: 'La diferencia de altura (en milímetros) entre el talón y la punta de una zapatilla de correr. Un drop alto (10-12mm) favorece a los que talonean, mientras que un drop bajo o cero (0-4mm) promueve un aterrizaje de mediopié y fortalece la musculatura intrínseca del pie.' },
+        { term: 'Placa de Carbono', category: 'equipamiento', definition: 'Pieza rígida insertada en la mediasuela de las zapatillas de competición. Actúa como una palanca o resorte, devolviendo energía en cada zancada y mejorando la economía de carrera entre un 1-4%. Combinada con espumas de alto rebote (Peba, ZoomX) es la tecnología dominante.' },
+        { term: 'Pronador', category: 'equipamiento', definition: 'Tipo de pisada donde el pie tiende a inclinarse hacia adentro (pronación) al aterrizar. La pronación es natural y necesaria para absorber impacto, pero la pronación excesiva puede requerir zapatillas con soporte medial o estabilidad para prevenir lesiones como la fascitis plantar.' },
+        { term: 'Supinador', category: 'equipamiento', definition: 'Tipo de pisada donde el pie tiende a inclinarse hacia afuera (supinación) al aterrizar. Es menos común que la pronación. Los supinadores suelen necesitar zapatillas neutras con buena amortiguación, ya que su pie absorbe menos el impacto de forma natural.' }
+      ];
+
+      const CATEGORIES = [
+        { id: 'all', label: 'Todos', color: '#CCFF00' },
+        { id: 'fisiologia', label: 'Fisiología', color: '#22D3EE' },
+        { id: 'entrenamiento', label: 'Entrenamiento', color: '#FF5722' },
+        { id: 'carrera', label: 'Competición', color: '#FBBF24' },
+        { id: 'equipamiento', label: 'Equipamiento', color: '#8B5CF6' }
+      ];
+
+      const CAT_COLORS = {
+        fisiologia: { bg: 'rgba(34,211,238,0.1)', text: '#22D3EE', dot: '#22D3EE' },
+        entrenamiento: { bg: 'rgba(255,87,34,0.1)', text: '#FF5722', dot: '#FF5722' },
+        carrera: { bg: 'rgba(251,191,36,0.1)', text: '#FBBF24', dot: '#FBBF24' },
+        equipamiento: { bg: 'rgba(139,92,246,0.1)', text: '#8B5CF6', dot: '#8B5CF6' }
+      };
+
+      const grid = document.getElementById('glosarioGrid');
+      const searchInput = document.getElementById('glosarioSearch');
+      const filterPills = document.getElementById('filterPills');
+      const visibleCount = document.getElementById('visibleCount');
+      const totalCount = document.getElementById('totalCount');
+
+      let currentFilter = 'all';
+      let currentSearch = '';
+
+      totalCount.textContent = glosarioData.length;
+
+      function renderPills() {
+        filterPills.innerHTML = CATEGORIES.map(c => {
+          const count = c.id === 'all' ? glosarioData.length : glosarioData.filter(t => t.category === c.id).length;
+          const activeClass = c.id === currentFilter ? 'active' : '';
+          return `<button class="filter-pill ${activeClass}" data-cat="${c.id}">${c.label} <span class="pill-count">${count}</span></button>`;
+        }).join('');
+        filterPills.querySelectorAll('.filter-pill').forEach(btn => {
+          btn.addEventListener('click', () => {
+            filterPills.querySelectorAll('.filter-pill').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentFilter = btn.dataset.cat;
+            renderGrid();
+          });
+        });
+      }
+
+      function getCategoryStyle(cat) {
+        return CAT_COLORS[cat] || { bg: 'rgba(255,255,255,0.04)', text: '#64748B', dot: '#64748B' };
+      }
+
+      function renderGrid() {
+        const filtered = glosarioData.filter(t => {
+          const matchCat = currentFilter === 'all' || t.category === currentFilter;
+          if (!currentSearch) return matchCat;
+          const q = currentSearch.toLowerCase();
+          return matchCat && (
+            t.term.toLowerCase().includes(q) ||
+            t.definition.toLowerCase().includes(q) ||
+            t.category.includes(q)
+          );
+        });
+
+        visibleCount.textContent = filtered.length;
+
+        if (filtered.length === 0) {
+          grid.innerHTML = `
+            <div class="empty-state show">
+              <div class="w-20 h-20 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-5">
+                <svg class="w-10 h-10 text-[#475569]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+              </div>
+              <h3 class="text-white font-bold text-lg mb-2">No encontramos ese término</h3>
+              <p class="text-[#64748B] text-sm max-w-md mx-auto mb-6">¿Crees que deberíamos agregarlo? El glosario crece con la comunidad.</p>
+              <a href="/sugerir-herramienta/" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#CCFF00]/10 border border-[#CCFF00]/20 text-[#CCFF00] text-sm font-semibold hover:bg-[#CCFF00]/20 transition-all duration-300">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                Sugerir término
+              </a>
+            </div>
+          `;
+          return;
+        }
+
+        grid.innerHTML = filtered.map((t, i) => {
+          const style = getCategoryStyle(t.category);
+          return `
+            <div class="glosario-card fade-in-card" style="animation-delay:${i * 30}ms">
+              <div class="category-badge" style="background:${style.bg};color:${style.text}">
+                <span class="category-dot" style="background:${style.dot}"></span>
+                ${CATEGORIES.find(c => c.id === t.category)?.label || t.category}
+              </div>
+              <div class="term">${t.term}</div>
+              <div class="definition">${t.definition}</div>
+              <div class="card-footer">
+                <span class="term-index">#${String(i + 1).padStart(2, '0')}</span>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      searchInput.addEventListener('input', () => {
+        currentSearch = searchInput.value.trim();
+        renderGrid();
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+          e.preventDefault();
+          searchInput.focus();
+        }
+        if (e.key === 'Escape') {
+          searchInput.blur();
+        }
+      });
+
+      const controlPanel = document.getElementById('controlPanel');
+      let controlObserver;
+      if ('IntersectionObserver' in window) {
+        controlObserver = new IntersectionObserver(([entry]) => {
+          controlPanel.classList.toggle('scrolled', !entry.isIntersecting);
+        }, { threshold: 0 });
+        const sentinel = document.createElement('div');
+        sentinel.style.position = 'absolute';
+        sentinel.style.top = '5rem';
+        sentinel.style.height = '1px';
+        sentinel.style.opacity = '0';
+        document.body.prepend(sentinel);
+        controlObserver.observe(sentinel);
+      }
+
+      renderPills();
+      renderGrid();
+    })();
+  </script>
+
+</body>
+</html>
