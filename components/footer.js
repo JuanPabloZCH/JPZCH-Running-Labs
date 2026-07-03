@@ -25,7 +25,7 @@ const JPZCH_FOOTER = `
           <li><a href="/tools/pace-calculator/" class="text-[#64748B] hover:text-[#CCFF00] text-sm transition-colors duration-300">Calculadora de Ritmo</a></li>
           <li><a href="/tools/training-zones/" class="text-[#64748B] hover:text-[#CCFF00] text-sm transition-colors duration-300">Zonas Cardíacas</a></li>
           <li><a href="/tools/race-predictor/" class="text-[#64748B] hover:text-[#CCFF00] text-sm transition-colors duration-300">Predictor de Carreras</a></li>
-          <li><span class="text-[#475569] text-sm cursor-default">VO₂Max Calculator</span></li>
+          <li><a href="/tools/vo2max-calculator/" class="text-[#64748B] hover:text-[#CCFF00] text-sm transition-colors duration-300">Calculadora VO₂Max</a></li>
           <li><span class="text-[#475569] text-sm cursor-default">Y más (próximamente)</span></li>
         </ul>
       </div>

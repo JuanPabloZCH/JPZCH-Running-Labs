@@ -1,2 +1,372 @@
-<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Calculadora VO&#8322;Max  JPZCH Running Labs</title><meta name="description" content="Estima tu consumo máximo de oxígeno usando test de Cooper, Rockport o tiempo de carrera."><meta name="theme-color" content="#0B0F19"><script src="https://cdn.tailwindcss.com"></script><link rel="stylesheet" href="/assets/css/styles.css"></head><body><div id="navbar-placeholder"></div><main class="min-h-screen pt-24 pb-12"><div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8"><div class="text-center mb-10"><span class="inline-block text-[#CCFF00] text-xs font-semibold uppercase tracking-[0.2em] mb-3">Herramienta</span><h1 class="text-3xl md:text-4xl font-black text-white mb-3">Calculadora <span class="text-gradient-green">VO&#8322;Max</span></h1><p class="text-[#94A3B8] text-sm md:text-base max-w-xl mx-auto">Estima tu consumo máximo de oxígeno mediante los test de Cooper, Rockport o directamente desde tu tiempo de carrera.</p></div><div class="glass rounded-2xl p-6 md:p-8 text-center"><div class="w-16 h-16 rounded-2xl bg-[#CCFF00]/10 border border-[#CCFF00]/20 flex items-center justify-center mx-auto mb-4"><svg class="w-8 h-8 text-[#CCFF00]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg></div><p class="text-[#94A3B8]">Herramienta en construcción.</p><a href="/" class="btn-secondary mt-6 inline-flex">Volver al inicio</a></div></div></main><div id="footer-placeholder"></div><script src="/assets/js/config.js"></script><script src="/assets/js/store.js"></script><script src="/components/navbar.js"></script><script src="/components/footer.js"></script><script src="/assets/js/profile-modal.js"></script>
-  <script src="/assets/js/components.js"></script></body></html>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VO₂Max Calculator — JPZCH Running Labs</title>
+  <meta name="description" content="Estima tu VO₂max usando 3 métodos validados: Test de Cooper, Frecuencia Cardíaca en Reposo, o Rendimiento en Carrera. Conoce tu capacidad aeróbica máxima.">
+  <meta name="theme-color" content="#0B0F19">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23CCFF00'/%3E%3Ctext x='16' y='22' font-family='Inter,system-ui,sans-serif' font-size='18' font-weight='900' fill='%230B0F19' text-anchor='middle'%3EJP%3C/text%3E%3C/svg%3E">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/assets/css/styles.css">
+  <style>
+    .hero-vo2 { min-height: 35vh; display: flex; align-items: center; position: relative; overflow: hidden; }
+    .hero-vo2::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 30% 30%, rgba(34,211,238,0.04) 0%, transparent 50%), radial-gradient(circle at 70% 70%, rgba(204,255,0,0.03) 0%, transparent 50%); pointer-events: none; }
+    .card-glass { background: linear-gradient(145deg, rgba(19,26,43,0.8), rgba(26,35,50,0.6)); border: 1px solid rgba(255,255,255,0.06); border-radius: 1.25rem; padding: 1.25rem; backdrop-filter: blur(12px); }
+    @media (min-width: 768px) { .card-glass { padding: 1.5rem; } }
+    .method-btn { flex: 1; padding: 0.75rem 0.5rem; text-align: center; font-size: 0.75rem; font-weight: 700; border-radius: 0.75rem; border: 1px solid rgba(255,255,255,0.06); cursor: pointer; transition: all 0.3s ease; background: rgba(255,255,255,0.02); color: #64748B; line-height: 1.2; }
+    .method-btn:hover { border-color: rgba(34,211,238,0.2); color: #94A3B8; }
+    .method-btn.active { background: rgba(34,211,238,0.08); border-color: #22D3EE; color: #22D3EE; box-shadow: 0 0 20px rgba(34,211,238,0.08); }
+    .method-panel { display: none; }
+    .method-panel.active { display: block; animation: fadePanel 0.3s ease; }
+    @keyframes fadePanel { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    .form-input { background: rgba(11,15,25,0.6); border: 1px solid rgba(255,255,255,0.08); border-radius: 0.75rem; padding: 0.75rem 1rem; color: #F1F5F9; font-size: 1rem; font-weight: 600; width: 100%; transition: all 0.3s ease; outline: none; }
+    .form-input:focus { border-color: #22D3EE; box-shadow: 0 0 0 3px rgba(34,211,238,0.1); }
+    .form-input::placeholder { color: #475569; font-weight: 400; }
+    .form-label { font-size: 0.75rem; font-weight: 600; color: #64748B; margin-bottom: 0.375rem; display: block; }
+    .result-ring { width: 160px; height: 160px; border-radius: 50%; border: 6px solid rgba(34,211,238,0.2); display: flex; align-items: center; justify-content: center; flex-direction: column; margin: 0 auto; position: relative; }
+    .result-ring .number { font-size: 2.5rem; font-weight: 900; color: #22D3EE; line-height: 1; }
+    .result-ring .unit { font-size: 0.75rem; font-weight: 600; color: #64748B; margin-top: 0.25rem; }
+    .badge-level { display: inline-flex; align-items: center; gap: 0.375rem; padding: 0.375rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 700; }
+    .tab-gender { display: inline-flex; background: rgba(255,255,255,0.04); border-radius: 0.5rem; padding: 2px; }
+    .tab-gender button { padding: 0.375rem 1rem; font-size: 0.8125rem; font-weight: 600; border-radius: 0.375rem; border: none; cursor: pointer; transition: all 0.2s ease; color: #64748B; background: transparent; }
+    .tab-gender button.active { background: #22D3EE; color: #0B0F19; }
+    .table-class { width: 100%; border-collapse: collapse; font-size: 0.75rem; }
+    .table-class th { text-align: left; padding: 0.5rem 0.375rem; color: #64748B; font-weight: 600; border-bottom: 1px solid rgba(255,255,255,0.06); }
+    .table-class td { padding: 0.5rem 0.375rem; color: #94A3B8; border-bottom: 1px solid rgba(255,255,255,0.03); }
+    .table-class td.highlight { color: #22D3EE; font-weight: 700; }
+    .method-icon { width: 1.25rem; height: 1.25rem; display: inline-block; vertical-align: middle; }
+    .fade-up { animation: fadeUp 0.5s ease forwards; opacity: 0; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+    @media (max-width: 639px) { .result-ring { width: 130px; height: 130px; } .result-ring .number { font-size: 2rem; } }
+  </style>
+</head>
+<body class="antialiased">
+  <div id="navbar-placeholder"></div>
+
+  <section class="hero-vo2 pt-24 md:pt-28">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full py-14 md:py-20 relative z-10">
+      <div class="max-w-3xl mx-auto text-center">
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#22D3EE]/10 border border-[#22D3EE]/20 text-[#22D3EE] text-xs font-semibold mb-5">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.636 50.636 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.903 59.903 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0 1 12 13.489a50.702 50.702 0 0 1 7.74-3.342"/></svg>
+          <span>Calculadoras</span>
+        </div>
+        <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black leading-[1.1] tracking-tight mb-4">
+          <span class="text-white">VO₂</span><span class="text-[#64748B] text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black">max</span>
+          <span class="text-gradient-cyan"> Calculator</span>
+        </h1>
+        <p class="text-[#94A3B8] text-sm sm:text-base md:text-lg leading-relaxed max-w-2xl mx-auto">
+          Estima tu consumo máximo de oxígeno usando 3 métodos validados. Selecciona el que tengas disponible.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
+    <div class="card-glass p-6 md:p-8 mb-6 fade-up glow-cyan" style="animation-delay:0.1s">
+      <div class="flex gap-2 mb-6" id="methodSelector">
+        <button class="method-btn active" data-method="cooper">
+          <span class="block">🏃</span>
+          <span class="block mt-0.5">Cooper</span>
+        </button>
+        <button class="method-btn" data-method="hr">
+          <span class="block">❤️</span>
+          <span class="block mt-0.5">FC Reposo</span>
+        </button>
+        <button class="method-btn" data-method="race">
+          <span class="block">⏱️</span>
+          <span class="block mt-0.5">Carrera</span>
+        </button>
+      </div>
+
+      <div class="method-panel active" id="panel-cooper">
+        <label class="form-label">Distancia recorrida en 12 minutos (metros)</label>
+        <input type="number" id="cooperDist" class="form-input" placeholder="Ej: 3200" value="3200" min="200" max="6000" step="10">
+        <p class="text-[#475569] text-[11px] mt-1.5">Corre todo lo que puedas durante 12 min sobre superficie plana. Mide la distancia total en metros.</p>
+      </div>
+
+      <div class="method-panel" id="panel-hr">
+        <label class="form-label">Edad (años)</label>
+        <input type="number" id="hrAge" class="form-input" placeholder="Ej: 30" value="30" min="10" max="100">
+        <label class="form-label mt-4">Frecuencia cardíaca en reposo (lpm)</label>
+        <input type="number" id="hrRest" class="form-input" placeholder="Ej: 55" value="55" min="30" max="100">
+        <p class="text-[#475569] text-[11px] mt-1.5">Mide tu pulso al despertar, antes de levantarte. 3 días seguidos y usa el promedio.</p>
+      </div>
+
+      <div class="method-panel" id="panel-race">
+        <label class="form-label">Distancia de carrera</label>
+        <div class="flex gap-2 mb-4">
+          <button class="dist-btn active" data-race-dist="5">5K</button>
+          <button class="dist-btn" data-race-dist="10">10K</button>
+        </div>
+        <label class="form-label">Tu tiempo</label>
+        <input type="text" id="raceTime" class="form-input" placeholder="mm:ss" value="25:00" inputmode="numeric">
+        <p class="text-[#475569] text-[11px] mt-1.5">Ingresa tu mejor tiempo reciente en la distancia seleccionada.</p>
+      </div>
+
+      <hr class="border-white/5 my-6">
+
+      <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+        <div>
+          <label class="form-label">Sexo (para clasificación)</label>
+          <div class="tab-gender" id="genderSelector">
+            <button class="active" data-gender="male">Hombre</button>
+            <button data-gender="female">Mujer</button>
+          </div>
+        </div>
+        <button id="calcBtn" class="px-8 py-3 rounded-xl font-bold text-sm text-[#0B0F19] bg-[#22D3EE] hover:bg-[#22D3EE]/90 transition-all duration-300" style="box-shadow: 0 4px 20px rgba(34,211,238,0.25);">
+          Calcular VO₂max
+        </button>
+      </div>
+    </div>
+
+    <div id="resultSection" class="card-glass p-6 md:p-8 fade-up" style="animation-delay:0.2s;display:none">
+      <div class="grid md:grid-cols-2 gap-8 items-center mb-8">
+        <div class="text-center">
+          <div class="result-ring">
+            <span class="number" id="vo2Value">—</span>
+            <span class="unit">ml/kg/min</span>
+          </div>
+          <div class="mt-4" id="vo2Badge"></div>
+          <p class="text-[#475569] text-xs mt-3">Método: <span id="usedMethod" class="text-[#94A3B8] font-semibold"></span></p>
+        </div>
+        <div>
+          <h3 class="text-white font-bold text-sm mb-3">¿Qué significa tu VO₂max?</h3>
+          <div id="vo2Description" class="text-[#94A3B8] text-xs leading-relaxed space-y-2"></div>
+        </div>
+      </div>
+
+      <div>
+        <h3 class="text-white font-bold text-sm mb-3">Tabla de clasificación</h3>
+        <div class="overflow-x-auto">
+          <table class="table-class" id="classTable">
+            <thead>
+              <tr>
+                <th>Edad</th>
+                <th>Excelente</th>
+                <th>Bueno</th>
+                <th>Regular</th>
+                <th>Bajo</th>
+                <th>Muy Bajo</th>
+              </tr>
+            </thead>
+            <tbody id="classBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-glass p-6 md:p-8 mt-8 fade-up" style="animation-delay:0.3s">
+      <h2 class="text-white font-bold text-lg mb-4">Métodos utilizados</h2>
+      <div class="grid md:grid-cols-3 gap-6">
+        <div>
+          <h3 class="text-[#22D3EE] font-semibold text-sm mb-2">Test de Cooper</h3>
+          <p class="text-[#94A3B8] text-xs leading-relaxed">VO₂max = (distancia_m - 504.9) ÷ 44.73. Desarrollado por el Dr. Kenneth Cooper en 1968 para el ejército de EE.UU. Correlación de 0.90 con medición directa en laboratorio.</p>
+        </div>
+        <div>
+          <h3 class="text-[#22D3EE] font-semibold text-sm mb-2">FC en Reposo</h3>
+          <p class="text-[#94A3B8] text-xs leading-relaxed">VO₂max = 15.3 × FCmax ÷ FCreposo, donde FCmax = 208 - 0.7 × edad (Tanaka). Fórmula Uth–Sørensen–Overgaard, validada en población no atlética.</p>
+        </div>
+        <div>
+          <h3 class="text-[#22D3EE] font-semibold text-sm mb-2">Rendimiento en Carrera</h3>
+          <p class="text-[#94A3B8] text-xs leading-relaxed">Basado en la ecuación ACSM para correr: VO₂ = 0.2 × v + 3.5 (v en m/min). Ajustado al 97% (5K) o 94% (10K) del VO₂max. Válido para ritmos de 3:00 a 6:00 min/km.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div id="footer-placeholder"></div>
+  <script src="/assets/js/config.js"></script>
+  <script src="/assets/js/store.js"></script>
+  <script src="/components/navbar.js"></script>
+  <script src="/components/footer.js"></script>
+  <script src="/assets/js/profile-modal.js"></script>
+  <script src="/assets/js/components.js"></script>
+  <script>
+  (() => {
+    const CLASS_DATA = {
+      male: [
+        { range: '20-29', excelente: 51, bueno: 45, regular: 38, bajo: 31 },
+        { range: '30-39', excelente: 48, bueno: 43, regular: 35, bajo: 28 },
+        { range: '40-49', excelente: 45, bueno: 40, regular: 33, bajo: 26 },
+        { range: '50-59', excelente: 42, bueno: 37, regular: 30, bajo: 23 },
+        { range: '60+', excelente: 39, bueno: 35, regular: 27, bajo: 20 }
+      ],
+      female: [
+        { range: '20-29', excelente: 44, bueno: 38, regular: 31, bajo: 25 },
+        { range: '30-39', excelente: 42, bueno: 36, regular: 29, bajo: 23 },
+        { range: '40-49', excelente: 39, bueno: 34, regular: 27, bajo: 21 },
+        { range: '50-59', excelente: 36, bueno: 31, regular: 24, bajo: 18 },
+        { range: '60+', excelente: 33, bueno: 28, regular: 22, bajo: 16 }
+      ]
+    };
+
+    const DESCRIPTIONS = {
+      excelente: { label: 'Excelente', color: '#22D3EE', bg: 'rgba(34,211,238,0.1)', text: 'Nivel de atleta de elite o muy entrenado. Capacidad aeróbica superior al 95% de la población de tu edad y sexo.' },
+      bueno: { label: 'Bueno', color: '#34D399', bg: 'rgba(52,211,153,0.1)', text: 'Por encima del promedio. Base aeróbica sólida, ideal para carreras de fondo y rendimiento constante.' },
+      regular: { label: 'Regular', color: '#FBBF24', bg: 'rgba(251,191,36,0.1)', text: 'Dentro del promedio saludable. Hay margen para mejorar con entrenamiento aeróbico consistente 3-4x/semana.' },
+      bajo: { label: 'Bajo', color: '#FF5722', bg: 'rgba(255,87,34,0.1)', text: 'Por debajo del promedio. Incrementar volumen de carrera suave y caminata rápida puede mejorar significativamente tu VO₂max.' },
+      muyBajo: { label: 'Muy Bajo', color: '#DC2626', bg: 'rgba(220,38,38,0.1)', text: 'Riesgo cardiovascular elevado. Consulta con un médico antes de iniciar entrenamiento intenso.' }
+    };
+
+    let activeMethod = 'cooper';
+    let gender = 'male';
+    let raceDist = 5;
+
+    document.querySelectorAll('#methodSelector .method-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('#methodSelector .method-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        document.querySelectorAll('.method-panel').forEach(p => p.classList.remove('active'));
+        activeMethod = btn.dataset.method;
+        document.getElementById(`panel-${activeMethod}`).classList.add('active');
+      });
+    });
+
+    document.querySelectorAll('#genderSelector button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('#genderSelector button').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        gender = btn.dataset.gender;
+        if (document.getElementById('resultSection').style.display !== 'none') {
+          renderTable();
+          updateBadge();
+        }
+      });
+    });
+
+    document.querySelectorAll('[data-race-dist]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('[data-race-dist]').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        raceDist = parseInt(btn.dataset.raceDist);
+      });
+    });
+
+    function getAgeRange(age) {
+      if (age < 20) return '20-29';
+      if (age <= 29) return '20-29';
+      if (age <= 39) return '30-39';
+      if (age <= 49) return '40-49';
+      if (age <= 59) return '50-59';
+      return '60+';
+    }
+
+    function classify(vo2, age, gender) {
+      const range = getAgeRange(age);
+      const row = CLASS_DATA[gender].find(r => r.range === range);
+      if (!row) return 'regular';
+      if (vo2 >= row.excelente) return 'excelente';
+      if (vo2 >= row.bueno) return 'bueno';
+      if (vo2 >= row.regular) return 'regular';
+      if (vo2 >= row.bajo) return 'bajo';
+      return 'muyBajo';
+    }
+
+    function calcVO2() {
+      let vo2 = null;
+      let methodName = '';
+      let age = 30;
+
+      if (activeMethod === 'cooper') {
+        const dist = parseFloat(document.getElementById('cooperDist').value);
+        if (dist && dist > 0) {
+          vo2 = (dist - 504.9) / 44.73;
+          methodName = 'Test de Cooper';
+          if (vo2 < 10 || vo2 > 90) vo2 = null;
+        }
+      } else if (activeMethod === 'hr') {
+        age = parseInt(document.getElementById('hrAge').value) || 30;
+        const hrRest = parseFloat(document.getElementById('hrRest').value);
+        if (hrRest && hrRest > 0 && age >= 10) {
+          const hrMax = 208 - 0.7 * age;
+          vo2 = 15.3 * hrMax / hrRest;
+          methodName = 'FC en Reposo';
+          if (vo2 < 10 || vo2 > 90) vo2 = null;
+        }
+      } else if (activeMethod === 'race') {
+        const tStr = document.getElementById('raceTime').value.trim();
+        const parts = tStr.split(':').map(s => parseFloat(s) || 0);
+        let tMin = 0;
+        if (parts.length === 2) tMin = parts[0] + parts[1] / 60;
+        else if (parts.length === 1) tMin = parts[0];
+        else return null;
+        if (tMin > 0) {
+          const distM = raceDist * 1000;
+          const v = distM / tMin;
+          const vo2race = 0.2 * v + 3.5;
+          const pct = raceDist === 5 ? 0.97 : 0.94;
+          vo2 = vo2race / pct;
+          methodName = `Rendimiento en ${raceDist}K`;
+          if (vo2 < 10 || vo2 > 90) vo2 = null;
+        }
+      }
+
+      if (vo2 === null || isNaN(vo2)) return;
+      return { vo2: Math.round(vo2 * 10) / 10, methodName, age };
+    }
+
+    function renderTable() {
+      const data = CLASS_DATA[gender];
+      const tbody = document.getElementById('classBody');
+      tbody.innerHTML = data.map(r => `
+        <tr>
+          <td class="text-white font-semibold">${r.range}</td>
+          <td class="text-[#22D3EE] font-semibold">&gt;${r.excelente}</td>
+          <td class="text-[#34D399]">${r.bueno}-${r.excelente}</td>
+          <td class="text-[#FBBF24]">${r.regular}-${r.bueno}</td>
+          <td class="text-[#FF5722]">${r.bajo}-${r.regular}</td>
+          <td class="text-[#DC2626]">&lt;${r.bajo}</td>
+        </tr>
+      `).join('');
+    }
+
+    function updateBadge() {
+      const result = calcVO2();
+      if (!result) return;
+      const level = classify(result.vo2, result.age, gender);
+      const desc = DESCRIPTIONS[level];
+      const badge = document.getElementById('vo2Badge');
+      badge.innerHTML = `<span class="badge-level" style="background:${desc.bg};color:${desc.color};border:1px solid ${desc.color}20">${desc.label}</span>`;
+    }
+
+    function calculate() {
+      const result = calcVO2();
+      if (!result) {
+        document.getElementById('resultSection').style.display = 'none';
+        return;
+      }
+
+      const { vo2, methodName, age } = result;
+      const level = classify(vo2, age, gender);
+      const desc = DESCRIPTIONS[level];
+
+      document.getElementById('vo2Value').textContent = vo2;
+      document.getElementById('usedMethod').textContent = methodName;
+      document.getElementById('vo2Description').innerHTML = `
+        <p>${desc.text}</p>
+        <p class="pt-2 text-[#64748B]">Tu VO₂max de <strong class="text-white">${vo2} ml/kg/min</strong> se clasifica como <strong style="color:${desc.color}">${desc.label}</strong> para tu rango de edad (${getAgeRange(age)} años).</p>
+      `;
+
+      updateBadge();
+      renderTable();
+      document.getElementById('resultSection').style.display = 'block';
+      document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    document.getElementById('calcBtn').addEventListener('click', calculate);
+
+    document.querySelectorAll('#panel-cooper input, #panel-hr input, #panel-race input').forEach(inp => {
+      inp.addEventListener('keydown', e => { if (e.key === 'Enter') calculate(); });
+    });
+
+    document.getElementById('raceTime').addEventListener('input', function() {
+      this.value = this.value.replace(/[^0-9:]/g, '');
+    });
+
+    renderTable();
+    calculate();
+  })();
+  </script>
+</body>
+</html>

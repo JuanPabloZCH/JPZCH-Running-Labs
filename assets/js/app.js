@@ -25,13 +25,13 @@ const JPZCH_App = (() => {
     {
       id: 'vo2max-calculator',
       name: 'Calculadora VO₂Max',
-      description: 'Estima tu consumo máximo de oxígeno usando test de Cooper, Rockport o tiempo de carrera.',
+      description: 'Estima tu consumo máximo de oxígeno usando 3 métodos validados: Cooper, FC Reposo y Rendimiento en Carrera.',
       category: 'calculadoras',
       icon: 'heart',
-      status: 'coming-soon',
-      accent: '#CCFF00',
+      status: 'available',
+      accent: '#22D3EE',
       url: '/tools/vo2max-calculator/',
-      features: ['Test Cooper', 'Rockport', 'Carrera', 'Percentiles']
+      features: ['Test Cooper', 'FC Reposo', 'Rendimiento 5K/10K', 'Clasificación']
     },
     {
       id: 'training-zones',
@@ -194,7 +194,7 @@ const JPZCH_App = (() => {
   function renderStats() {
     const stats = [
       { value: '12', label: 'Herramientas', suffix: '' },
-      { value: '4', label: 'Disponible', suffix: '' },
+      { value: '5', label: 'Disponible', suffix: '' },
       { value: '6', label: 'Categorías', suffix: '' },
       { value: '100', label: 'Gratuito', suffix: '%' }
     ];
