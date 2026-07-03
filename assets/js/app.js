@@ -3,13 +3,13 @@ const JPZCH_App = (() => {
     {
       id: 'pace-calculator',
       name: 'Calculadora de Ritmo',
-      description: 'Convierte y calcula ritmos por km, milla y distancias personalizadas. Ideal para sesiones de series y control de esfuerzo.',
+      description: 'Convierte ritmo a tiempo y viceversa para 5K, 10K, media maratón y maratón con tabla interactiva de ritmos.',
       category: 'calculadoras',
       icon: 'timer',
-      status: 'coming-soon',
+      status: 'available',
       accent: '#CCFF00',
       url: '/tools/pace-calculator/',
-      features: ['Ritmo/km', 'Ritmo/milla', 'Series', 'Tiempo total']
+      features: ['Ritmo→Tiempo', 'Tiempo→Ritmo', '5K·10K·Media·Maratón', 'WR récords']
     },
     {
       id: 'race-predictor',
@@ -39,7 +39,7 @@ const JPZCH_App = (() => {
       description: 'Calcula tus zonas de frecuencia cardíaca y ritmo objetivo según tu perfil fisiológico y umbrales.',
       category: 'planificadores',
       icon: 'activity',
-      status: 'coming-soon',
+      status: 'available',
       accent: '#FF5722',
       url: '/tools/training-zones/',
       features: ['FC Zones', 'Ritmo objetivo', 'Umbral', 'Recuperación']
@@ -194,7 +194,7 @@ const JPZCH_App = (() => {
   function renderStats() {
     const stats = [
       { value: '12', label: 'Herramientas', suffix: '' },
-      { value: '1', label: 'Disponible', suffix: '' },
+      { value: '3', label: 'Disponible', suffix: '' },
       { value: '6', label: 'Categorías', suffix: '' },
       { value: '100', label: 'Gratuito', suffix: '%' }
     ];

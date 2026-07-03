@@ -1,2 +1,611 @@
-<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Zonas de Entrenamiento — JPZCH Running Labs</title><meta name="description" content="Calcula tus zonas de frecuencia cardíaca y ritmo objetivo según tu perfil fisiológico."><meta name="theme-color" content="#0B0F19"><script src="https://cdn.tailwindcss.com"></script><link rel="stylesheet" href="/assets/css/styles.css"></head><body><div id="navbar-placeholder"></div><main class="min-h-screen pt-24 pb-12"><div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8"><div class="text-center mb-10"><span class="inline-block text-[#FF5722] text-xs font-semibold uppercase tracking-[0.2em] mb-3">Herramienta</span><h1 class="text-3xl md:text-4xl font-black text-white mb-3">Zonas de <span class="text-gradient-orange">Entrenamiento</span></h1><p class="text-[#94A3B8] text-sm md:text-base max-w-xl mx-auto">Calcula tus zonas de frecuencia cardíaca y ritmo objetivo según tu perfil fisiológico y umbrales.</p></div><div class="glass rounded-2xl p-6 md:p-8 text-center"><div class="w-16 h-16 rounded-2xl bg-[#FF5722]/10 border border-[#FF5722]/20 flex items-center justify-center mx-auto mb-4"><svg class="w-8 h-8 text-[#FF5722]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg></div><p class="text-[#94A3B8]">Herramienta en construcción.</p><a href="/" class="btn-secondary mt-6 inline-flex">Volver al inicio</a></div></div></main><div id="footer-placeholder"></div><script src="/assets/js/config.js"></script><script src="/assets/js/store.js"></script><script src="/components/navbar.js"></script><script src="/components/footer.js"></script><script src="/assets/js/profile-modal.js"></script>
-  <script src="/assets/js/components.js"></script></body></html>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zonas Cardíacas — JPZCH Running Labs</title>
+  <meta name="description" content="Calcula tus zonas de entrenamiento cardiovascular según 3 metodologías: Básica, Karvonen y Joe Friel (LTHR).">
+  <meta name="theme-color" content="#0B0F19">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23CCFF00'/%3E%3Ctext x='16' y='22' font-family='Inter,system-ui,sans-serif' font-size='18' font-weight='900' fill='%230B0F19' text-anchor='middle'%3EJP%3C/text%3E%3C/svg%3E">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/assets/css/styles.css">
+  <style>
+    .hero-hr {
+      min-height: 35vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-hr::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 70% 30%, rgba(239, 68, 68, 0.04) 0%, transparent 50%),
+        radial-gradient(circle at 30% 70%, rgba(204, 255, 0, 0.03) 0%, transparent 50%);
+      pointer-events: none;
+    }
+
+    .card-glass {
+      background: linear-gradient(145deg, rgba(19, 26, 43, 0.8), rgba(26, 35, 50, 0.6));
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 1.25rem;
+      padding: 1.25rem;
+      backdrop-filter: blur(12px);
+    }
+    @media (min-width: 768px) { .card-glass { padding: 1.5rem; } }
+
+    .method-pill {
+      padding: 0.5rem 1rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      border: 1px solid rgba(255,255,255,0.06);
+      background: transparent;
+      color: #64748B;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      white-space: nowrap;
+    }
+    .method-pill:hover { color: #94A3B8; background: rgba(255,255,255,0.03); }
+    .method-pill.active {
+      background: rgba(204, 255, 0, 0.1);
+      border-color: rgba(204, 255, 0, 0.2);
+      color: #CCFF00;
+    }
+
+    .hr-input {
+      width: 100%;
+      max-width: 8rem;
+      padding: 0.625rem 0.75rem;
+      background: rgba(11, 15, 25, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 0.75rem;
+      color: #F1F5F9;
+      font-size: 1rem;
+      font-weight: 600;
+      font-family: inherit;
+      outline: none;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+    .hr-input:focus {
+      border-color: rgba(204, 255, 0, 0.3);
+      box-shadow: 0 0 0 3px rgba(204, 255, 0, 0.06);
+    }
+    .hr-input::placeholder { color: #475569; font-weight: 400; font-size: 0.875rem; }
+
+    .help-tip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      font-size: 0.65rem;
+      color: #64748B;
+      cursor: pointer;
+      transition: color 0.2s;
+      margin-top: 0.375rem;
+    }
+    .help-tip:hover { color: #94A3B8; }
+    .help-tip svg { width: 0.75rem; height: 0.75rem; }
+    .help-content {
+      font-size: 0.75rem;
+      line-height: 1.7;
+      color: #94A3B8;
+      padding: 0.75rem 1rem;
+      border-radius: 0.75rem;
+      background: rgba(11, 15, 25, 0.5);
+      border: 1px solid rgba(255,255,255,0.04);
+      margin-top: 0.5rem;
+      display: none;
+    }
+    .help-content.open { display: block; }
+
+    .zone-card {
+      border-radius: 1rem;
+      padding: 1rem;
+      min-height: 3.5rem;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .zone-card:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,0,0,0.2); }
+    .zone-card .bar-fill {
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      opacity: 0.08;
+      transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .zone-card .zone-label {
+      font-size: 0.65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      position: relative;
+      z-index: 1;
+    }
+    .zone-card .zone-name {
+      font-size: 0.8125rem;
+      font-weight: 600;
+      position: relative;
+      z-index: 1;
+    }
+    .zone-card .zone-range {
+      font-size: 1rem;
+      font-weight: 800;
+      position: relative;
+      z-index: 1;
+    }
+    .zone-card .zone-benefit {
+      font-size: 0.7rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .zone-z1 { background: rgba(96, 165, 250, 0.08); border: 1px solid rgba(96, 165, 250, 0.15); }
+    .zone-z1 .zone-label, .zone-z1 .zone-range { color: #60A5FA; }
+    .zone-z1 .zone-name, .zone-z1 .zone-benefit { color: #93C5FD; }
+    .zone-z2 { background: rgba(52, 211, 153, 0.08); border: 1px solid rgba(52, 211, 153, 0.15); }
+    .zone-z2 .zone-label, .zone-z2 .zone-range { color: #34D399; }
+    .zone-z2 .zone-name, .zone-z2 .zone-benefit { color: #6EE7B7; }
+    .zone-z3 { background: rgba(251, 191, 36, 0.08); border: 1px solid rgba(251, 191, 36, 0.15); }
+    .zone-z3 .zone-label, .zone-z3 .zone-range { color: #FBBF24; }
+    .zone-z3 .zone-name, .zone-z3 .zone-benefit { color: #FCD34D; }
+    .zone-z4 { background: rgba(251, 146, 60, 0.08); border: 1px solid rgba(251, 146, 60, 0.15); }
+    .zone-z4 .zone-label, .zone-z4 .zone-range { color: #FB923C; }
+    .zone-z4 .zone-name, .zone-z4 .zone-benefit { color: #FDBA74; }
+    .zone-z5 { background: rgba(248, 113, 113, 0.08); border: 1px solid rgba(248, 113, 113, 0.15); }
+    .zone-z5 .zone-label, .zone-z5 .zone-range { color: #F87171; }
+    .zone-z5 .zone-name, .zone-z5 .zone-benefit { color: #FCA5A5; }
+    .zone-z5a { background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.15); }
+    .zone-z5a .zone-label, .zone-z5a .zone-range { color: #EF4444; }
+    .zone-z5a .zone-name, .zone-z5a .zone-benefit { color: #F87171; }
+    .zone-z5b { background: rgba(220, 38, 38, 0.08); border: 1px solid rgba(220, 38, 38, 0.2); }
+    .zone-z5b .zone-label, .zone-z5b .zone-range { color: #DC2626; }
+    .zone-z5b .zone-name, .zone-z5b .zone-benefit { color: #EF4444; }
+    .zone-z5c { background: rgba(168, 85, 247, 0.08); border: 1px solid rgba(168, 85, 247, 0.15); }
+    .zone-z5c .zone-label, .zone-z5c .zone-range { color: #A855F7; }
+    .zone-z5c .zone-name, .zone-z5c .zone-benefit { color: #C084FC; }
+
+    .method-panel { display: none; }
+    .method-panel.active { display: block; }
+
+    .fade-up {
+      animation: fadeUp 0.35s ease forwards;
+      opacity: 0;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .accordion-btn {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      padding: 0.75rem 0;
+      background: none;
+      border: none;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      cursor: pointer;
+      color: #F1F5F9;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      text-align: left;
+      transition: color 0.2s;
+    }
+    .accordion-btn:hover { color: #CCFF00; }
+    .accordion-btn .chevron {
+      width: 1rem;
+      height: 1rem;
+      color: #475569;
+      transition: transform 0.3s ease;
+      flex-shrink: 0;
+    }
+    .accordion-btn.open .chevron { transform: rotate(180deg); }
+    .accordion-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.35s ease, padding 0.35s ease;
+      padding: 0;
+    }
+    .accordion-content.open {
+      max-height: 600px;
+      padding: 0.75rem 0;
+    }
+  </style>
+</head>
+<body class="antialiased">
+
+  <div id="navbar-placeholder"></div>
+
+  <section class="hero-hr pt-24 md:pt-28">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full py-12 md:py-20 relative z-10">
+      <div class="max-w-3xl mx-auto text-center">
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#CCFF00]/10 border border-[#CCFF00]/20 text-[#CCFF00] text-xs font-semibold mb-5">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+          <span>Herramienta + Guía</span>
+        </div>
+        <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black leading-[1.1] tracking-tight mb-4">
+          <span class="text-white">Calculadora de</span>
+          <span class="text-gradient-green"> Zonas Cardíacas</span>
+        </h1>
+        <p class="text-[#94A3B8] text-sm sm:text-base md:text-lg leading-relaxed max-w-2xl mx-auto">
+          Entrena con precisión. Descubre tus rangos exactos de pulsaciones (BPM) según la metodología que mejor se adapte a tu nivel y objetivos.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
+
+    <div class="flex flex-wrap justify-center gap-2 mb-6" id="methodPills">
+      <button class="method-pill active" data-method="basica">Básica (% FC Máx)</button>
+      <button class="method-pill" data-method="karvonen">Karvonen (FC Reserva)</button>
+      <button class="method-pill" data-method="friel">Joe Friel (LTHR)</button>
+    </div>
+
+    <div class="card-glass mb-6">
+      <div class="method-panel active" id="panel-basica">
+        <div class="flex flex-col sm:flex-row sm:items-end gap-4 mb-3">
+          <div>
+            <label class="text-xs font-semibold text-[#64748B] uppercase tracking-wider mb-1.5 block">FC Máxima</label>
+            <input type="number" id="b-fcmax" class="hr-input" placeholder="195" min="100" max="250">
+            <button class="help-tip" data-help="help-fcmax">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              ¿Cómo medirla?
+            </button>
+            <div id="help-fcmax" class="help-content">Realiza un test de campo: después de un calentamiento de 15-20 min, corre 3 minutos a ritmo muy fuerte (esfuerzo 9/10), luego 2 minutos todo lo que tengas. La pulsación más alta que veas al final es tu FC máx aproximada. También puedes usar una fórmula: <strong class="text-white">208 − (0.7 × edad)</strong> (Tanaka).</div>
+          </div>
+          <div class="flex items-center gap-3 text-[#475569] text-sm pb-2">
+            <span class="h-px w-6 bg-white/10"></span>o<span class="h-px w-6 bg-white/10"></span>
+          </div>
+          <div>
+            <label class="text-xs font-semibold text-[#64748B] uppercase tracking-wider mb-1.5 block">Edad (años)</label>
+            <input type="number" id="b-edad" class="hr-input" placeholder="30" min="10" max="120">
+          </div>
+          <div class="text-xs text-[#475569] pb-2">Fórmula Tanaka: <span class="text-[#94A3B8]">208 − (0.7 × edad)</span></div>
+        </div>
+        <div class="text-xs text-[#64748B] leading-relaxed p-3 rounded-lg bg-white/5">
+          <strong class="text-[#94A3B8]">¿Para quién es?</strong> Corredores principiantes o intermedios que quieren una referencia rápida sin necesidad de pruebas de esfuerzo. <strong class="text-[#94A3B8]">¿Precisión?</strong> Media — no considera tu condición física actual.
+        </div>
+      </div>
+
+      <div class="method-panel" id="panel-karvonen">
+        <div class="flex flex-col sm:flex-row sm:items-end gap-4 mb-3">
+          <div>
+            <label class="text-xs font-semibold text-[#64748B] uppercase tracking-wider mb-1.5 block">FC Máxima</label>
+            <input type="number" id="k-fcmax" class="hr-input" placeholder="195" min="100" max="250">
+            <button class="help-tip" data-help="help-fcmax2">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              ¿Cómo medirla?
+            </button>
+            <div id="help-fcmax2" class="help-content">Misma recomendación: test de campo de 3 min fuerte + 2 min máximo, o usa la fórmula Tanaka <strong class="text-white">208 − (0.7 × edad)</strong> para una estimación.</div>
+          </div>
+          <div>
+            <label class="text-xs font-semibold text-[#64748B] uppercase tracking-wider mb-1.5 block">FC Reposo</label>
+            <input type="number" id="k-fcreposo" class="hr-input" placeholder="55" min="30" max="120">
+            <button class="help-tip" data-help="help-fcrepo">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              ¿Cómo medirla?
+            </button>
+            <div id="help-fcrepo" class="help-content">Siéntate tranquilo 5 minutos sin hablar ni moverte. Luego tómate el pulso (carótida o muñeca) durante 60 segundos. Lo ideal es hacerlo apenas despiertes, antes de levantarte de la cama, durante 3 mañanas seguidas y sacar el promedio.</div>
+          </div>
+          <div class="text-xs text-[#475569] pb-2">
+            FCR = FC Máx − FC Reposo<br>
+            <span class="text-[#94A3B8]">BPM = (FCR × %) + FC Reposo</span>
+          </div>
+        </div>
+        <div class="text-xs text-[#64748B] leading-relaxed p-3 rounded-lg bg-white/5">
+          <strong class="text-[#94A3B8]">¿Para quién es?</strong> La mayoría de corredores. Es el método más recomendado porque ajusta las zonas a tu condición cardiovascular real. <strong class="text-[#CCFF00]">Recomendado.</strong> <strong class="text-[#94A3B8]">¿Precisión?</strong> Alta — considera tu FC de reposo como línea base.
+        </div>
+      </div>
+
+      <div class="method-panel" id="panel-friel">
+        <div class="flex flex-col sm:flex-row sm:items-end gap-4 mb-3">
+          <div>
+            <label class="text-xs font-semibold text-[#64748B] uppercase tracking-wider mb-1.5 block">FC de Umbral (LTHR)</label>
+            <input type="number" id="f-lthr" class="hr-input" placeholder="175" min="100" max="250">
+            <button class="help-tip" data-help="help-lthr">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              ¿Cómo encontrarlo?
+            </button>
+            <div id="help-lthr" class="help-content">Test de 30 minutos: corre a ritmo constante que sientas como "dura pero controlable" (esfuerzo 8/10). Los últimos 20 minutos son tu referencia. La FC promedio de esos 20 min es tu LTHR aproximado. También puedes usar un test de umbral de lactato en laboratorio.</div>
+          </div>
+          <div class="text-xs text-[#475569] pb-2">
+            Basado en el modelo de Joe Friel.<br>
+            <span class="text-[#94A3B8]">7 zonas derivadas del umbral de lactato.</span>
+          </div>
+        </div>
+        <div class="text-xs text-[#64748B] leading-relaxed p-3 rounded-lg bg-white/5">
+          <strong class="text-[#94A3B8]">¿Para quién es?</strong> Corredores avanzados que ya entrenan con estructura y conocen su ritmo de umbral. <strong class="text-[#94A3B8]">¿Precisión?</strong> Muy alta — las zonas se ajustan a tu estado fisiológico actual. Requiere conocer tu LTHR real.
+        </div>
+      </div>
+    </div>
+
+    <div class="flex justify-center mb-6">
+      <button id="calcBtn" class="inline-flex items-center gap-2 px-6 py-3 bg-[#CCFF00] text-[#0B0F19] font-bold text-sm rounded-xl hover:bg-[#D9FF33] transition-all hover:translate-y-[-2px] hover:shadow-[0_8px_25px_rgba(204,255,0,0.25)] active:translate-y-0">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+        Calcular Zonas
+      </button>
+    </div>
+
+    <div id="resultsContainer" class="space-y-4"></div>
+
+    <div class="mt-8 card-glass" id="guideAccordion">
+      <div class="flex items-center gap-2 mb-2">
+        <svg class="w-4 h-4 text-[#CCFF00]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+        <span class="text-white font-semibold text-sm">Guía completa de zonas cardíacas</span>
+      </div>
+
+      <button class="accordion-btn" data-accordion="guide-zones">
+        <span>¿Qué significa cada zona?</span>
+        <svg class="chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+      </button>
+      <div class="accordion-content" id="guide-zones">
+        <div class="space-y-3 text-xs text-[#94A3B8] leading-relaxed">
+          <p>Las zonas cardíacas representan <strong class="text-white">rangos de intensidad</strong> que producen diferentes adaptaciones fisiológicas. Entrenar en cada zona desarrolla un aspecto distinto de tu condición física:</p>
+          <div class="overflow-x-auto">
+            <table class="w-full text-xs">
+              <thead>
+                <tr class="border-b border-white/5">
+                  <th class="text-left py-2 pr-2 font-semibold text-[#64748B]">Zona</th>
+                  <th class="text-left py-2 pr-2 font-semibold text-[#64748B]">Nombre</th>
+                  <th class="text-left py-2 pr-2 font-semibold text-[#64748B]">Sensación (RPE)</th>
+                  <th class="text-left py-2 font-semibold text-[#64748B]">¿Para qué sirve?</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="border-b border-white/5"><td class="py-2 pr-2 text-[#60A5FA] font-semibold">Z1</td><td class="py-2 pr-2 text-white">Recuperación Activa</td><td class="py-2 pr-2">Muy ligero, puedes cantar</td><td class="py-2">Regeneración muscular, mejora de flujo sanguíneo</td></tr>
+                <tr class="border-b border-white/5"><td class="py-2 pr-2 text-[#34D399] font-semibold">Z2</td><td class="py-2 pr-2 text-white">Aeróbico Extensivo</td><td class="py-2 pr-2">Ligero, conversación fluida</td><td class="py-2">Quema de grasa, capilarización, base aeróbica. <strong class="text-[#CCFF00]">70-80% de tu volumen semanal debería estar aquí.</strong></td></tr>
+                <tr class="border-b border-white/5"><td class="py-2 pr-2 text-[#FBBF24] font-semibold">Z3</td><td class="py-2 pr-2 text-white">Aeróbico Intensivo</td><td class="py-2 pr-2">Moderado, frases cortas</td><td class="py-2">Mejora de resistencia, ritmo de media maratón. Entrena tu "economía de carrera".</td></tr>
+                <tr class="border-b border-white/5"><td class="py-2 pr-2 text-[#FB923C] font-semibold">Z4</td><td class="py-2 pr-2 text-white">Umbral</td><td class="py-2 pr-2">Fuerte, incómodo pero sostenible</td><td class="py-2">Elevación del umbral de lactato. Te permite correr más rápido sin acumular ácido láctico.</td></tr>
+                <tr class="border-b border-white/5"><td class="py-2 pr-2 text-[#F87171] font-semibold">Z5</td><td class="py-2 pr-2 text-white">Potencia Anaeróbica</td><td class="py-2 pr-2">Muy intenso, apenas puedes hablar</td><td class="py-2">VO₂Max, tolerancia al lactato, velocidad máxima. Entrenamiento de intervalos cortos.</td></tr>
+                <tr><td class="py-2 pr-2 text-[#A855F7] font-semibold">Z5c*</td><td class="py-2 pr-2 text-white">Potencia Muscular</td><td class="py-2 pr-2">Explosivo, sprint</td><td class="py-2">Reclutamiento de fibras rápidas, potencia máxima (solo en modelo Friel).</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="text-[#475569]">* Las subdivisiones Z5a, Z5b, Z5c solo existen en el modelo de Joe Friel. En los modelos Básico y Karvonen, Z5 abarca todo el rango superior.</p>
+        </div>
+      </div>
+
+      <button class="accordion-btn" data-accordion="guide-compare">
+        <span>¿Qué método elegir?</span>
+        <svg class="chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+      </button>
+      <div class="accordion-content" id="guide-compare">
+        <div class="text-xs text-[#94A3B8] leading-relaxed space-y-2">
+          <div class="p-3 rounded-lg bg-white/5">
+            <span class="text-white font-semibold block mb-1">Básica (% FC Máx)</span>
+            <span>Usa solo tu frecuencia cardíaca máxima. Simple, pero no considera cuán entrenado estás. Dos personas de la misma edad pueden tener la misma FC máx pero niveles de condición física muy distintos, y este método les daría las mismas zonas.</span>
+          </div>
+          <div class="p-3 rounded-lg bg-white/5 border-l-2 border-[#CCFF00]">
+            <span class="text-white font-semibold block mb-1">Karvonen (FC de Reserva) <span class="text-[#CCFF00]">★ Recomendado</span></span>
+            <span>Incorpora tu FC de reposo para calcular la "reserva" cardiovascular que realmente puedes usar. Un corredor con FC reposo de 45 vs uno de 65 (misma FC máx) obtendrá zonas distintas. Es más preciso y se ajusta a tu nivel actual. La mayoría de entrenadores lo usan.</span>
+          </div>
+          <div class="p-3 rounded-lg bg-white/5">
+            <span class="text-white font-semibold block mb-1">Joe Friel (LTHR)</span>
+            <span>Basado en tu umbral de lactato, el punto donde tu cuerpo empieza a acumular lactato más rápido de lo que puede eliminarlo. Ideal para sesiones muy específicas de umbral, VO₂Max y potencia. Requiere conocer tu LTHR real con un test o laboratorio.</span>
+          </div>
+        </div>
+      </div>
+
+      <button class="accordion-btn" data-accordion="guide-howto">
+        <span>Consejos para obtener datos precisos</span>
+        <svg class="chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+      </button>
+      <div class="accordion-content" id="guide-howto">
+        <div class="text-xs text-[#94A3B8] leading-relaxed space-y-3">
+          <div>
+            <span class="text-[#60A5FA] font-semibold block mb-1">📊 FC Máxima precisa</span>
+            <span>Un monitor cardíaco con banda torácica es más fiable que el sensor óptico de muñeca. Si usas fórmula, Tanaka (208 - 0.7×edad) es más precisa que la clásica 220-edad, especialmente en mayores de 40 años.</span>
+          </div>
+          <div>
+            <span class="text-[#34D399] font-semibold block mb-1">🌅 FC de Reposo real</span>
+            <span>Mídela 3 mañanas seguidas <strong class="text-white">antes de levantarte</strong>, después de una noche de sueño normal. Evita medirla si estás enfermo, después de entrenar muy fuerte o con resaca. El promedio de 3 días es tu valor más fiable.</span>
+          </div>
+          <div>
+            <span class="text-[#FB923C] font-semibold block mb-1">🎯 Umbral de Lactato (LTHR)</span>
+            <span>El test de 30 minutos (20 min cronometrados) es el método de campo más accesible. Si tu reloj estima tu LTHR automáticamente (Garmin, Polar, Suunto), úsalo como referencia pero verifícalo con un test real cada 6-8 semanas, ya que mejora con el entrenamiento.</span>
+          </div>
+          <div>
+            <span class="text-[#CCFF00] font-semibold block mb-1">🔄 Recalcula cada 6-8 semanas</span>
+            <span>Tu condición física cambia. A medida que entrenas, tu FC de reposo baja y tu umbral de lactato sube. Las zonas que calculaste al inicio del plan ya no serán precisas después de 2 meses de entrenamiento consistente.</span>
+          </div>
+        </div>
+      </div>
+
+      <button class="accordion-btn border-b-0" data-accordion="guide-myths">
+        <span>Mitos y errores comunes</span>
+        <svg class="chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+      </button>
+      <div class="accordion-content" id="guide-myths">
+        <div class="text-xs text-[#94A3B8] leading-relaxed space-y-2">
+          <div class="flex gap-2"><span class="text-[#EF4444] shrink-0">✕</span><span><strong class="text-white">"Si no llego a Z5 no estoy entrenando fuerte."</strong> Falso. El 80% de tu entrenamiento debería ser en Z1-Z2. Los corredores de élite pasan la mayor parte del tiempo corriendo suave.</span></div>
+          <div class="flex gap-2"><span class="text-[#EF4444] shrink-0">✕</span><span><strong class="text-white">"La fórmula 220-edad es exacta."</strong> Falso. Tiene un margen de error de ±10-15 latidos. Tanaka (208-0.7×edad) es más precisa, pero un test de campo siempre será mejor.</span></div>
+          <div class="flex gap-2"><span class="text-[#EF4444] shrink-0">✕</span><span><strong class="text-white">"Mis zonas son fijas para siempre."</strong> Falso. Al mejorar tu condición aeróbica, tu FC de reposo baja y tu umbral sube. Debes recalcular tus zonas cada 6-8 semanas.</span></div>
+          <div class="flex gap-2"><span class="text-[#EF4444] shrink-0">✕</span><span><strong class="text-white">"El método básico y Karvonen dan lo mismo."</strong> Falso. Karvonen siempre da rangos más bajos porque parte de tu FC de reposo. Es más seguro y personalizado.</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div id="footer-placeholder"></div>
+
+  <script src="/assets/js/config.js"></script>
+  <script src="/assets/js/store.js"></script>
+  <script src="/components/navbar.js"></script>
+  <script src="/components/footer.js"></script>
+  <script src="/assets/js/profile-modal.js"></script>
+  <script src="/assets/js/components.js"></script>
+
+  <script>
+    (function() {
+      var results = document.getElementById('resultsContainer');
+      var calcBtn = document.getElementById('calcBtn');
+      var currentMethod = 'basica';
+
+      var ZONE_META = {
+        basica: [
+          { id: 'z1', label: 'Z1', name: 'Recuperación Activa', range: [0.50, 0.60], benefit: 'Recuperación, regeneración muscular' },
+          { id: 'z2', label: 'Z2', name: 'Aeróbico Extensivo', range: [0.60, 0.70], benefit: 'Quema de grasa, construcción de base aeróbica' },
+          { id: 'z3', label: 'Z3', name: 'Aeróbico Intensivo', range: [0.70, 0.80], benefit: 'Mejora de capacidad aeróbica y resistencia' },
+          { id: 'z4', label: 'Z4', name: 'Umbral / Sub-Umbral', range: [0.80, 0.90], benefit: 'Elevación del umbral de lactato' },
+          { id: 'z5', label: 'Z5', name: 'Potencia Anaeróbica', range: [0.90, 1.00], benefit: 'Potencia máxima, velocidad y tolerancia al lactato' }
+        ],
+        karvonen: [
+          { id: 'z1', label: 'Z1', name: 'Recuperación Activa', range: [0.50, 0.60], benefit: 'Recuperación, regeneración muscular' },
+          { id: 'z2', label: 'Z2', name: 'Aeróbico Extensivo', range: [0.60, 0.70], benefit: 'Quema de grasa, construcción de base aeróbica' },
+          { id: 'z3', label: 'Z3', name: 'Aeróbico Intensivo', range: [0.70, 0.80], benefit: 'Mejora de capacidad aeróbica y resistencia' },
+          { id: 'z4', label: 'Z4', name: 'Umbral / Sub-Umbral', range: [0.80, 0.90], benefit: 'Elevación del umbral de lactato' },
+          { id: 'z5', label: 'Z5', name: 'Potencia Anaeróbica', range: [0.90, 1.00], benefit: 'Potencia máxima, velocidad y tolerancia al lactato' }
+        ],
+        friel: [
+          { id: 'z1', label: 'Z1', name: 'Recuperación Activa', range: [0.00, 0.85], benefit: 'Recuperación, regeneración activa' },
+          { id: 'z2', label: 'Z2', name: 'Aeróbico Extensivo', range: [0.85, 0.89], benefit: 'Base aeróbica, quema de grasa' },
+          { id: 'z3', label: 'Z3', name: 'Tempo / Aeróbico Intensivo', range: [0.90, 0.94], benefit: 'Mejora de resistencia y eficiencia' },
+          { id: 'z4', label: 'Z4', name: 'Umbral de Lactato', range: [0.95, 0.99], benefit: 'Elevación del umbral, ritmo de media maratón' },
+          { id: 'z5a', label: 'Z5a', name: 'Capacidad Aeróbica Máx.', range: [1.00, 1.02], benefit: 'VO₂Max, ritmo de 5K a 10K' },
+          { id: 'z5b', label: 'Z5b', name: 'Potencia Anaeróbica', range: [1.03, 1.05], benefit: 'Tolerancia al lactato, ritmo de 1K a 3K' },
+          { id: 'z5c', label: 'Z5c', name: 'Potencia Muscular', range: [1.06, 2.00], benefit: 'Potencia explosiva, sprints y repeticiones cortas' }
+        ]
+      };
+
+      function loadProfile() {
+        try {
+          var p = JSON.parse(localStorage.getItem('JPZCH_Store')) || {};
+          var edad = p.edad || p.age || '';
+          var fcmax = p.fcMax || p.fc_max || '';
+          var fcrepo = p.fcReposo || p.fc_reposo || '';
+          if (edad) { document.getElementById('b-edad').value = edad; }
+          if (fcmax) {
+            document.getElementById('b-fcmax').value = fcmax;
+            document.getElementById('k-fcmax').value = fcmax;
+          }
+          if (fcrepo) { document.getElementById('k-fcreposo').value = fcrepo; }
+        } catch(e) {}
+      }
+
+      function roundBPM(v) { return Math.round(v); }
+
+      function renderZones(zones, fcmax) {
+        var html = '';
+        for (var i = 0; i < zones.length; i++) {
+          var z = zones[i];
+          var lowBpm = roundBPM(z.low);
+          var highBpm = roundBPM(z.high);
+          var pctLow = Math.round(z.pctLow * 100);
+          var pctHigh = Math.round(z.pctHigh * 100);
+          var avg = (z.low + z.high) / 2;
+          var barPct = avg / fcmax * 100;
+          if (barPct > 100) barPct = 100;
+
+          html += '<div class="zone-card zone-' + z.id + ' fade-up" style="animation-delay:' + (i * 60) + 'ms">';
+          html += '<div class="bar-fill" style="width:' + barPct + '%"></div>';
+          html += '<div class="flex flex-wrap items-center justify-between gap-2">';
+          html += '<div class="flex items-center gap-3 min-w-0">';
+          html += '<span class="zone-label shrink-0">' + z.label + '</span>';
+          html += '<span class="zone-name truncate">' + z.name + '</span>';
+          html += '</div>';
+          html += '<span class="zone-range shrink-0">' + lowBpm + ' – ' + highBpm + ' <span class="text-xs font-normal opacity-60">BPM</span></span>';
+          html += '</div>';
+          html += '<div class="zone-benefit mt-1.5">' + z.benefit + ' · ' + pctLow + '–' + pctHigh + '%</div>';
+          html += '</div>';
+        }
+        return html;
+      }
+
+      function calcBasica() {
+        var fcmax = parseInt(document.getElementById('b-fcmax').value);
+        var edad = parseInt(document.getElementById('b-edad').value);
+        if (!fcmax && !edad) return results.innerHTML = '<p class="text-center text-[#64748B] text-sm py-8">Ingresa tu FC máxima o tu edad para calcular.</p>';
+        if (!fcmax) fcmax = 208 - (0.7 * edad);
+        var zones = ZONE_META.basica.map(function(z) {
+          return {
+            id: z.id, label: z.label, name: z.name, benefit: z.benefit,
+            pctLow: z.range[0], pctHigh: z.range[1],
+            low: fcmax * z.range[0], high: fcmax * z.range[1]
+          };
+        });
+        results.innerHTML = renderZones(zones, fcmax);
+      }
+
+      function calcKarvonen() {
+        var fcmax = parseInt(document.getElementById('k-fcmax').value);
+        var fcrepo = parseInt(document.getElementById('k-fcreposo').value);
+        if (!fcmax || !fcrepo) return results.innerHTML = '<p class="text-center text-[#64748B] text-sm py-8">Ingresa tu FC máxima y FC en reposo para calcular.</p>';
+        if (fcrepo >= fcmax) return results.innerHTML = '<p class="text-center text-[#EF4444] text-sm py-8">La FC de reposo debe ser menor que la FC máxima.</p>';
+        var fcr = fcmax - fcrepo;
+        var zones = ZONE_META.karvonen.map(function(z) {
+          return {
+            id: z.id, label: z.label, name: z.name, benefit: z.benefit,
+            pctLow: z.range[0], pctHigh: z.range[1],
+            low: (fcr * z.range[0]) + fcrepo, high: (fcr * z.range[1]) + fcrepo
+          };
+        });
+        results.innerHTML = renderZones(zones, fcmax);
+      }
+
+      function calcFriel() {
+        var lthr = parseInt(document.getElementById('f-lthr').value);
+        if (!lthr) return results.innerHTML = '<p class="text-center text-[#64748B] text-sm py-8">Ingresa tu frecuencia cardíaca de umbral (LTHR) para calcular.</p>';
+        var zones = ZONE_META.friel.map(function(z) {
+          return {
+            id: z.id, label: z.label, name: z.name, benefit: z.benefit,
+            pctLow: z.range[0], pctHigh: z.range[1],
+            low: lthr * z.range[0], high: lthr * z.range[1]
+          };
+        });
+        results.innerHTML = renderZones(zones, lthr);
+      }
+
+      function calcular() {
+        if (currentMethod === 'basica') calcBasica();
+        else if (currentMethod === 'karvonen') calcKarvonen();
+        else calcFriel();
+      }
+
+      document.querySelectorAll('.method-pill').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          document.querySelectorAll('.method-pill').forEach(function(b) { b.classList.remove('active'); });
+          document.querySelectorAll('.method-panel').forEach(function(p) { p.classList.remove('active'); });
+          this.classList.add('active');
+          currentMethod = this.getAttribute('data-method');
+          document.getElementById('panel-' + currentMethod).classList.add('active');
+          results.innerHTML = '';
+        });
+      });
+
+      calcBtn.addEventListener('click', calcular);
+
+      document.querySelectorAll('.hr-input').forEach(function(inp) {
+        inp.addEventListener('keydown', function(e) { if (e.key === 'Enter') calcular(); });
+      });
+
+      document.querySelectorAll('.help-tip').forEach(function(btn) {
+        btn.addEventListener('click', function(e) {
+          e.preventDefault();
+          var target = document.getElementById(this.getAttribute('data-help'));
+          if (target) { target.classList.toggle('open'); }
+        });
+      });
+
+      document.querySelectorAll('.accordion-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          var target = document.getElementById(this.getAttribute('data-accordion'));
+          var isOpen = target.classList.contains('open');
+          target.classList.toggle('open');
+          this.classList.toggle('open');
+        });
+      });
+
+      loadProfile();
+    })();
+  </script>
+
+</body>
+</html>

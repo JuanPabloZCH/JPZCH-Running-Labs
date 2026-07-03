@@ -22,17 +22,16 @@ const JPZCH_FOOTER = `
         <h4 class="text-white font-semibold text-sm uppercase tracking-wider mb-4">Herramientas</h4>
         <ul class="space-y-3">
           <li><a href="/tools/cadence-analyzer/" class="text-[#64748B] hover:text-[#CCFF00] text-sm transition-colors duration-300">Analizador de Cadencia</a></li>
-          <li><span class="text-[#475569] text-sm cursor-default">Calculadora de Ritmo</span></li>
+          <li><a href="/tools/pace-calculator/" class="text-[#64748B] hover:text-[#CCFF00] text-sm transition-colors duration-300">Calculadora de Ritmo</a></li>
+          <li><a href="/tools/training-zones/" class="text-[#64748B] hover:text-[#CCFF00] text-sm transition-colors duration-300">Zonas Cardíacas</a></li>
           <li><span class="text-[#475569] text-sm cursor-default">Predictor de Carreras</span></li>
-          <li><span class="text-[#475569] text-sm cursor-default">VO₂Max + Zonas</span></li>
+          <li><span class="text-[#475569] text-sm cursor-default">VO₂Max Calculator</span></li>
           <li><span class="text-[#475569] text-sm cursor-default">Y más (próximamente)</span></li>
         </ul>
       </div>
       <div>
         <h4 class="text-white font-semibold text-sm uppercase tracking-wider mb-4">Recursos</h4>
         <ul class="space-y-3">
-          <li><a href="/recursos/tabla-de-ritmos/" class="text-[#64748B] hover:text-[#CCFF00] text-sm transition-colors duration-300">Tabla de Ritmos</a></li>
-          <li><a href="#" class="text-[#64748B] hover:text-[#CCFF00] text-sm transition-colors duration-300">Zonas Cardíacas</a></li>
           <li><a href="#" class="text-[#64748B] hover:text-[#CCFF00] text-sm transition-colors duration-300">Guía de Entrenamientos</a></li>
           <li><a href="#" class="text-[#64748B] hover:text-[#CCFF00] text-sm transition-colors duration-300">Glosario Runner</a></li>
         </ul>
