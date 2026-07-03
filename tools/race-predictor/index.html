@@ -1,10 +1,224 @@
-<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Predictor de Carreras — JPZCH Running Labs</title><meta name="description" content="Predice tu tiempo en cualquier distancia basado en tu mejor marca reciente."><meta name="theme-color" content="#0B0F19"><script src="https://cdn.tailwindcss.com"></script><link rel="stylesheet" href="/assets/css/styles.css"></head><body>
-<div id="navbar-placeholder"></div>
-<main class="min-h-screen pt-24 pb-12"><div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-<div class="text-center mb-10"><span class="inline-block text-[#FF5722] text-xs font-semibold uppercase tracking-[0.2em] mb-3">Herramienta</span><h1 class="text-3xl md:text-4xl font-black text-white mb-3">Predictor de <span class="text-gradient-orange">Carreras</span></h1><p class="text-[#94A3B8] text-sm md:text-base max-w-xl mx-auto">Predice tu tiempo en 5K, 10K, media maratón y maratón usando las fórmulas de Riegel y Cameron.</p></div>
-<div class="glass rounded-2xl p-6 md:p-8 text-center"><div class="w-16 h-16 rounded-2xl bg-[#FF5722]/10 border border-[#FF5722]/20 flex items-center justify-center mx-auto mb-4"><svg class="w-8 h-8 text-[#FF5722]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg></div><p class="text-[#94A3B8]">Herramienta en construcción. Pronto podrás predecir tus marcas aquí.</p><a href="/" class="btn-secondary mt-6 inline-flex">Volver al inicio</a></div>
-</div></main>
-<div id="footer-placeholder"></div>
-<script src="/assets/js/config.js"></script><script src="/assets/js/store.js"></script><script src="/components/navbar.js"></script><script src="/components/footer.js"></script><script src="/assets/js/profile-modal.js"></script>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Predictor de Carreras — JPZCH Running Labs</title>
+  <meta name="description" content="Predice tu tiempo en 5K, 10K, media maratón y maratón basado en tu mejor marca. Usa la fórmula de Riegel para proyecciones precisas.">
+  <meta name="theme-color" content="#0B0F19">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23CCFF00'/%3E%3Ctext x='16' y='22' font-family='Inter,system-ui,sans-serif' font-size='18' font-weight='900' fill='%230B0F19' text-anchor='middle'%3EJP%3C/text%3E%3C/svg%3E">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/assets/css/styles.css">
+  <style>
+    .hero-predictor { min-height: 35vh; display: flex; align-items: center; position: relative; overflow: hidden; }
+    .hero-predictor::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 30% 30%, rgba(255,87,34,0.05) 0%, transparent 50%), radial-gradient(circle at 70% 70%, rgba(204,255,0,0.03) 0%, transparent 50%); pointer-events: none; }
+    .card-glass { background: linear-gradient(145deg, rgba(19,26,43,0.8), rgba(26,35,50,0.6)); border: 1px solid rgba(255,255,255,0.06); border-radius: 1.25rem; padding: 1.25rem; backdrop-filter: blur(12px); }
+    @media (min-width: 768px) { .card-glass { padding: 1.5rem; } }
+    .dist-btn { flex: 1; padding: 0.75rem 0.5rem; text-align: center; font-size: 0.8125rem; font-weight: 700; border-radius: 0.75rem; border: 1px solid rgba(255,255,255,0.06); cursor: pointer; transition: all 0.3s ease; background: rgba(255,255,255,0.02); color: #64748B; }
+    .dist-btn:hover { border-color: rgba(255,87,34,0.2); color: #94A3B8; }
+    .dist-btn.active { background: rgba(255,87,34,0.1); border-color: #FF5722; color: #FF5722; box-shadow: 0 0 20px rgba(255,87,34,0.1); }
+    .result-card { background: rgba(11,15,25,0.5); border: 1px solid rgba(255,255,255,0.04); border-radius: 1rem; padding: 1rem; transition: all 0.3s ease; }
+    .result-card:hover { border-color: rgba(255,255,255,0.08); transform: translateY(-2px); }
+    .result-time { font-size: 1.5rem; font-weight: 900; font-variant-numeric: tabular-nums; }
+    .result-label { font-size: 0.6875rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; }
+    .input-time { background: rgba(11,15,25,0.6); border: 1px solid rgba(255,255,255,0.08); border-radius: 0.75rem; padding: 0.75rem 1rem; color: #F1F5F9; font-size: 1.5rem; font-weight: 700; font-variant-numeric: tabular-nums; width: 100%; text-align: center; transition: all 0.3s ease; outline: none; }
+    .input-time:focus { border-color: #FF5722; box-shadow: 0 0 0 3px rgba(255,87,34,0.1); }
+    .input-time::placeholder { color: #475569; font-weight: 400; }
+    .time-label { font-size: 0.75rem; font-weight: 600; color: #64748B; margin-bottom: 0.375rem; }
+    .bar-track { height: 0.5rem; border-radius: 0.25rem; background: rgba(255,255,255,0.04); overflow: hidden; margin-top: 0.5rem; }
+    .bar-fill { height: 100%; border-radius: 0.25rem; transition: width 0.6s ease; }
+    .fade-up { animation: fadeUp 0.5s ease forwards; opacity: 0; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+    .glow-orange { box-shadow: 0 0 30px rgba(255,87,34,0.08); }
+    @media (max-width: 639px) { .result-time { font-size: 1.25rem; } }
+  </style>
+</head>
+<body class="antialiased">
+  <div id="navbar-placeholder"></div>
+
+  <section class="hero-predictor pt-24 md:pt-28">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full py-14 md:py-20 relative z-10">
+      <div class="max-w-3xl mx-auto text-center">
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#FF5722]/10 border border-[#FF5722]/20 text-[#FF5722] text-xs font-semibold mb-5">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+          <span>Calculadoras</span>
+        </div>
+        <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black leading-[1.1] tracking-tight mb-4">
+          <span class="text-white">Predictor de</span>
+          <span class="text-gradient-orange"> Carreras</span>
+        </h1>
+        <p class="text-[#94A3B8] text-sm sm:text-base md:text-lg leading-relaxed max-w-2xl mx-auto">
+          Proyecta tu rendimiento en cualquier distancia. Ingresa tu mejor marca y descubre tu potencial en 5K, 10K, media maratón y maratón.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
+    <div class="card-glass p-6 md:p-8 mb-8 fade-up glow-orange" style="animation-delay:0.1s">
+      <div class="mb-6">
+        <div class="time-label">Tu mejor distancia</div>
+        <div class="flex gap-2" id="distanceSelector">
+          <button class="dist-btn active" data-dist="5">5K</button>
+          <button class="dist-btn" data-dist="10">10K</button>
+          <button class="dist-btn" data-dist="21.0975">Media</button>
+          <button class="dist-btn" data-dist="42.195">Maratón</button>
+        </div>
+      </div>
+      <div class="mb-6">
+        <div class="time-label">Tu tiempo en esa distancia</div>
+        <input type="text" id="timeInput" class="input-time" placeholder="hh:mm:ss" value="25:00" inputmode="numeric">
+        <p class="text-[#475569] text-[11px] mt-1.5">Formato: hh:mm:ss o mm:ss. Ej: 1:25:00 o 25:00</p>
+      </div>
+      <button id="predictBtn" class="w-full py-3 px-6 rounded-xl font-bold text-sm text-[#0B0F19] bg-[#FF5722] hover:bg-[#FF5722]/90 transition-all duration-300" style="box-shadow: 0 4px 20px rgba(255,87,34,0.25);">
+        Calcular Proyecciones
+      </button>
+    </div>
+
+    <div id="resultsSection" class="space-y-5">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div class="result-card fade-up" style="animation-delay:0.15s">
+          <div class="result-label text-[#22D3EE]">5K</div>
+          <div class="result-time text-[#22D3EE] mt-1" id="pred5k">—</div>
+          <div class="text-[#475569] text-[10px] mt-0.5" id="pace5k"></div>
+          <div class="bar-track"><div class="bar-fill" id="bar5k" style="width:0%;background:rgba(34,211,238,0.5)"></div></div>
+        </div>
+        <div class="result-card fade-up" style="animation-delay:0.2s">
+          <div class="result-label text-[#34D399]">10K</div>
+          <div class="result-time text-[#34D399] mt-1" id="pred10k">—</div>
+          <div class="text-[#475569] text-[10px] mt-0.5" id="pace10k"></div>
+          <div class="bar-track"><div class="bar-fill" id="bar10k" style="width:0%;background:rgba(52,211,153,0.5)"></div></div>
+        </div>
+        <div class="result-card fade-up" style="animation-delay:0.25s">
+          <div class="result-label text-[#FBBF24]">Media</div>
+          <div class="result-time text-[#FBBF24] mt-1" id="predHalf">—</div>
+          <div class="text-[#475569] text-[10px] mt-0.5" id="paceHalf"></div>
+          <div class="bar-track"><div class="bar-fill" id="barHalf" style="width:0%;background:rgba(251,191,36,0.5)"></div></div>
+        </div>
+        <div class="result-card fade-up" style="animation-delay:0.3s">
+          <div class="result-label text-[#FF5722]">Maratón</div>
+          <div class="result-time text-[#FF5722] mt-1" id="predMarathon">—</div>
+          <div class="text-[#475569] text-[10px] mt-0.5" id="paceMarathon"></div>
+          <div class="bar-track"><div class="bar-fill" id="barMarathon" style="width:0%;background:rgba(255,87,34,0.5)"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-glass p-6 md:p-8 mt-8 fade-up" style="animation-delay:0.35s">
+      <h2 class="text-white font-bold text-lg mb-4">Cómo funciona</h2>
+      <div class="grid md:grid-cols-2 gap-6">
+        <div>
+          <h3 class="text-white font-semibold text-sm mb-2">Fórmula de Riegel</h3>
+          <p class="text-[#94A3B8] text-xs leading-relaxed">T₂ = T₁ × (D₂ ÷ D₁)^1.06. Desarrollada por el fisiólogo Peter Riegel, esta fórmula predice el tiempo de carrera basándose en la relación no lineal entre distancia y fatiga. El exponente 1.06 refleja cómo el rendimiento disminuye proporcionalmente en distancias más largas.</p>
+        </div>
+        <div>
+          <h3 class="text-white font-semibold text-sm mb-2">Precisión</h3>
+          <p class="text-[#94A3B8] text-xs leading-relaxed">La fórmula de Riegel tiene un margen de error de ±2-4% para la mayoría de corredores. Es más precisa cuando las distancias son similares (ej: 5K→10K) y menos precisa en saltos grandes (ej: 5K→maratón). Factores como entrenamiento específico, condiciones climáticas y perfil del recorrido también influyen.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div id="footer-placeholder"></div>
+  <script src="/assets/js/config.js"></script>
+  <script src="/assets/js/store.js"></script>
+  <script src="/components/navbar.js"></script>
+  <script src="/components/footer.js"></script>
+  <script src="/assets/js/profile-modal.js"></script>
   <script src="/assets/js/components.js"></script>
-</body></html>
+  <script>
+  (() => {
+    const DISTANCES = [
+      { id: '5k', label: '5K', km: 5 },
+      { id: '10k', label: '10K', km: 10 },
+      { id: 'half', label: 'Media', km: 21.0975 },
+      { id: 'marathon', label: 'Maratón', km: 42.195 }
+    ];
+
+    const distBtns = document.querySelectorAll('.dist-btn');
+    const timeInput = document.getElementById('timeInput');
+    const predictBtn = document.getElementById('predictBtn');
+    let selectedDist = 5;
+
+    distBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        distBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        selectedDist = parseFloat(btn.dataset.dist);
+      });
+    });
+
+    function parseTime(str) {
+      str = str.trim();
+      if (!str) return null;
+      let parts = str.split(':').map(s => parseFloat(s) || 0);
+      if (parts.length === 3) return parts[0] * 3600 + parts[1] * 60 + parts[2];
+      if (parts.length === 2) return parts[0] * 60 + parts[1];
+      if (parts.length === 1) return parts[0] * 60;
+      return null;
+    }
+
+    function formatTime(seconds) {
+      if (seconds == null || isNaN(seconds)) return '—';
+      const h = Math.floor(seconds / 3600);
+      const m = Math.floor((seconds % 3600) / 60);
+      const s = Math.round(seconds % 60);
+      if (h > 0) return `${h}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+      return `${m}:${String(s).padStart(2,'0')}`;
+    }
+
+    function formatPace(secondsPerKm) {
+      if (secondsPerKm == null || isNaN(secondsPerKm)) return '';
+      const min = Math.floor(secondsPerKm / 60);
+      const sec = Math.round(secondsPerKm % 60);
+      return `${min}:${String(sec).padStart(2,'0')} min/km`;
+    }
+
+    function riegel(t1, d1, d2) {
+      return t1 * Math.pow(d2 / d1, 1.06);
+    }
+
+    function predict() {
+      const t1 = parseTime(timeInput.value);
+      if (t1 === null || t1 <= 0) {
+        DISTANCES.forEach(d => {
+          document.getElementById(`pred${d.id.charAt(0).toUpperCase() + d.id.slice(1)}`).textContent = '—';
+          document.getElementById(`pace${d.id.charAt(0).toUpperCase() + d.id.slice(1)}`).textContent = '';
+          document.getElementById(`bar${d.id.charAt(0).toUpperCase() + d.id.slice(1)}`).style.width = '0%';
+        });
+        return;
+      }
+
+      const results = DISTANCES.map(d => {
+        const time = riegel(t1, selectedDist, d.km);
+        const pace = d.km > 0 ? time / d.km : 0;
+        return { ...d, time, pace };
+      });
+
+      const maxTime = Math.max(...results.map(r => r.time));
+
+      results.forEach(r => {
+        const id = r.id.charAt(0).toUpperCase() + r.id.slice(1);
+        document.getElementById(`pred${id}`).textContent = formatTime(r.time);
+        document.getElementById(`pace${id}`).textContent = formatPace(r.pace);
+        const pct = maxTime > 0 ? (r.time / maxTime) * 100 : 0;
+        document.getElementById(`bar${id}`).style.width = `${Math.max(pct, 5)}%`;
+      });
+    }
+
+    predictBtn.addEventListener('click', predict);
+
+    timeInput.addEventListener('keydown', e => {
+      if (e.key === 'Enter') predict();
+    });
+
+    timeInput.addEventListener('input', () => {
+      let val = timeInput.value.replace(/[^0-9:]/g, '');
+      timeInput.value = val;
+    });
+
+    predict();
+  })();
+  </script>
+</body>
+</html>

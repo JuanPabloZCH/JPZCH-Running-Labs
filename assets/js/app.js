@@ -14,10 +14,10 @@ const JPZCH_App = (() => {
     {
       id: 'race-predictor',
       name: 'Predictor de Carreras',
-      description: 'Predice tu tiempo en cualquier distancia basado en tu mejor marca reciente. Usa las fórmulas de Riegel y Cameron.',
+      description: 'Predice tu tiempo en cualquier distancia basado en tu mejor marca reciente. Usa la fórmula de Riegel para proyecciones precisas.',
       category: 'calculadoras',
       icon: 'trending-up',
-      status: 'coming-soon',
+      status: 'available',
       accent: '#FF5722',
       url: '/tools/race-predictor/',
       features: ['5K', '10K', 'Media', 'Maratón']
@@ -194,7 +194,7 @@ const JPZCH_App = (() => {
   function renderStats() {
     const stats = [
       { value: '12', label: 'Herramientas', suffix: '' },
-      { value: '3', label: 'Disponible', suffix: '' },
+      { value: '4', label: 'Disponible', suffix: '' },
       { value: '6', label: 'Categorías', suffix: '' },
       { value: '100', label: 'Gratuito', suffix: '%' }
     ];
