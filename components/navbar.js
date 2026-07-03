@@ -59,7 +59,7 @@ const JPZCH_NAVBAR = `
           </button>
           <div class="nav-dropdown absolute top-full left-0 w-56 opacity-0 invisible group-hover:opacity-100 group-hover:visible">
             <div class="bg-[#131A2B]/95 backdrop-blur-xl rounded-xl border border-white/10 p-2 shadow-2xl shadow-black/50">
-              <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#94A3B8] hover:text-white hover:bg-white/5 transition-colors">
+              <a href="/recursos/tabla-de-ritmos/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#94A3B8] hover:text-white hover:bg-white/5 transition-colors">
                 <svg class="w-4 h-4 text-[#CCFF00] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                 Tabla de Ritmos
               </a>
@@ -167,7 +167,7 @@ const JPZCH_NAVBAR = `
           <svg class="mobile-dd-chevron w-4 h-4 text-[#475569] transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
         </button>
         <div class="mobile-dd-content hidden bg-white/5">
-          <a href="#" class="flex items-center gap-3 px-8 py-3 text-sm text-[#94A3B8] hover:text-white hover:bg-white/5 transition-colors">Tabla de Ritmos</a>
+          <a href="/recursos/tabla-de-ritmos/" class="flex items-center gap-3 px-8 py-3 text-sm text-[#94A3B8] hover:text-white hover:bg-white/5 transition-colors">Tabla de Ritmos</a>
           <a href="#" class="flex items-center gap-3 px-8 py-3 text-sm text-[#94A3B8] hover:text-white hover:bg-white/5 transition-colors">Zonas Cardíacas</a>
           <a href="#" class="flex items-center gap-3 px-8 py-3 text-sm text-[#94A3B8] hover:text-white hover:bg-white/5 transition-colors">Guía de Entrenamientos</a>
           <a href="#" class="flex items-center gap-3 px-8 py-3 text-sm text-[#94A3B8] hover:text-white hover:bg-white/5 transition-colors">Glosario Runner</a>
