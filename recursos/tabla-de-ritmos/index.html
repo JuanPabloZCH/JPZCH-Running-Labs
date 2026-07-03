@@ -3,654 +3,142 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pace Chart Interactivo — JPZCH Running Labs</title>
-  <meta name="description" content="Tabla de ritmos interactiva con calculadora bidireccional. De ritmos de élite mundial a caminata. Calcula tus tiempos en 5K, 10K, media y maratón.">
+  <title>Tabla de Ritmos — Guía Completa | JPZCH Running Labs</title>
+  <meta name="description" content="Guía completa de ritmos en running. Aprende qué son, cómo usarlos en tus entrenamientos y cómo interpretar las zonas de ritmo para 5K, 10K, media y maratón.">
   <meta name="theme-color" content="#0B0F19">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23CCFF00'/%3E%3Ctext x='16' y='22' font-family='Inter,system-ui,sans-serif' font-size='18' font-weight='900' fill='%230B0F19' text-anchor='middle'%3EJP%3C/text%3E%3C/svg%3E">
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="/assets/css/styles.css">
   <style>
-    .hero-pace {
-      min-height: 35vh;
-      display: flex;
-      align-items: center;
-      position: relative;
-      overflow: hidden;
+    .hero-rhythm {
+      min-height: 35vh; display: flex; align-items: center; position: relative; overflow: hidden;
     }
-    .hero-pace::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(circle at 30% 30%, rgba(204, 255, 0, 0.05) 0%, transparent 50%),
-        radial-gradient(circle at 70% 70%, rgba(255, 87, 34, 0.03) 0%, transparent 50%);
-      pointer-events: none;
-    }
-
-    .card-glass {
-      background: linear-gradient(145deg, rgba(19, 26, 43, 0.8), rgba(26, 35, 50, 0.6));
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      border-radius: 1.25rem;
-      padding: 1.25rem;
-      backdrop-filter: blur(12px);
-    }
-    @media (min-width: 768px) { .card-glass { padding: 1.5rem; } }
-
-    .tab-btn {
-      flex: 1;
-      padding: 0.625rem 1rem;
-      text-align: center;
-      font-size: 0.8125rem;
-      font-weight: 600;
-      border-radius: 0.75rem;
-      border: none;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      background: transparent;
-      color: #64748B;
-    }
-    .tab-btn.active {
-      background: rgba(204, 255, 0, 0.1);
-      color: #CCFF00;
-      box-shadow: inset 0 -2px 0 #CCFF00;
-    }
-    .tab-btn:hover:not(.active) { color: #94A3B8; }
-
-    .tab-panel { display: none; }
-    .tab-panel.active { display: block; }
-
-    .calc-input {
-      padding: 0.625rem 0.75rem;
-      background: rgba(11, 15, 25, 0.6);
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      border-radius: 0.75rem;
-      color: #F1F5F9;
-      font-size: 1.125rem;
-      font-weight: 700;
-      font-family: inherit;
-      outline: none;
-      text-align: center;
-      transition: all 0.3s ease;
-    }
-    .calc-input:focus {
-      border-color: rgba(204, 255, 0, 0.3);
-      box-shadow: 0 0 0 3px rgba(204, 255, 0, 0.06);
-    }
-    .calc-input::placeholder { color: #475569; font-weight: 400; font-size: 0.875rem; }
-
-    .calc-select {
-      padding: 0.625rem 2rem 0.625rem 0.75rem;
-      background: rgba(11, 15, 25, 0.6);
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      border-radius: 0.75rem;
-      color: #F1F5F9;
-      font-size: 0.875rem;
-      font-weight: 600;
-      font-family: inherit;
-      outline: none;
-      text-align: center;
-      transition: all 0.3s ease;
-      -webkit-appearance: none;
-      appearance: none;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='%23475569' viewBox='0 0 24 24'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 0.75rem center;
-      background-size: 1rem;
-      cursor: pointer;
-    }
-    .calc-select option { background: #131A2B; color: #F1F5F9; }
-    .calc-select:focus {
-      border-color: rgba(204, 255, 0, 0.3);
-      box-shadow: 0 0 0 3px rgba(204, 255, 0, 0.06);
-    }
-
-    .calc-result-tile {
-      background: rgba(11, 15, 25, 0.4);
-      border-radius: 0.75rem;
-      padding: 0.75rem 0.5rem;
-      text-align: center;
-      transition: all 0.3s ease;
-    }
-    .calc-result-tile:hover { background: rgba(11, 15, 25, 0.6); }
-    .calc-result-tile .label {
-      font-size: 0.6rem;
-      font-weight: 600;
-      color: #64748B;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      margin-bottom: 0.25rem;
-    }
-    .calc-result-tile .value {
-      font-size: 1rem;
-      font-weight: 700;
-      color: #F1F5F9;
-    }
-    @media (min-width: 640px) {
-      .calc-result-tile .value { font-size: 1.125rem; }
-    }
-    .calc-result-tile .sub {
-      font-size: 0.65rem;
-      color: #475569;
-      margin-top: 0.125rem;
-    }
-
-    .search-pace {
-      width: 100%;
-      max-width: 14rem;
-      padding: 0.5rem 0.75rem 0.5rem 2.25rem;
-      background: rgba(11, 15, 25, 0.6);
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      border-radius: 0.75rem;
-      color: #F1F5F9;
-      font-size: 0.8125rem;
-      outline: none;
-      transition: all 0.3s ease;
-    }
-    .search-pace:focus {
-      border-color: rgba(204, 255, 0, 0.3);
-      box-shadow: 0 0 0 3px rgba(204, 255, 0, 0.06);
-    }
-    .search-pace::placeholder { color: #475569; }
-    .search-wrap { position: relative; }
-    .search-wrap .icon {
-      position: absolute;
-      left: 0.75rem;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 1rem;
-      height: 1rem;
-      color: #475569;
-      pointer-events: none;
-    }
-
-    .jump-btn {
-      padding: 0.375rem 0.625rem;
-      border-radius: 0.5rem;
-      font-size: 0.65rem;
-      font-weight: 600;
-      border: 1px solid rgba(255,255,255,0.06);
-      background: rgba(255,255,255,0.03);
-      color: #94A3B8;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      white-space: nowrap;
-    }
-    .jump-btn:hover {
-      background: rgba(204, 255, 0, 0.08);
-      border-color: rgba(204, 255, 0, 0.15);
-      color: #CCFF00;
-    }
-
-    .pace-table-wrap {
-      background: linear-gradient(145deg, rgba(19, 26, 43, 0.8), rgba(26, 35, 50, 0.6));
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      border-radius: 1.25rem;
-      backdrop-filter: blur(12px);
-      overflow: hidden;
-    }
-
-    .pace-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.75rem;
-    }
-    @media (min-width: 640px) { .pace-table { font-size: 0.8125rem; } }
-
-    .pace-table th {
-      padding: 0.625rem 0.375rem;
-      text-align: left;
-      font-weight: 600;
-      color: #94A3B8;
-      background: rgba(11, 15, 25, 0.6);
-      position: sticky;
-      top: 0;
-      z-index: 5;
-      white-space: nowrap;
-    }
-    .pace-table th:first-child { padding-left: 0.75rem; min-width: 6rem; }
-    .pace-table th:not(:first-child) { text-align: center; min-width: 5rem; }
-
-    .pace-table td {
-      padding: 0.4375rem 0.375rem;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-      color: #CBD5E1;
-      white-space: nowrap;
-      transition: background 0.15s ease;
-    }
-    .pace-table td:first-child {
-      padding-left: 0.75rem;
-      color: #CCFF00;
-      font-weight: 600;
-      position: relative;
-    }
-    .pace-table td:not(:first-child) { text-align: center; }
-
-    .pace-table tbody tr {
-      transition: opacity 0.2s ease;
-    }
-    .pace-table tbody tr.hidden-row { display: none; }
-    .pace-table tbody tr.search-highlight td {
-      background: rgba(204, 255, 0, 0.06);
-    }
-    .pace-table tbody tr.search-highlight td:first-child {
-      color: #D9FF33;
-    }
-    .pace-table tbody tr:hover td {
-      background: rgba(255, 255, 255, 0.03);
-    }
-
-    .wr-row td:first-child { color: #FFD700 !important; }
-    .wr-row td:not(:first-child) { color: #E2E8F0; }
-    .wr-row {
-      background: linear-gradient(90deg, rgba(255, 215, 0, 0.04), transparent);
-      border-left: 3px solid rgba(255, 215, 0, 0.4);
-    }
-    .wr-row:hover td { background: rgba(255, 215, 0, 0.03); }
-
-    .zone-elite td:first-child { color: #F87171; }
-    .zone-elite td:not(:first-child) { color: #FCA5A5; }
-    .zone-elite { border-left: 3px solid rgba(248,113,113,0.3); }
-
-    .zone-umbral td:first-child { color: #FB923C; }
-    .zone-umbral td:not(:first-child) { color: #FDBA74; }
-    .zone-umbral { border-left: 3px solid rgba(251,146,60,0.3); }
-
-    .zone-ritmo td:first-child { color: #FBBF24; }
-    .zone-ritmo td:not(:first-child) { color: #FCD34D; }
-    .zone-ritmo { border-left: 3px solid rgba(251,191,36,0.3); }
-
-    .zone-suave td:first-child { color: #34D399; }
-    .zone-suave td:not(:first-child) { color: #6EE7B7; }
-    .zone-suave { border-left: 3px solid rgba(52,211,153,0.3); }
-
-    .zone-recuperacion td:first-child { color: #60A5FA; }
-    .zone-recuperacion td:not(:first-child) { color: #93C5FD; }
-    .zone-recuperacion { border-left: 3px solid rgba(96,165,250,0.3); }
-
-    .wr-row.zone-elite td:first-child,
-    .wr-row.zone-umbral td:first-child,
-    .wr-row.zone-ritmo td:first-child,
-    .wr-row.zone-suave td:first-child,
-    .wr-row.zone-recuperacion td:first-child { color: #FFD700 !important; }
-    .wr-row.zone-elite td:not(:first-child),
-    .wr-row.zone-umbral td:not(:first-child),
-    .wr-row.zone-ritmo td:not(:first-child),
-    .wr-row.zone-suave td:not(:first-child),
-    .wr-row.zone-recuperacion td:not(:first-child) { color: #E2E8F0 !important; }
-
-    .wr-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.25rem;
-      padding: 0.125rem 0.375rem;
-      border-radius: 0.25rem;
-      font-size: 0.55rem;
-      font-weight: 700;
-      background: rgba(255, 87, 34, 0.15);
-      color: #FF5722;
-      border: 1px solid rgba(255, 87, 34, 0.2);
-      white-space: nowrap;
-      margin-left: 0.375rem;
-      vertical-align: middle;
-    }
-
-    .zone-dot {
-      display: inline-block;
-      width: 0.5rem;
-      height: 0.5rem;
-      border-radius: 50%;
-      margin-right: 0.25rem;
-      vertical-align: middle;
-    }
-    .zone-label {
-      font-size: 0.65rem;
-      font-weight: 600;
-      color: #64748B;
-      cursor: pointer;
-      padding: 0.25rem 0.5rem;
-      border-radius: 0.375rem;
-      transition: all 0.2s ease;
-      background: rgba(255,255,255,0.02);
-    }
-    .zone-label:hover { background: rgba(255,255,255,0.05); }
-    .zone-label.active {
-      background: rgba(204, 255, 0, 0.06);
-      color: #CCFF00;
-    }
-
-    .fade-row {
-      animation: fadeInUp 0.25s ease forwards;
-      opacity: 0;
-    }
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(4px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+    .hero-rhythm::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 30% 30%, rgba(204,255,0,0.06) 0%, transparent 50%), radial-gradient(circle at 70% 70%, rgba(255,87,34,0.03) 0%, transparent 50%); pointer-events: none; }
+    .card-glass { background: linear-gradient(145deg, rgba(19,26,43,0.8), rgba(26,35,50,0.6)); border: 1px solid rgba(255,255,255,0.06); border-radius: 1.25rem; padding: 1.5rem; backdrop-filter: blur(12px); }
+    .zone-tag { display: inline-flex; align-items: center; gap: 0.375rem; padding: 0.25rem 0.75rem; border-radius: 999px; font-size: 0.6875rem; font-weight: 600; }
+    .stat-tile { background: rgba(11,15,25,0.4); border-radius: 0.75rem; padding: 1rem; text-align: center; }
+    .stat-tile .val { font-size: 1.5rem; font-weight: 800; color: #CCFF00; }
+    .stat-tile .lbl { font-size: 0.65rem; color: #64748B; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 0.25rem; }
+    .faq-item summary::-webkit-details-marker { display: none; }
+    .faq-item summary { list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; padding: 1rem 0; }
+    .faq-item summary::after { content: '+'; font-size: 1.25rem; color: #CCFF00; font-weight: 700; transition: transform 0.3s ease; }
+    .faq-item[open] summary::after { content: '−'; }
+    .faq-item .faq-body { padding-bottom: 1rem; color: #94A3B8; font-size: 0.875rem; line-height: 1.7; }
+    .chart-bar { height: 0.5rem; border-radius: 999px; transition: width 0.8s ease; }
+    .fade-up { animation: fadeUp 0.5s ease forwards; opacity: 0; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
   </style>
 </head>
 <body class="antialiased">
-
   <div id="navbar-placeholder"></div>
 
-  <section class="hero-pace pt-24 md:pt-28">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full py-12 md:py-20 relative z-10">
+  <section class="hero-rhythm pt-24 md:pt-28">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full py-12 md:py-16 relative z-10">
       <div class="max-w-3xl mx-auto text-center">
         <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#CCFF00]/10 border border-[#CCFF00]/20 text-[#CCFF00] text-xs font-semibold mb-5">
           <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-          <span>Recurso Interactivo</span>
+          <span>Recurso Informativo</span>
         </div>
         <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black leading-[1.1] tracking-tight mb-4">
-          <span class="text-white">Pace Chart</span>
-          <span class="text-gradient-green"> Interactivo</span>
+          <span class="text-white">Tabla de</span>
+          <span class="text-gradient-green"> Ritmos</span>
         </h1>
         <p class="text-[#94A3B8] text-sm sm:text-base md:text-lg leading-relaxed max-w-2xl mx-auto">
-          De récords mundiales a ritmos de caminata. Calcula, explora y proyecta tus tiempos en 5K, 10K, media maratón y maratón.
+          Todo lo que necesitas saber sobre los ritmos en running: cómo interpretarlos, entrenarlos y aplicarlos a tus carreras.
         </p>
       </div>
     </div>
   </section>
 
-  <section class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 md:pb-20">
-
-    <div class="card-glass mb-6">
-      <div class="flex gap-2 mb-5 bg-white/5 rounded-xl p-1" id="tabHeaders">
-        <button class="tab-btn active" data-tab="pace-to-time">Tengo mi Ritmo</button>
-        <button class="tab-btn" data-tab="time-to-pace">Tengo mi Objetivo</button>
+  <section class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
+    <div class="card-glass mb-8 fade-up" style="animation-delay:0.1s">
+      <h2 class="text-white font-bold text-xl mb-4">¿Qué es el Ritmo en Running?</h2>
+      <p class="text-[#94A3B8] text-sm md:text-base leading-relaxed mb-4">El ritmo (pace) es el tiempo que tardas en recorrer un kilómetro (min/km). Es la métrica más usada por corredores porque escala linealmente con la distancia: si corres a 5:00 min/km, harás 5K en 25:00 y 10K en 50:00.</p>
+      <p class="text-[#94A3B8] text-sm md:text-base leading-relaxed mb-4">A diferencia de la velocidad (km/h), el ritmo te permite proyectar tiempos de forma intuitiva. Es el lenguaje universal del corredor: cuando alguien dice "corro a 4:30", todo runner sabe exactamente de qué habla.</p>
+      <div class="flex flex-wrap gap-2 mt-4">
+        <span class="zone-tag" style="background:rgba(248,113,113,0.1);color:#F87171;border:1px solid rgba(248,113,113,0.2)">&lt; 3:30 — Élite / Intervalo</span>
+        <span class="zone-tag" style="background:rgba(251,146,60,0.1);color:#FB923C;border:1px solid rgba(251,146,60,0.2)">3:30–4:00 — Umbral</span>
+        <span class="zone-tag" style="background:rgba(251,191,36,0.1);color:#FBBF24;border:1px solid rgba(251,191,36,0.2)">4:00–5:30 — Ritmo</span>
+        <span class="zone-tag" style="background:rgba(52,211,153,0.1);color:#34D399;border:1px solid rgba(52,211,153,0.2)">5:30–6:30 — Suave</span>
+        <span class="zone-tag" style="background:rgba(96,165,250,0.1);color:#60A5FA;border:1px solid rgba(96,165,250,0.2)">&gt; 6:30 — Recuperación</span>
       </div>
+    </div>
 
-      <div class="tab-panel active" id="panel-pace-to-time">
-        <div class="flex flex-col sm:flex-row sm:items-end gap-4 mb-4">
-          <div>
-            <label class="text-xs font-semibold text-[#64748B] uppercase tracking-wider mb-1.5 block">Ritmo (min/km)</label>
-            <input type="text" id="paceInput" class="calc-input" placeholder="5:00" value="5:00" maxlength="5" style="max-width:8rem">
-          </div>
-          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 flex-[2]">
-            <div class="calc-result-tile"><div class="label">5K</div><div class="value" id="p2t-5k">—</div></div>
-            <div class="calc-result-tile"><div class="label">10K</div><div class="value" id="p2t-10k">—</div></div>
-            <div class="calc-result-tile"><div class="label">Media</div><div class="value" id="p2t-21k">—</div></div>
-            <div class="calc-result-tile"><div class="label">Maratón</div><div class="value" id="p2t-42k">—</div></div>
-          </div>
+    <div class="card-glass mb-8 fade-up" style="animation-delay:0.3s">
+      <h2 class="text-white font-bold text-xl mb-5">Zonas de Ritmo</h2>
+      <p class="text-[#94A3B8] text-sm md:text-base leading-relaxed mb-6">Cada ritmo tiene un propósito fisiológico. Entrenar en la zona correcta maximiza la adaptación y minimiza el riesgo de lesión.</p>
+      <div class="space-y-4">
+        <div class="flex items-start gap-3 p-3 rounded-xl" style="background:rgba(248,113,113,0.04);border-left:3px solid #F87171">
+          <div class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" style="background:rgba(248,113,113,0.1)"><span class="text-[#F87171] font-black text-xs">Z1</span></div>
+          <div><div class="text-white font-semibold text-sm mb-1">Élite / Intervalos (&lt; 3:30 min/km)</div><p class="text-[#94A3B8] text-xs leading-relaxed">Ritmos muy intensos, sostenibles solo por minutos. Se usan en series cortas (200m–1K) para desarrollar velocidad máxima, reclutamiento de fibras rápidas y potencia anaeróbica. No apto para principiantes.</p></div>
         </div>
-        <div class="text-[#475569] text-xs">Presiona Enter o haz clic fuera para ir a esa fila en la tabla</div>
-      </div>
-
-      <div class="tab-panel" id="panel-time-to-pace">
-        <div class="flex flex-col sm:flex-row sm:items-end gap-4">
-          <div>
-            <label class="text-xs font-semibold text-[#64748B] uppercase tracking-wider mb-1.5 block">Distancia</label>
-            <select id="distSelect" class="calc-select" style="max-width:9rem">
-              <option value="5">5K</option>
-              <option value="10">10K</option>
-              <option value="21.0975" selected>Media Maratón (21.1K)</option>
-              <option value="42.195">Maratón (42.2K)</option>
-            </select>
-          </div>
-          <div>
-            <label class="text-xs font-semibold text-[#64748B] uppercase tracking-wider mb-1.5 block">Tiempo objetivo (HH:MM:SS)</label>
-            <input type="text" id="goalTimeInput" class="calc-input" placeholder="1:45:00" value="1:45:00" maxlength="8" style="max-width:9rem">
-          </div>
-          <div class="flex-1 min-w-0">
-            <label class="text-xs font-semibold text-[#64748B] uppercase tracking-wider mb-1.5 block">Ritmo necesario</label>
-            <div class="calc-result-tile" style="background:rgba(204,255,0,0.06);border:1px solid rgba(204,255,0,0.1)">
-              <div class="value" id="requiredPace" style="color:#CCFF00;font-size:1.25rem">—</div>
-              <div class="sub">min/km</div>
-            </div>
-          </div>
+        <div class="flex items-start gap-3 p-3 rounded-xl" style="background:rgba(251,146,60,0.04);border-left:3px solid #FB923C">
+          <div class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" style="background:rgba(251,146,60,0.1)"><span class="text-[#FB923C] font-black text-xs">Z2</span></div>
+          <div><div class="text-white font-semibold text-sm mb-1">Umbral (3:30–4:00 min/km)</div><p class="text-[#94A3B8] text-xs leading-relaxed">El ritmo "cómodamente duro". Entrenar aquí eleva tu umbral de lactato, permitiéndote correr más rápido durante más tiempo. Corresponde al tempo run y es clave para mejorar en 10K y media maratón.</p></div>
+        </div>
+        <div class="flex items-start gap-3 p-3 rounded-xl" style="background:rgba(251,191,36,0.04);border-left:3px solid #FBBF24">
+          <div class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" style="background:rgba(251,191,36,0.1)"><span class="text-[#FBBF24] font-black text-xs">Z3</span></div>
+          <div><div class="text-white font-semibold text-sm mb-1">Ritmo de Carrera (4:00–5:30 min/km)</div><p class="text-[#94A3B8] text-xs leading-relaxed">El ritmo que puedes mantener durante una carrera. Varía según la distancia: más rápido para 5K, más conservador para maratón. Entrenarlo mejora tu economía de carrera y resistencia específica.</p></div>
+        </div>
+        <div class="flex items-start gap-3 p-3 rounded-xl" style="background:rgba(52,211,153,0.04);border-left:3px solid #34D399">
+          <div class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" style="background:rgba(52,211,153,0.1)"><span class="text-[#34D399] font-black text-xs">Z4</span></div>
+          <div><div class="text-white font-semibold text-sm mb-1">Suave / Aeróbico (5:30–6:30 min/km)</div><p class="text-[#94A3B8] text-xs leading-relaxed">El pan de cada día del corredor. Ritmo conversacional donde tu cuerpo quema principalmente grasa, capilariza los músculos y construye base aeróbica. Debe representar el 70-80% de tu volumen semanal.</p></div>
+        </div>
+        <div class="flex items-start gap-3 p-3 rounded-xl" style="background:rgba(96,165,250,0.04);border-left:3px solid #60A5FA">
+          <div class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" style="background:rgba(96,165,250,0.1)"><span class="text-[#60A5FA] font-black text-xs">Z5</span></div>
+          <div><div class="text-white font-semibold text-sm mb-1">Recuperación / Caminata (&gt; 6:30 min/km)</div><p class="text-[#94A3B8] text-xs leading-relaxed">Ritmos de regeneración activa, calentamiento, vuelta a la calma o días post-carrera. Mantienen el flujo sanguíneo sin estrés metabólico, acelerando la eliminación de desechos y la reparación muscular.</p></div>
         </div>
       </div>
     </div>
 
-    <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
-      <div class="flex flex-wrap items-center gap-1">
-        <span class="text-[#64748B] text-xs font-medium mr-1">Ir a:</span>
-        <button class="jump-btn" data-pace="2:10">2:10</button>
-        <button class="jump-btn" data-pace="2:30">2:30</button>
-        <button class="jump-btn" data-pace="3:00">3:00</button>
-        <button class="jump-btn" data-pace="4:00">4:00</button>
-        <button class="jump-btn" data-pace="5:00">5:00</button>
-        <button class="jump-btn" data-pace="6:00">6:00</button>
-        <button class="jump-btn" data-pace="8:00">8:00</button>
-        <button class="jump-btn" data-pace="10:00">10:00</button>
-        <button class="jump-btn" data-pace="12:00">12:00</button>
-      </div>
-      <div class="search-wrap">
-        <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-        <input type="text" id="paceSearch" class="search-pace" placeholder="Buscar ritmo…" autocomplete="off">
+    <div class="card-glass mb-8 fade-up" style="animation-delay:0.4s">
+      <h2 class="text-white font-bold text-xl mb-4">Ritmos según tu Nivel</h2>
+      <p class="text-[#94A3B8] text-sm mb-5">No todos los corredores tienen las mismas referencias. Aquí una guía orientativa por nivel:</p>
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead><tr class="text-[#64748B] text-xs uppercase tracking-wider"><th class="text-left pb-3 font-semibold">Distancia</th><th class="pb-3 font-semibold">Principiante</th><th class="pb-3 font-semibold">Intermedio</th><th class="pb-3 font-semibold">Avanzado</th><th class="pb-3 font-semibold">Élite</th></tr></thead>
+          <tbody class="text-[#94A3B8]">
+            <tr class="border-t border-white/5"><td class="py-2.5 font-medium text-white">5K</td><td class="text-center">&gt; 6:00</td><td class="text-center">&lt; 5:30</td><td class="text-center">&lt; 4:30</td><td class="text-center" style="color:#CCFF00;font-weight:600">&lt; 3:00</td></tr>
+            <tr class="border-t border-white/5"><td class="py-2.5 font-medium text-white">10K</td><td class="text-center">&gt; 6:15</td><td class="text-center">&lt; 5:45</td><td class="text-center">&lt; 4:45</td><td class="text-center" style="color:#CCFF00;font-weight:600">&lt; 3:10</td></tr>
+            <tr class="border-t border-white/5"><td class="py-2.5 font-medium text-white">Media</td><td class="text-center">&gt; 6:30</td><td class="text-center">&lt; 6:00</td><td class="text-center">&lt; 5:00</td><td class="text-center" style="color:#CCFF00;font-weight:600">&lt; 3:20</td></tr>
+            <tr class="border-t border-white/5"><td class="py-2.5 font-medium text-white">Maratón</td><td class="text-center">&gt; 6:45</td><td class="text-center">&lt; 6:15</td><td class="text-center">&lt; 5:15</td><td class="text-center" style="color:#CCFF00;font-weight:600">&lt; 3:30</td></tr>
+          </tbody>
+        </table>
       </div>
     </div>
 
-    <div class="pace-table-wrap overflow-x-auto">
-      <table class="pace-table">
-        <thead>
-          <tr>
-            <th>Ritmo</th>
-            <th>5K</th>
-            <th>10K</th>
-            <th>Media</th>
-            <th>Maratón</th>
-          </tr>
-        </thead>
-        <tbody id="paceTbody"></tbody>
-      </table>
+    <div class="card-glass mb-8 fade-up" style="animation-delay:0.5s">
+      <h2 class="text-white font-bold text-xl mb-4">Entrenar por Ritmo vs. por Frecuencia Cardíaca</h2>
+      <div class="grid md:grid-cols-2 gap-4">
+        <div class="p-4 rounded-xl" style="background:rgba(204,255,0,0.03);border:1px solid rgba(204,255,0,0.08)">
+          <div class="text-[#CCFF00] font-semibold text-sm mb-2">Entrenar por Ritmo ✓</div>
+          <ul class="text-[#94A3B8] text-xs space-y-1.5"><li>Objetivo y medible al instante</li><li>Perfecto para sesiones de series y tempo</li><li>No depende de variables fisiológicas diarias</li><li>Ideal en pista o rutas planas</li></ul>
+        </div>
+        <div class="p-4 rounded-xl" style="background:rgba(34,211,238,0.03);border:1px solid rgba(34,211,238,0.08)">
+          <div class="text-[#22D3EE] font-semibold text-sm mb-2">Entrenar por FC ✓</div>
+          <ul class="text-[#94A3B8] text-xs space-y-1.5"><li>Refleja el esfuerzo real del cuerpo</li><li>Se ajusta automáticamente al calor, fatiga o altitud</li><li>Ideal para rodajes suaves y control de carga</li><li>Mejor en rutas con desnivel</li></ul>
+        </div>
+      </div>
+      <p class="text-[#64748B] text-xs mt-4">Lo ideal es combinar ambas: usa ritmo para sesiones estructuradas y FC para controlar la intensidad en rodajes y recuperación.</p>
     </div>
 
-    <div class="mt-4 flex flex-wrap items-center gap-3 text-xs text-[#475569]">
-      <span class="font-medium">Leyenda:</span>
-      <span><span class="zone-dot" style="background:#FFD700"></span>Récord Mundial</span>
-      <span><span class="zone-dot" style="background:#F87171"></span>Élite / Intervalo</span>
-      <span><span class="zone-dot" style="background:#FB923C"></span>Umbral</span>
-      <span><span class="zone-dot" style="background:#FBBF24"></span>Ritmo</span>
-      <span><span class="zone-dot" style="background:#34D399"></span>Suave</span>
-      <span><span class="zone-dot" style="background:#60A5FA"></span>Recuperación / Caminata</span>
+    <div class="card-glass fade-up" style="animation-delay:0.6s">
+      <h2 class="text-white font-bold text-xl mb-4">Preguntas Frecuentes</h2>
+      <div class="divide-y divide-white/5">
+        <details class="faq-item"><summary class="text-white text-sm font-medium">¿Cómo calculo mi ritmo objetivo para maratón?</summary><div class="faq-body">Tu ritmo de maratón debe ser ligeramente más lento que tu ritmo de 10K (aproximadamente 15-20 seg/km más lento) o tu ritmo de tempo run. Usa nuestra <a href="/tools/pace-calculator/" class="text-[#CCFF00] hover:underline">Calculadora de Ritmo</a> para convertir tiempos entre distancias.</div></details>
+        <details class="faq-item"><summary class="text-white text-sm font-medium">¿Cada cuánto debo probar mi ritmo de 5K o 10K?</summary><div class="faq-body">Cada 4-6 semanas de entrenamiento. Hacer test de ritmo frecuentes te permite ajustar tus zonas de entrenamiento y ver tu progresión. No los hagas más de una vez al mes para evitar fatiga acumulada.</div></details>
+        <details class="faq-item"><summary class="text-white text-sm font-medium">¿El ritmo en cinta es igual que al aire libre?</summary><div class="faq-body">En general, correr en cinta a 0% de inclinación es ~1-2% más fácil que al aire libre por la ausencia de resistencia del viento y la cinta que tira. Se recomienda poner 1-2% de inclinación para simular mejor el esfuerzo exterior.</div></details>
+        <details class="faq-item"><summary class="text-white text-sm font-medium">Factores que afectan mi ritmo</summary><div class="faq-body">Clima (calor extremo suma 10-30 seg/km), altitud (sobre 1500m afecta el rendimiento), terreno (asfalto vs. trail), fatiga acumulada, hidratación, y calidad del sueño. No te obsesiones si un día tu ritmo es más lento sin explicación aparente.</div></details>
+      </div>
     </div>
   </section>
 
   <div id="footer-placeholder"></div>
-
   <script src="/assets/js/config.js"></script>
   <script src="/assets/js/store.js"></script>
   <script src="/components/navbar.js"></script>
   <script src="/components/footer.js"></script>
   <script src="/assets/js/profile-modal.js"></script>
   <script src="/assets/js/components.js"></script>
-
-  <script>
-    (function() {
-      const DISTS = [5, 10, 21.0975, 42.195];
-      const DIST_IDS = ['p2t-5k', 'p2t-10k', 'p2t-21k', 'p2t-42k'];
-      const tbody = document.getElementById('paceTbody');
-      const paceInput = document.getElementById('paceInput');
-      const paceSearch = document.getElementById('paceSearch');
-      const goalTimeInput = document.getElementById('goalTimeInput');
-      const distSelect = document.getElementById('distSelect');
-      const requiredPace = document.getElementById('requiredPace');
-
-      const WR = [
-        { label: '👑 WR 1500m — Hicham El Guerrouj (3:26)', paceSec: 137 },
-        { label: '👑 WR 5K — Joshua Cheptegei (12:35)', paceSec: 151 },
-        { label: '👑 WR 10K — Joshua Cheptegei (26:11)', paceSec: 157 },
-        { label: '👑 WR Media — Jacob Kiplimo (56:42)', paceSec: 161 },
-        { label: '👑 WR Maratón — Sabastian Sawe (1:59:30)', paceSec: 170 }
-      ];
-
-      let rowsData = [];
-      let searchTerm = '';
-
-      function fmtTime(sec) {
-        const h = Math.floor(sec / 3600);
-        const m = Math.floor((sec % 3600) / 60);
-        const s = sec % 60;
-        if (h > 0) return h + ':' + String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
-        return m + ':' + String(s).padStart(2, '0');
-      }
-
-      function getPaceSec(str) {
-        const p = str.split(':');
-        if (p.length !== 2) return NaN;
-        return +p[0] * 60 + +p[1];
-      }
-
-      function fmtPace(sec) {
-        const m = Math.floor(sec / 60);
-        const s = Math.round(sec % 60);
-        return m + ':' + String(s).padStart(2, '0');
-      }
-
-      function hmsToSec(str) {
-        const p = str.split(':');
-        if (p.length === 3) return +p[0] * 3600 + +p[1] * 60 + +p[2];
-        if (p.length === 2) return +p[0] * 60 + +p[1];
-        return NaN;
-      }
-
-      function getZoneClass(paceSec) {
-        if (paceSec < 210) return 'zone-elite';
-        if (paceSec < 240) return 'zone-umbral';
-        if (paceSec < 330) return 'zone-ritmo';
-        if (paceSec < 390) return 'zone-suave';
-        return 'zone-recuperacion';
-      }
-
-      function getWRBadges(paceSec) {
-        const found = [];
-        for (let i = 0; i < WR.length; i++) {
-          if (Math.abs(paceSec - WR[i].paceSec) <= 5) found.push(WR[i].label);
-        }
-        return found.length > 0 ? found : null;
-      }
-
-      function buildTable() {
-        rowsData = [];
-        let html = '';
-        let idx = 0;
-        for (let min = 2; min <= 12; min++) {
-          const maxSec = min === 12 ? 0 : 50;
-          const startSec = (min === 2) ? 10 : 0;
-          for (let sec = startSec; sec <= maxSec; sec += 10) {
-            const paceSec = min * 60 + sec;
-            const paceStr = min + ':' + String(sec).padStart(2, '0');
-            const times = DISTS.map(d => fmtTime(Math.round(paceSec * d)));
-            const badges = getWRBadges(paceSec);
-            const isWR = badges !== null;
-            const zoneCls = getZoneClass(paceSec);
-
-            rowsData.push({ paceStr, paceSec, times, badges, isWR });
-            const cls = isWR ? 'wr-row ' + zoneCls : zoneCls;
-            const delay = idx * 12;
-            const badgeHtml = badges ? badges.map(function(b) { return '<span class="wr-badge">' + b + '</span>'; }).join('') : '';
-            html += '<tr class="fade-row ' + cls + '" data-idx="' + idx + '" data-pace="' + paceStr + '" data-sec="' + paceSec + '" style="animation-delay:' + delay + 'ms">';
-            html += '<td>' + paceStr + badgeHtml + '</td>';
-            times.forEach(t => { html += '<td>' + t + '</td>'; });
-            html += '</tr>';
-            idx++;
-          }
-        }
-        tbody.innerHTML = html;
-      }
-
-      function updatePaceToTime(paceStr) {
-        const sec = getPaceSec(paceStr);
-        if (isNaN(sec) || sec <= 0) {
-          DIST_IDS.forEach(id => document.getElementById(id).textContent = '—');
-          return;
-        }
-        DISTS.forEach((d, i) => {
-          document.getElementById(DIST_IDS[i]).textContent = fmtTime(Math.round(sec * d));
-        });
-      }
-
-      function updateTimeToPace() {
-        const dist = parseFloat(distSelect.value);
-        const timeSec = hmsToSec(goalTimeInput.value.trim());
-        if (isNaN(dist) || dist <= 0 || isNaN(timeSec) || timeSec <= 0) {
-          requiredPace.textContent = '—';
-          return;
-        }
-        const paceSec = timeSec / dist;
-        requiredPace.textContent = fmtPace(paceSec);
-        requiredPace.style.color = paceSec < 180 ? '#F87171' : paceSec < 360 ? '#CCFF00' : '#60A5FA';
-      }
-
-      function filterRows() {
-        const rows = tbody.querySelectorAll('tr');
-        rows.forEach(row => {
-          const pace = row.getAttribute('data-pace');
-          const match = !searchTerm || pace.includes(searchTerm);
-          if (match) {
-            row.classList.remove('hidden-row');
-            if (searchTerm && pace.includes(searchTerm)) {
-              row.classList.add('search-highlight');
-            } else {
-              row.classList.remove('search-highlight');
-            }
-          } else {
-            row.classList.add('hidden-row');
-            row.classList.remove('search-highlight');
-          }
-        });
-      }
-
-      function scrollToPace(paceStr) {
-        const rows = tbody.querySelectorAll('tr');
-        for (const row of rows) {
-          if (row.getAttribute('data-pace') === paceStr) {
-            row.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            row.classList.add('search-highlight');
-            setTimeout(() => row.classList.remove('search-highlight'), 2000);
-            break;
-          }
-        }
-      }
-
-      paceInput.addEventListener('input', function() {
-        if (/^\d{1,2}:\d{2}$/.test(this.value.trim())) {
-          updatePaceToTime(this.value.trim());
-          this.style.borderColor = 'rgba(204, 255, 0, 0.3)';
-        } else {
-          this.style.borderColor = 'rgba(239, 68, 68, 0.3)';
-          DIST_IDS.forEach(id => document.getElementById(id).textContent = '—');
-        }
-      });
-
-      paceInput.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter' && /^\d{1,2}:\d{2}$/.test(this.value.trim())) {
-          scrollToPace(this.value.trim());
-        }
-      });
-
-      paceInput.dispatchEvent(new Event('input'));
-
-      goalTimeInput.addEventListener('input', updateTimeToPace);
-      distSelect.addEventListener('change', updateTimeToPace);
-      updateTimeToPace();
-
-      paceSearch.addEventListener('input', function() {
-        searchTerm = this.value.trim();
-        filterRows();
-      });
-
-      document.querySelectorAll('.jump-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-          const pace = this.getAttribute('data-pace');
-          paceInput.value = pace;
-          paceInput.dispatchEvent(new Event('input'));
-          scrollToPace(pace);
-        });
-      });
-
-      document.querySelectorAll('.tab-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-          document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-          document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-          this.classList.add('active');
-          document.getElementById('panel-' + this.getAttribute('data-tab')).classList.add('active');
-        });
-      });
-
-      buildTable();
-
-    })();
-  </script>
-
 </body>
 </html>

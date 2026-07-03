@@ -32,8 +32,13 @@ const JPZCH_FOOTER = `
       <div>
         <h4 class="text-white font-semibold text-sm uppercase tracking-wider mb-4">Recursos</h4>
         <ul class="space-y-3">
-          <li><a href="#" class="text-[#64748B] hover:text-[#CCFF00] text-sm transition-colors duration-300">Guía de Entrenamientos</a></li>
+          <li class="text-[#475569] text-xs font-medium uppercase tracking-wider mt-1 mb-1.5">Información</li>
+          <li><a href="/recursos/tabla-de-ritmos/" class="text-[#64748B] hover:text-[#CCFF00] text-sm transition-colors duration-300">Tabla de Ritmos</a></li>
+          <li><a href="/recursos/zonas-cardiacas/" class="text-[#64748B] hover:text-[#CCFF00] text-sm transition-colors duration-300">Zonas Cardíacas</a></li>
           <li><a href="/recursos/glosario/" class="text-[#64748B] hover:text-[#CCFF00] text-sm transition-colors duration-300">Glosario Runner</a></li>
+          <li class="text-[#475569] text-xs font-medium uppercase tracking-wider mt-4 mb-1.5">Cultura &amp; Análisis</li>
+          <li><a href="/recursos/laboratorio-de-elite/" class="text-[#64748B] hover:text-[#CCFF00] text-sm transition-colors duration-300">Laboratorio de Élite</a></li>
+          <li><a href="/recursos/playlists-bpm/" class="text-[#64748B] hover:text-[#CCFF00] text-sm transition-colors duration-300">Playlists BPM</a></li>
         </ul>
       </div>
       <div>

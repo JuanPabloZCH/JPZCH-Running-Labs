@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Playlists BPM — JPZCH Running Labs</title>
+  <meta name="description" content="Playlists de running organizadas por BPM. Encuentra la música perfecta para tu cadencia: 140 BPM para rodaje, 180 BPM para ritmo de élite y más.">
+  <meta name="theme-color" content="#0B0F19">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23CCFF00'/%3E%3Ctext x='16' y='22' font-family='Inter,system-ui,sans-serif' font-size='18' font-weight='900' fill='%230B0F19' text-anchor='middle'%3EJP%3C/text%3E%3C/svg%3E">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/assets/css/styles.css">
+  <style>
+    .hero-bpm { min-height: 35vh; display: flex; align-items: center; position: relative; overflow: hidden; }
+    .hero-bpm::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 35% 30%, rgba(139,92,246,0.07) 0%, transparent 50%), radial-gradient(circle at 65% 70%, rgba(204,255,0,0.04) 0%, transparent 50%); pointer-events: none; }
+    .card-glass { background: linear-gradient(145deg, rgba(19,26,43,0.8), rgba(26,35,50,0.6)); border: 1px solid rgba(255,255,255,0.06); border-radius: 1.25rem; padding: 1.5rem; backdrop-filter: blur(12px); }
+    .bpm-hero-display { width: 6rem; height: 6rem; border-radius: 1.5rem; display: flex; align-items: center; justify-content: center; font-size: 2.25rem; font-weight: 900; margin: 0 auto; background: linear-gradient(135deg, rgba(139,92,246,0.15), rgba(204,255,0,0.05)); border: 1px solid rgba(139,92,246,0.15); }
+    .bpm-zone { border-radius: 1rem; padding: 1.25rem; transition: all 0.3s ease; }
+    .bpm-zone:hover { transform: translateY(-3px); }
+    .song-row { display: flex; align-items: center; gap: 0.75rem; padding: 0.625rem 0; border-bottom: 1px solid rgba(255,255,255,0.03); }
+    .song-row:last-child { border-bottom: none; }
+    .song-num { width: 1.25rem; font-size: 0.625rem; font-weight: 700; color: #475569; }
+    .bpm-tag { display: inline-flex; align-items: center; gap: 0.25rem; padding: 0.125rem 0.5rem; border-radius: 0.25rem; font-size: 0.625rem; font-weight: 700; }
+    .fade-up { animation: fadeUp 0.5s ease forwards; opacity: 0; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+  </style>
+</head>
+<body class="antialiased">
+  <div id="navbar-placeholder"></div>
+
+  <section class="hero-bpm pt-24 md:pt-28">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full py-14 md:py-20 relative z-10">
+      <div class="max-w-3xl mx-auto text-center">
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#8B5CF6]/10 border border-[#8B5CF6]/20 text-[#8B5CF6] text-xs font-semibold mb-5">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/></svg>
+          <span>Música & Running</span>
+        </div>
+        <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black leading-[1.1] tracking-tight mb-4">
+          <span class="text-white">Playlists</span>
+          <span class="text-gradient-green"> BPM</span>
+        </h1>
+        <p class="text-[#94A3B8] text-sm sm:text-base md:text-lg leading-relaxed max-w-2xl mx-auto">
+          La banda sonora perfecta para cada zancada. Playlists curadas por BPM para sincronizar tu cadencia con la música.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
+    <div class="card-glass p-6 md:p-8 mb-10 fade-up" style="animation-delay:0.1s">
+      <div class="flex flex-col md:flex-row items-center gap-6">
+        <div class="bpm-hero-display">180</div>
+        <div><h2 class="text-white font-bold text-lg mb-2">La Ciencia del BPM en Running</h2><p class="text-[#94A3B8] text-sm leading-relaxed">La música con un BPM constante actúa como un metrónomo auditivo. Cuando sincronizas tu zancada con el beat, tu cuerpo encuentra un ritmo natural que mejora la economía de carrera entre un 2-5%. La relación ideal es <strong class="text-white">BPM = SPM × 2</strong>: un beat por cada apoyo de pie. Para una cadencia de 180 SPM (90 zancadas por pie), necesitas canciones a 180 BPM.</p></div>
+      </div>
+    </div>
+
+    <div class="space-y-5">
+      <div class="bpm-zone fade-up" style="animation-delay:0.2s;background:linear-gradient(135deg,rgba(34,211,238,0.04),transparent);border:1px solid rgba(34,211,238,0.12)">
+        <div class="flex items-center justify-between mb-3">
+          <div class="flex items-center gap-3"><div class="w-10 h-10 rounded-xl flex items-center justify-center font-black text-lg" style="background:rgba(34,211,238,0.1);color:#22D3EE">140</div><div><div class="text-white font-semibold">140–155 BPM</div><div class="text-[#64748B] text-xs">Rodaje Suave · Recuperación</div></div></div>
+          <span class="bpm-tag" style="background:rgba(34,211,238,0.1);color:#22D3EE">70-77 SPM</span>
+        </div>
+        <div class="song-row"><span class="song-num">1</span><svg class="w-4 h-4 text-[#64748B] shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg><span class="text-white text-sm flex-1">Stayin' Alive</span><span class="text-[#475569] text-xs">Bee Gees</span><span class="bpm-tag" style="background:rgba(255,255,255,0.03);color:#64748B">103 BPM</span></div>
+        <div class="song-row"><span class="song-num">2</span><svg class="w-4 h-4 text-[#64748B] shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg><span class="text-white text-sm flex-1">Three Little Birds</span><span class="text-[#475569] text-xs">Bob Marley</span><span class="bpm-tag" style="background:rgba(255,255,255,0.03);color:#64748B">150 BPM</span></div>
+        <div class="song-row"><span class="song-num">3</span><svg class="w-4 h-4 text-[#64748B] shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg><span class="text-white text-sm flex-1">Walking on Sunshine</span><span class="text-[#475569] text-xs">Katrina & The Waves</span><span class="bpm-tag" style="background:rgba(255,255,255,0.03);color:#64748B">116 BPM</span></div>
+        <div class="song-row"><span class="song-num">4</span><svg class="w-4 h-4 text-[#64748B] shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg><span class="text-white text-sm flex-1">Here Comes the Sun</span><span class="text-[#475569] text-xs">The Beatles</span><span class="bpm-tag" style="background:rgba(255,255,255,0.03);color:#64748B">129 BPM</span></div>
+        <div class="song-row"><span class="song-num">5</span><svg class="w-4 h-4 text-[#64748B] shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg><span class="text-white text-sm flex-1">What a Wonderful World</span><span class="text-[#475569] text-xs">Louis Armstrong</span><span class="bpm-tag" style="background:rgba(255,255,255,0.03);color:#64748B">140 BPM</span></div>
+      </div>
+
+      <div class="bpm-zone fade-up" style="animation-delay:0.3s;background:linear-gradient(135deg,rgba(52,211,153,0.04),transparent);border:1px solid rgba(52,211,153,0.12)">
+        <div class="flex items-center justify-between mb-3">
+          <div class="flex items-center gap-3"><div class="w-10 h-10 rounded-xl flex items-center justify-center font-black text-lg" style="background:rgba(52,211,153,0.1);color:#34D399">160</div><div><div class="text-white font-semibold">155–170 BPM</div><div class="text-[#64748B] text-xs">Tempo Run · Aeróbico</div></div></div>
+          <span class="bpm-tag" style="background:rgba(52,211,153,0.1);color:#34D399">77-85 SPM</span>
+        </div>
+        <div class="song-row"><span class="song-num">1</span><svg class="w-4 h-4 text-[#64748B] shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg><span class="text-white text-sm flex-1">Happy</span><span class="text-[#475569] text-xs">Pharrell Williams</span><span class="bpm-tag" style="background:rgba(255,255,255,0.03);color:#64748B">160 BPM</span></div>
+        <div class="song-row"><span class="song-num">2</span><svg class="w-4 h-4 text-[#64748B] shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg><span class="text-white text-sm flex-1">Uptown Funk</span><span class="text-[#475569] text-xs">Bruno Mars</span><span class="bpm-tag" style="background:rgba(255,255,255,0.03);color:#64748B">115 BPM</span></div>
+        <div class="song-row"><span class="song-num">3</span><svg class="w-4 h-4 text-[#64748B] shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg><span class="text-white text-sm flex-1">Shake It Off</span><span class="text-[#475569] text-xs">Taylor Swift</span><span class="bpm-tag" style="background:rgba(255,255,255,0.03);color:#64748B">160 BPM</span></div>
+        <div class="song-row"><span class="song-num">4</span><svg class="w-4 h-4 text-[#64748B] shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg><span class="text-white text-sm flex-1">Get Lucky</span><span class="text-[#475569] text-xs">Daft Punk</span><span class="bpm-tag" style="background:rgba(255,255,255,0.03);color:#64748B">116 BPM</span></div>
+        <div class="song-row"><span class="song-num">5</span><svg class="w-4 h-4 text-[#64748B] shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg><span class="text-white text-sm flex-1">Levitating</span><span class="text-[#475569] text-xs">Dua Lipa</span><span class="bpm-tag" style="background:rgba(255,255,255,0.03);color:#64748B">103 BPM</span></div>
+      </div>
+
+      <div class="bpm-zone fade-up" style="animation-delay:0.4s;background:linear-gradient(135deg,rgba(204,255,0,0.04),transparent);border:1px solid rgba(204,255,0,0.12)">
+        <div class="flex items-center justify-between mb-3">
+          <div class="flex items-center gap-3"><div class="w-10 h-10 rounded-xl flex items-center justify-center font-black text-lg" style="background:rgba(204,255,0,0.1);color:#CCFF00">180</div><div><div class="text-white font-semibold">170–185 BPM</div><div class="text-[#64748B] text-xs">Ritmo de Carrera · Élite</div></div></div>
+          <span class="bpm-tag" style="background:rgba(204,255,0,0.1);color:#CCFF00">85-92 SPM</span>
+        </div>
+        <div class="song-row"><span class="song-num">1</span><svg class="w-4 h-4 text-[#64748B] shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg><span class="text-white text-sm flex-1">Don't Stop Me Now</span><span class="text-[#475569] text-xs">Queen</span><span class="bpm-tag" style="background:rgba(255,255,255,0.03);color:#64748B">156 BPM</span></div>
+        <div class="song-row"><span class="song-num">2</span><svg class="w-4 h-4 text-[#64748B] shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg><span class="text-white text-sm flex-1">Eye of the Tiger</span><span class="text-[#475569] text-xs">Survivor</span><span class="bpm-tag" style="background:rgba(255,255,255,0.03);color:#64748B">109 BPM</span></div>
+        <div class="song-row"><span class="song-num">3</span><svg class="w-4 h-4 text-[#64748B] shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg><span class="text-white text-sm flex-1">Lose Yourself</span><span class="text-[#475569] text-xs">Eminem</span><span class="bpm-tag" style="background:rgba(255,255,255,0.03);color:#64748B">171 BPM</span></div>
+        <div class="song-row"><span class="song-num">4</span><svg class="w-4 h-4 text-[#64748B] shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg><span class="text-white text-sm flex-1">Stronger</span><span class="text-[#475569] text-xs">Kanye West</span><span class="bpm-tag" style="background:rgba(255,255,255,0.03);color:#64748B">104 BPM</span></div>
+        <div class="song-row"><span class="song-num">5</span><svg class="w-4 h-4 text-[#64748B] shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg><span class="text-white text-sm flex-1">Thunder</span><span class="text-[#475569] text-xs">Imagine Dragons</span><span class="bpm-tag" style="background:rgba(255,255,255,0.03);color:#64748B">168 BPM</span></div>
+      </div>
+
+      <div class="bpm-zone fade-up" style="animation-delay:0.5s;background:linear-gradient(135deg,rgba(255,87,34,0.04),transparent);border:1px solid rgba(255,87,34,0.12)">
+        <div class="flex items-center justify-between mb-3">
+          <div class="flex items-center gap-3"><div class="w-10 h-10 rounded-xl flex items-center justify-center font-black text-lg" style="background:rgba(255,87,34,0.1);color:#FF5722">200</div><div><div class="text-white font-semibold">185–200+ BPM</div><div class="text-[#64748B] text-xs">Series · Sprint · Máxima Intensidad</div></div></div>
+          <span class="bpm-tag" style="background:rgba(255,87,34,0.1);color:#FF5722">92-100 SPM</span>
+        </div>
+        <div class="song-row"><span class="song-num">1</span><svg class="w-4 h-4 text-[#64748B] shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg><span class="text-white text-sm flex-1">Kickstart My Heart</span><span class="text-[#475569] text-xs">Mötley Crüe</span><span class="bpm-tag" style="background:rgba(255,255,255,0.03);color:#64748B">170 BPM</span></div>
+        <div class="song-row"><span class="song-num">2</span><svg class="w-4 h-4 text-[#64748B] shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg><span class="text-white text-sm flex-1">Bleed It Out</span><span class="text-[#475569] text-xs">Linkin Park</span><span class="bpm-tag" style="background:rgba(255,255,255,0.03);color:#64748B">137 BPM</span></div>
+        <div class="song-row"><span class="song-num">3</span><svg class="w-4 h-4 text-[#64748B] shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg><span class="text-white text-sm flex-1">Can't Hold Us</span><span class="text-[#475569] text-xs">Macklemore</span><span class="bpm-tag" style="background:rgba(255,255,255,0.03);color:#64748B">146 BPM</span></div>
+        <div class="song-row"><span class="song-num">4</span><svg class="w-4 h-4 text-[#64748B] shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg><span class="text-white text-sm flex-1">Till I Collapse</span><span class="text-[#475569] text-xs">Eminem</span><span class="bpm-tag" style="background:rgba(255,255,255,0.03);color:#64748B">171 BPM</span></div>
+        <div class="song-row"><span class="song-num">5</span><svg class="w-4 h-4 text-[#64748B] shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg><span class="text-white text-sm flex-1">Sabotage</span><span class="text-[#475569] text-xs">Beastie Boys</span><span class="bpm-tag" style="background:rgba(255,255,255,0.03);color:#64748B">138 BPM</span></div>
+      </div>
+    </div>
+
+    <div class="card-glass p-6 mt-8 fade-up" style="animation-delay:0.6s">
+      <h3 class="text-white font-semibold text-sm mb-3">Cómo Usar estas Playlists</h3>
+      <div class="grid md:grid-cols-3 gap-4">
+        <div class="p-3 rounded-xl" style="background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.04)">
+          <div class="text-[#CCFF00] font-black text-lg mb-1">1</div>
+          <div class="text-white text-xs font-semibold mb-1">Encuentra tu BPM</div>
+          <p class="text-[#64748B] text-[11px]">Identifica tu cadencia actual (SPM) y multiplícala por 2 para hallar tu BPM objetivo. Si no la sabes, usa el Analizador de Cadencia.</p>
+        </div>
+        <div class="p-3 rounded-xl" style="background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.04)">
+          <div class="text-[#CCFF00] font-black text-lg mb-1">2</div>
+          <div class="text-white text-xs font-semibold mb-1">Sincroniza tu zancada</div>
+          <p class="text-[#64748B] text-[11px]">Al salir a correr, concéntrate en que cada beat de la música coincida con el apoyo de un pie. Tu cuerpo encontrará el ritmo naturalmente.</p>
+        </div>
+        <div class="p-3 rounded-xl" style="background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.04)">
+          <div class="text-[#CCFF00] font-black text-lg mb-1">3</div>
+          <div class="text-white text-xs font-semibold mb-1">Varía según el entreno</div>
+          <p class="text-[#64748B] text-[11px]">Usa playlists más lentas para rodajes suaves y más rápidas para series. Tu cerebro asociará el BPM con la intensidad deseada.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div id="footer-placeholder"></div>
+  <script src="/assets/js/config.js"></script>
+  <script src="/assets/js/store.js"></script>
+  <script src="/components/navbar.js"></script>
+  <script src="/components/footer.js"></script>
+  <script src="/assets/js/profile-modal.js"></script>
+  <script src="/assets/js/components.js"></script>
+</body>
+</html>

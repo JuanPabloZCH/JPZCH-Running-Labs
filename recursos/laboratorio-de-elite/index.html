@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Laboratorio de Élite — JPZCH Running Labs</title>
+  <meta name="description" content="Explora los récords del running a través de datos: splits, zapatillas, cadencia, y la evolución histórica de las marcas de élite.">
+  <meta name="theme-color" content="#0B0F19">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23CCFF00'/%3E%3Ctext x='16' y='22' font-family='Inter,system-ui,sans-serif' font-size='18' font-weight='900' fill='%230B0F19' text-anchor='middle'%3EJP%3C/text%3E%3C/svg%3E">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/assets/css/styles.css">
+  <style>
+    .hero-elite { min-height: 40vh; display: flex; align-items: center; position: relative; overflow: hidden; }
+    .hero-elite::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 25% 30%, rgba(251,191,36,0.07) 0%, transparent 50%), radial-gradient(circle at 75% 70%, rgba(255,87,34,0.04) 0%, transparent 50%), radial-gradient(circle at 50% 50%, rgba(204,255,0,0.03) 0%, transparent 40%); pointer-events: none; }
+    .card-glass { background: linear-gradient(145deg, rgba(19,26,43,0.8), rgba(26,35,50,0.6)); border: 1px solid rgba(255,255,255,0.06); border-radius: 1.25rem; backdrop-filter: blur(12px); }
+    .record-card { background: linear-gradient(145deg, rgba(19,26,43,0.9), rgba(26,35,50,0.7)); border: 1px solid rgba(255,255,255,0.06); border-radius: 1.25rem; padding: 1.5rem; position: relative; overflow: hidden; transition: all 0.4s ease; }
+    .record-card:hover { transform: translateY(-4px); border-color: rgba(255,215,0,0.2); box-shadow: 0 12px 40px rgba(0,0,0,0.3); }
+    .record-card .glow { position: absolute; top: -50%; right: -50%; width: 100%; height: 100%; background: radial-gradient(circle, rgba(255,215,0,0.03) 0%, transparent 60%); pointer-events: none; }
+    .record-card .medal { width: 3rem; height: 3rem; border-radius: 1rem; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; }
+    .stat-chip { display: inline-flex; align-items: center; gap: 0.375rem; padding: 0.25rem 0.625rem; border-radius: 0.5rem; font-size: 0.6875rem; font-weight: 600; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); color: #94A3B8; }
+    .split-bar { height: 1.5rem; border-radius: 0.375rem; background: rgba(255,255,255,0.03); position: relative; overflow: hidden; }
+    .split-bar-fill { height: 100%; border-radius: 0.375rem; transition: width 0.8s ease; }
+    .timeline-track { position: relative; padding-left: 2rem; }
+    .timeline-track::before { content: ''; position: absolute; left: 0.5rem; top: 0; bottom: 0; width: 2px; background: linear-gradient(to bottom, rgba(204,255,0,0.2), rgba(255,87,34,0.1)); }
+    .timeline-dot { position: absolute; left: 0.125rem; width: 0.875rem; height: 0.875rem; border-radius: 50%; border: 2px solid; top: 0.375rem; }
+    .timeline-item { position: relative; padding-bottom: 2rem; }
+    .timeline-item:last-child { padding-bottom: 0; }
+    .bpm-card { padding: 1.25rem; border-radius: 1rem; background: rgba(11,15,25,0.4); border: 1px solid rgba(255,255,255,0.04); transition: all 0.3s ease; }
+    .bpm-card:hover { border-color: rgba(139,92,246,0.2); transform: translateY(-2px); }
+    .bpm-visual { width: 3rem; height: 3rem; border-radius: 1rem; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; font-weight: 900; }
+    .fade-up { animation: fadeUp 0.5s ease forwards; opacity: 0; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+  </style>
+</head>
+<body class="antialiased">
+  <div id="navbar-placeholder"></div>
+
+  <section class="hero-elite pt-24 md:pt-28">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full py-14 md:py-20 relative z-10">
+      <div class="max-w-3xl mx-auto text-center">
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#FBBF24]/10 border border-[#FBBF24]/20 text-[#FBBF24] text-xs font-semibold mb-5">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+          <span>Análisis de Élite</span>
+        </div>
+        <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black leading-[1.1] tracking-tight mb-4">
+          <span class="text-white">Laboratorio</span>
+          <span class="text-gradient-green"> de Élite</span>
+        </h1>
+        <p class="text-[#94A3B8] text-sm sm:text-base md:text-lg leading-relaxed max-w-2xl mx-auto">
+          Destripamos los récords más grandes de la historia: splits, zapatillas, cadencia y la ciencia detrás de cada zancada de leyenda.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
+
+    <div class="text-center mb-8 fade-up"><h2 class="text-white text-2xl font-black">Récords Históricos</h2><p class="text-[#64748B] text-sm mt-1">Los hitos que redefinieron los límites del running</p></div>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4 mb-12">
+      <div class="record-card fade-up" style="animation-delay:0.1s">
+        <div class="glow"></div>
+        <div class="flex items-center gap-3 mb-4"><div class="medal" style="background:rgba(255,215,0,0.1);border:1px solid rgba(255,215,0,0.2)">👑</div><div><div class="text-white font-bold">Sabastian Sawe</div><div class="text-[#FBBF24] text-xs font-semibold">Maratón — 1:59:30</div></div></div>
+        <div class="grid grid-cols-2 gap-2 mb-3">
+          <div class="stat-chip"><svg class="w-3 h-3 text-[#CCFF00]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>2:50 min/km</div>
+          <div class="stat-chip"><svg class="w-3 h-3 text-[#22D3EE]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>183 SPM</div>
+          <div class="stat-chip"><svg class="w-3 h-3 text-[#FF5722]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>1.78 m zancada</div>
+          <div class="stat-chip"><svg class="w-3 h-3 text-[#8B5CF6]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/></svg>Adidas Adizero Adios Pro Evo 3</div>
+        </div>
+        <div class="text-xs text-[#475569] mb-1">Splits cada 5K</div>
+        <div class="space-y-1">
+          <div><div class="flex justify-between text-[10px] text-[#64748B] mb-0.5"><span>5K</span><span>14:14</span></div><div class="split-bar"><div class="split-bar-fill" style="width:72%;background:rgba(251,191,36,0.4)"></div></div></div>
+          <div><div class="flex justify-between text-[10px] text-[#64748B] mb-0.5"><span>10K</span><span>28:35</span></div><div class="split-bar"><div class="split-bar-fill" style="width:72%;background:rgba(251,191,36,0.4)"></div></div></div>
+          <div><div class="flex justify-between text-[10px] text-[#64748B] mb-0.5"><span>21.1K</span><span>1:00:29</span></div><div class="split-bar"><div class="split-bar-fill" style="width:75%;background:rgba(251,146,60,0.4)"></div></div></div>
+          <div><div class="flex justify-between text-[10px] text-[#64748B] mb-0.5"><span>42.2K</span><span>1:59:30</span></div><div class="split-bar"><div class="split-bar-fill" style="width:100%;background:rgba(255,215,0,0.4)"></div></div></div>
+        </div>
+        <div class="mt-3 pt-3 border-t border-white/5"><div class="flex items-center gap-2 text-[10px] text-[#475569]"><span class="w-1.5 h-1.5 rounded-full bg-[#FBBF24]"></span>London Marathon — 26 Abril 2026</div></div>
+      </div>
+
+      <div class="record-card fade-up" style="animation-delay:0.15s">
+        <div class="glow"></div>
+        <div class="flex items-center gap-3 mb-4"><div class="medal" style="background:rgba(139,92,246,0.1);border:1px solid rgba(139,92,246,0.2)">⚡</div><div><div class="text-white font-bold">Yomif Kejelcha</div><div class="text-[#A78BFA] text-xs font-semibold">Maratón — 1:59:41 (Debut)</div></div></div>
+        <div class="grid grid-cols-2 gap-2 mb-3">
+          <div class="stat-chip"><svg class="w-3 h-3 text-[#CCFF00]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>2:50 min/km</div>
+          <div class="stat-chip"><svg class="w-3 h-3 text-[#22D3EE]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>185 SPM</div>
+          <div class="stat-chip"><svg class="w-3 h-3 text-[#FF5722]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>1.80 m zancada</div>
+          <div class="stat-chip"><svg class="w-3 h-3 text-[#8B5CF6]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/></svg>Adidas Adizero Adios Pro Evo 3</div>
+        </div>
+        <div class="text-xs text-[#475569] mb-1">Splits cada 5K</div>
+        <div class="space-y-1">
+          <div><div class="flex justify-between text-[10px] text-[#64748B] mb-0.5"><span>5K</span><span>14:14</span></div><div class="split-bar"><div class="split-bar-fill" style="width:72%;background:rgba(139,92,246,0.4)"></div></div></div>
+          <div><div class="flex justify-between text-[10px] text-[#64748B] mb-0.5"><span>10K</span><span>28:35</span></div><div class="split-bar"><div class="split-bar-fill" style="width:72%;background:rgba(139,92,246,0.4)"></div></div></div>
+          <div><div class="flex justify-between text-[10px] text-[#64748B] mb-0.5"><span>21.1K</span><span>1:00:29</span></div><div class="split-bar"><div class="split-bar-fill" style="width:75%;background:rgba(139,92,246,0.4)"></div></div></div>
+          <div><div class="flex justify-between text-[10px] text-[#64748B] mb-0.5"><span>42.2K</span><span>1:59:41</span></div><div class="split-bar"><div class="split-bar-fill" style="width:100%;background:rgba(139,92,246,0.4)"></div></div></div>
+        </div>
+        <div class="mt-3 pt-3 border-t border-white/5"><div class="flex items-center gap-2 text-[10px] text-[#475569]"><span class="w-1.5 h-1.5 rounded-full bg-[#8B5CF6]"></span>Debut más rápido historia — London 2026</div></div>
+      </div>
+
+      <div class="record-card fade-up" style="animation-delay:0.2s">
+        <div class="glow"></div>
+        <div class="flex items-center gap-3 mb-4"><div class="medal" style="background:rgba(255,215,0,0.1);border:1px solid rgba(255,215,0,0.2)">🏅</div><div><div class="text-white font-bold">Eliud Kipchoge</div><div class="text-[#FBBF24] text-xs font-semibold">Maratón — 1:59:40 (INEOS)</div></div></div>
+        <div class="grid grid-cols-2 gap-2 mb-3">
+          <div class="stat-chip"><svg class="w-3 h-3 text-[#CCFF00]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>2:50 min/km</div>
+          <div class="stat-chip"><svg class="w-3 h-3 text-[#22D3EE]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>180 SPM</div>
+          <div class="stat-chip"><svg class="w-3 h-3 text-[#FF5722]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>1.85 m zancada</div>
+          <div class="stat-chip"><svg class="w-3 h-3 text-[#8B5CF6]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/></svg>Nike Alphafly Next%</div>
+        </div>
+        <div class="text-xs text-[#475569] mb-1">Splits cada 5K</div>
+        <div class="space-y-1">
+          <div><div class="flex justify-between text-[10px] text-[#64748B] mb-0.5"><span>5K</span><span>14:10</span></div><div class="split-bar"><div class="split-bar-fill" style="width:71%;background:rgba(251,191,36,0.4)"></div></div></div>
+          <div><div class="flex justify-between text-[10px] text-[#64748B] mb-0.5"><span>10K</span><span>28:20</span></div><div class="split-bar"><div class="split-bar-fill" style="width:71%;background:rgba(251,191,36,0.4)"></div></div></div>
+          <div><div class="flex justify-between text-[10px] text-[#64748B] mb-0.5"><span>21.1K</span><span>59:54</span></div><div class="split-bar"><div class="split-bar-fill" style="width:75%;background:rgba(251,146,60,0.4)"></div></div></div>
+          <div><div class="flex justify-between text-[10px] text-[#64748B] mb-0.5"><span>42.2K</span><span>1:59:40</span></div><div class="split-bar"><div class="split-bar-fill" style="width:100%;background:rgba(255,215,0,0.4)"></div></div></div>
+        </div>
+        <div class="mt-3 pt-3 border-t border-white/5"><div class="flex items-center gap-2 text-[10px] text-[#475569]"><span class="w-1.5 h-1.5 rounded-full bg-[#22D3EE]"></span>INEOS 1:59 Challenge — Viena 12 Oct 2019</div></div>
+      </div>
+
+      <div class="record-card fade-up" style="animation-delay:0.3s">
+        <div class="glow"></div>
+        <div class="flex items-center gap-3 mb-4"><div class="medal" style="background:rgba(255,87,34,0.1);border:1px solid rgba(255,87,34,0.2)">🔥</div><div><div class="text-white font-bold">Tigst Assefa</div><div class="text-[#FB923C] text-xs font-semibold">Maratón — 2:11:53</div></div></div>
+        <div class="grid grid-cols-2 gap-2 mb-3">
+          <div class="stat-chip"><svg class="w-3 h-3 text-[#CCFF00]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>3:07 min/km</div>
+          <div class="stat-chip"><svg class="w-3 h-3 text-[#22D3EE]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>185 SPM</div>
+          <div class="stat-chip"><svg class="w-3 h-3 text-[#FF5722]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>1.63 m zancada</div>
+          <div class="stat-chip"><svg class="w-3 h-3 text-[#8B5CF6]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/></svg>Adidas Adizero Adios Pro Evo 1</div>
+        </div>
+        <div class="text-xs text-[#475569] mb-1">Splits cada 5K</div>
+        <div class="space-y-1">
+          <div><div class="flex justify-between text-[10px] text-[#64748B] mb-0.5"><span>5K</span><span>15:58</span></div><div class="split-bar"><div class="split-bar-fill" style="width:73%;background:rgba(34,211,238,0.4)"></div></div></div>
+          <div><div class="flex justify-between text-[10px] text-[#64748B] mb-0.5"><span>10K</span><span>31:45</span></div><div class="split-bar"><div class="split-bar-fill" style="width:73%;background:rgba(34,211,238,0.4)"></div></div></div>
+          <div><div class="flex justify-between text-[10px] text-[#64748B] mb-0.5"><span>21.1K</span><span>1:06:20</span></div><div class="split-bar"><div class="split-bar-fill" style="width:76%;background:rgba(34,211,238,0.4)"></div></div></div>
+          <div><div class="flex justify-between text-[10px] text-[#64748B] mb-0.5"><span>42.2K</span><span>2:11:53</span></div><div class="split-bar"><div class="split-bar-fill" style="width:100%;background:rgba(255,87,34,0.4)"></div></div></div>
+        </div>
+        <div class="mt-3 pt-3 border-t border-white/5"><div class="flex items-center gap-2 text-[10px] text-[#475569]"><span class="w-1.5 h-1.5 rounded-full bg-[#FF5722]"></span>Récord Mundial Femenino — Berlín 2023</div></div>
+      </div>
+    </div>
+
+    <div class="card-glass p-6 md:p-8 mb-12 fade-up" style="animation-delay:0.4s">
+      <h2 class="text-white font-bold text-xl mb-6 flex items-center gap-2">
+        <svg class="w-5 h-5 text-[#CCFF00]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+        Línea de Tiempo Evolutiva
+      </h2>
+      <div class="timeline-track">
+        <div class="timeline-item">
+          <div class="timeline-dot" style="background:rgba(148,163,184,0.2);border-color:#64748B"></div>
+          <div class="pl-4"><span class="text-[#64748B] text-xs font-semibold">1908</span><div class="text-white font-semibold text-sm mt-0.5">Primer maratón oficial</div><p class="text-[#94A3B8] text-xs mt-1">Johnny Hayes gana el maratón olímpico de Londres en 2:55:18. Zapatillas de suela plana con clavos. Sin hidratación ni avituallamiento durante la carrera.</p></div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot" style="background:rgba(148,163,184,0.2);border-color:#94A3B8"></div>
+          <div class="pl-4"><span class="text-[#64748B] text-xs font-semibold">1954</span><div class="text-white font-semibold text-sm mt-0.5">La milla sub-4: Roger Bannister</div><p class="text-[#94A3B8] text-xs mt-1">Bannister rompe la barrera de los 4 minutos en la milla (3:59.4). Zapatillas de cuero de 200g. Considerado el hito más grande del atletismo hasta entonces.</p></div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot" style="background:rgba(204,255,0,0.2);border-color:#CCFF00"></div>
+          <div class="pl-4"><span class="text-[#64748B] text-xs font-semibold">1960</span><div class="text-white font-semibold text-sm mt-0.5">Abebe Bikila — Descalzo a la gloria</div><p class="text-[#94A3B8] text-xs mt-1">Gana el maratón olímpico de Roma descalzo en 2:15:16. Primera vez que se ve a un africano dominar el fondo. Quiebra el paradigma de que solo los occidentales podían ganar.</p></div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot" style="background:rgba(204,255,0,0.2);border-color:#CCFF00"></div>
+          <div class="pl-4"><span class="text-[#64748B] text-xs font-semibold">1998</span><div class="text-white font-semibold text-sm mt-0.5">Nike Air Zoom Streak — La era del foam</div><p class="text-[#94A3B8] text-xs mt-1">Llegan las primeras zapatillas con espuma de alto rendimiento. Haile Gebrselassie establece 15 récords mundiales en pista y ruta usando esta tecnología.</p></div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot" style="background:rgba(255,215,0,0.3);border-color:#FBBF24"></div>
+          <div class="pl-4"><span class="text-[#64748B] text-xs font-semibold">2017</span><div class="text-white font-semibold text-sm mt-0.5">Breaking2 — El límite se reescribe</div><p class="text-[#94A3B8] text-xs mt-1">Nike lanza el proyecto Breaking2 con Eliud Kipchoge. Primera zapatilla con placa de carbono (Vaporfly 4%). Kipchoge corre 2:00:25 en Monza. Nace la era del superfoam + carbono.</p></div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot" style="background:rgba(255,215,0,0.4);border-color:#FBBF24"></div>
+          <div class="pl-4"><span class="text-[#64748B] text-xs font-semibold">2019</span><div class="text-white font-semibold text-sm mt-0.5">INEOS 1:59 — La barrera humana cae</div><p class="text-[#94A3B8] text-xs mt-1">Kipchoge corre 1:59:40 en Viena. Equipo de 41 liebres rotándose. Zapatillas Alphafly Next% con Air Zoom pods. No homologado por no ser carrera abierta.</p></div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot" style="background:rgba(255,87,34,0.3);border-color:#FF5722"></div>
+          <div class="pl-4"><span class="text-[#64748B] text-xs font-semibold">2023</span><div class="text-white font-semibold text-sm mt-0.5">Kiptum — 2:00:35 en Chicago</div><p class="text-[#94A3B8] text-xs mt-1">Kelvin Kiptum rompe el récord mundial oficial con 2:00:35 en Chicago. Splits negativos y un cierre de 27:52 en los últimos 10K. Fallece trágicamente en 2024 a los 24 años.</p></div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot" style="background:rgba(255,215,0,0.5);border-color:#CCFF00"></div>
+          <div class="pl-4"><span class="text-[#64748B] text-xs font-semibold">2026</span><div class="text-white font-semibold text-sm mt-0.5">London 2026 — El día que el límite explotó</div><p class="text-[#94A3B8] text-xs mt-1">Sabastian Sawe (1:59:30) y Yomif Kejelcha (1:59:41) rompen los 2h en la misma carrera. Jacob Kiplimo (2:00:28) también baja el anterior RM. El primer sub-2h oficial de la historia.</p></div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <div id="footer-placeholder"></div>
+  <script src="/assets/js/config.js"></script>
+  <script src="/assets/js/store.js"></script>
+  <script src="/components/navbar.js"></script>
+  <script src="/components/footer.js"></script>
+  <script src="/assets/js/profile-modal.js"></script>
+  <script src="/assets/js/components.js"></script>
+</body>
+</html>

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zonas Cardíacas — Guía Completa | JPZCH Running Labs</title>
+  <meta name="description" content="Guía completa de zonas de frecuencia cardíaca para running. Aprende qué son, cómo calcularlas y cómo entrenar en cada zona para mejorar tu rendimiento.">
+  <meta name="theme-color" content="#0B0F19">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23CCFF00'/%3E%3Ctext x='16' y='22' font-family='Inter,system-ui,sans-serif' font-size='18' font-weight='900' fill='%230B0F19' text-anchor='middle'%3EJP%3C/text%3E%3C/svg%3E">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/assets/css/styles.css">
+  <style>
+    .hero-hr { min-height: 35vh; display: flex; align-items: center; position: relative; overflow: hidden; }
+    .hero-hr::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 30% 40%, rgba(255,87,34,0.06) 0%, transparent 50%), radial-gradient(circle at 70% 60%, rgba(204,255,0,0.04) 0%, transparent 50%); pointer-events: none; }
+    .card-glass { background: linear-gradient(145deg, rgba(19,26,43,0.8), rgba(26,35,50,0.6)); border: 1px solid rgba(255,255,255,0.06); border-radius: 1.25rem; padding: 1.5rem; backdrop-filter: blur(12px); }
+    .zone-card { padding: 1.25rem; border-radius: 1rem; transition: all 0.3s ease; }
+    .zone-card:hover { transform: translateY(-2px); }
+    .stat-tile { background: rgba(11,15,25,0.4); border-radius: 0.75rem; padding: 1rem; text-align: center; }
+    .stat-tile .val { font-size: 1.5rem; font-weight: 800; color: #CCFF00; }
+    .stat-tile .lbl { font-size: 0.65rem; color: #64748B; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 0.25rem; }
+    .method-card { padding: 1.25rem; border-radius: 1rem; border: 1px solid rgba(255,255,255,0.06); transition: all 0.3s ease; }
+    .method-card:hover { border-color: rgba(255,255,255,0.12); }
+    .hr-bar { height: 0.5rem; border-radius: 999px; }
+    .faq-item summary::-webkit-details-marker { display: none; }
+    .faq-item summary { list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; padding: 1rem 0; }
+    .faq-item summary::after { content: '+'; font-size: 1.25rem; color: #CCFF00; font-weight: 700; transition: transform 0.3s ease; }
+    .faq-item[open] summary::after { content: '−'; }
+    .faq-item .faq-body { padding-bottom: 1rem; color: #94A3B8; font-size: 0.875rem; line-height: 1.7; }
+    .fade-up { animation: fadeUp 0.5s ease forwards; opacity: 0; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+  </style>
+</head>
+<body class="antialiased">
+  <div id="navbar-placeholder"></div>
+
+  <section class="hero-hr pt-24 md:pt-28">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full py-12 md:py-16 relative z-10">
+      <div class="max-w-3xl mx-auto text-center">
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#FF5722]/10 border border-[#FF5722]/20 text-[#FF5722] text-xs font-semibold mb-5">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+          <span>Recurso Informativo</span>
+        </div>
+        <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black leading-[1.1] tracking-tight mb-4">
+          <span class="text-white">Zonas</span>
+          <span class="text-gradient-green"> Cardíacas</span>
+        </h1>
+        <p class="text-[#94A3B8] text-sm sm:text-base md:text-lg leading-relaxed max-w-2xl mx-auto">
+          Aprende a entrenar con tu frecuencia cardíaca: qué significan las zonas, cómo calcularlas y cómo usarlas para correr más y mejor.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
+    <div class="grid grid-cols-2 md:grid-cols-5 gap-3 mb-10 fade-up" style="animation-delay:0.1s">
+      <div class="stat-tile border border-white/5"><div class="val" style="color:#22D3EE">Z1</div><div class="lbl">Recuperación</div></div>
+      <div class="stat-tile border border-white/5"><div class="val" style="color:#34D399">Z2</div><div class="lbl">Aeróbico</div></div>
+      <div class="stat-tile border border-white/5"><div class="val" style="color:#FBBF24">Z3</div><div class="lbl">Tempo</div></div>
+      <div class="stat-tile border border-white/5"><div class="val" style="color:#FB923C">Z4</div><div class="lbl">Umbral</div></div>
+      <div class="stat-tile border border-white/5"><div class="val" style="color:#EF4444">Z5</div><div class="lbl">Máximo</div></div>
+    </div>
+
+    <div class="card-glass mb-8 fade-up" style="animation-delay:0.2s">
+      <h2 class="text-white font-bold text-xl mb-4">¿Qué son las Zonas Cardíacas?</h2>
+      <p class="text-[#94A3B8] text-sm md:text-base leading-relaxed mb-4">Las zonas cardíacas dividen tu frecuencia cardíaca (FC) en rangos de intensidad, cada uno con un beneficio fisiológico específico. Entrenar en la zona correcta es la clave para mejorar sin sobreentrenar.</p>
+      <p class="text-[#94A3B8] text-sm md:text-base leading-relaxed">Tu FC máxima es el techo. A partir de ahí, se calculan 5 zonas que van desde la recuperación (Z1, muy suave) hasta el esfuerzo máximo (Z5, solo para intervalos muy cortos).</p>
+    </div>
+
+    <div class="card-glass mb-8 fade-up" style="animation-delay:0.3s">
+      <h2 class="text-white font-bold text-xl mb-5">Las 5 Zonas Explicadas</h2>
+      <div class="space-y-3">
+        <div class="zone-card" style="background:linear-gradient(135deg,rgba(34,211,238,0.06),transparent);border-left:4px solid #22D3EE">
+          <div class="flex items-center gap-3 mb-2"><span class="text-[#22D3EE] font-black text-lg">Z1</span><span class="text-white font-semibold text-sm">Recuperación (50-60% FC máx)</span></div>
+          <p class="text-[#94A3B8] text-xs leading-relaxed">La zona más suave. Ideal para calentamiento, vuelta a la calma, días post-carrera o corredores principiantes. Sensación: trotar muy cómodo, respiración completamente controlada, puedes mantener una conversación larga sin esfuerzo.</p>
+          <div class="mt-2 flex items-center gap-2"><div class="hr-bar flex-1" style="background:rgba(34,211,238,0.15)"><div class="hr-bar" style="width:60%;background:#22D3EE;opacity:0.6"></div></div></div>
+        </div>
+        <div class="zone-card" style="background:linear-gradient(135deg,rgba(52,211,153,0.06),transparent);border-left:4px solid #34D399">
+          <div class="flex items-center gap-3 mb-2"><span class="text-[#34D399] font-black text-lg">Z2</span><span class="text-white font-semibold text-sm">Aeróbico / Quema Grasa (60-70% FC máx)</span></div>
+          <p class="text-[#94A3B8] text-xs leading-relaxed">El pan de cada día. Aquí tu cuerpo quema principalmente grasa como combustible, capilariza los músculos y construye tu base aeróbica. El 70-80% de tu entrenamiento semanal debe estar en esta zona. Sensación: ritmo conversacional, sudas pero sin ahogo.</p>
+          <div class="mt-2 flex items-center gap-2"><div class="hr-bar flex-1" style="background:rgba(52,211,153,0.15)"><div class="hr-bar" style="width:70%;background:#34D399;opacity:0.6"></div></div></div>
+        </div>
+        <div class="zone-card" style="background:linear-gradient(135deg,rgba(251,191,36,0.06),transparent);border-left:4px solid #FBBF24">
+          <div class="flex items-center gap-3 mb-2"><span class="text-[#FBBF24] font-black text-lg">Z3</span><span class="text-white font-semibold text-sm">Tempo / Resistencia (70-80% FC máx)</span></div>
+          <p class="text-[#94A3B8] text-xs leading-relaxed">El ritmo de media maratón para la mayoría. Aquí empiezas a respirar más profundo pero aún puedes mantener el esfuerzo 30-60 minutos. Mejora tu eficiencia cardiovascular y tu umbral aeróbico. Sensación: "cómodamente duro", puedes decir frases cortas.</p>
+          <div class="mt-2 flex items-center gap-2"><div class="hr-bar flex-1" style="background:rgba(251,191,36,0.15)"><div class="hr-bar" style="width:80%;background:#FBBF24;opacity:0.6"></div></div></div>
+        </div>
+        <div class="zone-card" style="background:linear-gradient(135deg,rgba(251,146,60,0.06),transparent);border-left:4px solid #FB923C">
+          <div class="flex items-center gap-3 mb-2"><span class="text-[#FB923C] font-black text-lg">Z4</span><span class="text-white font-semibold text-sm">Umbral (80-90% FC máx)</span></div>
+          <p class="text-[#94A3B8] text-xs leading-relaxed">Justo en tu umbral de lactato. El esfuerzo es intenso pero sostenible 20-40 minutos. Es la zona clave para mejorar tu ritmo de 10K y media maratón. Sensación: respiración muy exigida, piernas pesadas, quieres que termine pero puedes mantenerlo.</p>
+          <div class="mt-2 flex items-center gap-2"><div class="hr-bar flex-1" style="background:rgba(251,146,60,0.15)"><div class="hr-bar" style="width:90%;background:#FB923C;opacity:0.6"></div></div></div>
+        </div>
+        <div class="zone-card" style="background:linear-gradient(135deg,rgba(239,68,68,0.06),transparent);border-left:4px solid #EF4444">
+          <div class="flex items-center gap-3 mb-2"><span class="text-[#EF4444] font-black text-lg">Z5</span><span class="text-white font-semibold text-sm">Máximo (90-100% FC máx)</span></div>
+          <p class="text-[#94A3B8] text-xs leading-relaxed">Esfuerzo máximo, sostenible solo por minutos. Se usa en series muy cortas (200-400m) para desarrollar velocidad máxima y potencia anaeróbica. No más del 5% de tu volumen semanal. Sensación: ardiente, no puedes hablar, solo te concentras en aguantar.</p>
+          <div class="mt-2 flex items-center gap-2"><div class="hr-bar flex-1" style="background:rgba(239,68,68,0.15)"><div class="hr-bar" style="width:100%;background:#EF4444;opacity:0.6"></div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-glass mb-8 fade-up" style="animation-delay:0.4s">
+      <h2 class="text-white font-bold text-xl mb-4">Métodos para Calcular tus Zonas</h2>
+      <div class="grid md:grid-cols-3 gap-4">
+        <div class="method-card" style="background:rgba(204,255,0,0.03)">
+          <div class="text-[#CCFF00] font-black text-sm mb-1">Básica</div>
+          <div class="text-[#475569] text-xs mb-2">Porcentaje de FC máxima</div>
+          <p class="text-[#94A3B8] text-xs leading-relaxed">El método más simple. Calculas tu FC máxima (220 - edad) y aplicas porcentajes fijos para cada zona. No requiere conocer tu FC en reposo. Fácil de calcular pero menos preciso.</p>
+        </div>
+        <div class="method-card" style="background:rgba(34,211,238,0.03)">
+          <div class="text-[#22D3EE] font-black text-sm mb-1">Karvonen</div>
+          <div class="text-[#475569] text-xs mb-2">Frecuencia cardíaca de reserva</div>
+          <p class="text-[#94A3B8] text-xs leading-relaxed">Usa tu FC máxima y FC en reposo para calcular la "FC de reserva". Es más preciso porque se adapta a tu condición física actual. La fórmula: Zona = (FCmáx - FCreposo) × % + FCreposo.</p>
+        </div>
+        <div class="method-card" style="background:rgba(255,87,34,0.03)">
+          <div class="text-[#FF5722] font-black text-sm mb-1">Friel</div>
+          <div class="text-[#475569] text-xs mb-2">Basado en umbral de lactato</div>
+          <p class="text-[#94A3B8] text-xs leading-relaxed">Desarrollado por Joe Friel para triatlón. Divide las zonas basándose en tu FC de umbral funcional (FTP). Es el método más preciso pero requiere saber tu FC de umbral mediante un test de campo.</p>
+        </div>
+      </div>
+      <div class="mt-4 pt-4 border-t border-white/5">
+        <a href="/tools/training-zones/" class="inline-flex items-center gap-2 text-sm text-[#CCFF00] hover:underline font-semibold">
+          Calcular mis zonas ahora →
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <div class="card-glass mb-8 fade-up" style="animation-delay:0.5s">
+      <h2 class="text-white font-bold text-xl mb-4">Cómo Entrenar en Z2 (El Secreto de los Pros)</h2>
+      <p class="text-[#94A3B8] text-sm leading-relaxed mb-4">La zona 2 es el secreto mejor guardado del running. Los corredores de élite pasan hasta el 80% de su tiempo de entrenamiento en esta zona. ¿Por qué? Porque desarrolla:</p>
+      <div class="grid md:grid-cols-3 gap-3">
+        <div class="p-3 rounded-xl" style="background:rgba(52,211,153,0.04);border:1px solid rgba(52,211,153,0.08)">
+          <div class="text-[#34D399] font-semibold text-xs mb-1">Capilarización</div>
+          <p class="text-[#64748B] text-xs">Crea más capilares sanguíneos en los músculos, mejorando el oxígeno disponible.</p>
+        </div>
+        <div class="p-3 rounded-xl" style="background:rgba(52,211,153,0.04);border:1px solid rgba(52,211,153,0.08)">
+          <div class="text-[#34D399] font-semibold text-xs mb-1">Quema de Grasa</div>
+          <p class="text-[#64748B] text-xs">Entrena a tu cuerpo a usar grasa como combustible, ahorrando glucógeno para el final de la carrera.</p>
+        </div>
+        <div class="p-3 rounded-xl" style="background:rgba(52,211,153,0.04);border:1px solid rgba(52,211,153,0.08)">
+          <div class="text-[#34D399] font-semibold text-xs mb-1">Mitocondrias</div>
+          <p class="text-[#64748B] text-xs">Aumenta el número y eficiencia de las mitocondrias (las centrales energéticas de tus células).</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-glass fade-up" style="animation-delay:0.6s">
+      <h2 class="text-white font-bold text-xl mb-4">Mitos y Errores Comunes</h2>
+      <div class="divide-y divide-white/5">
+        <details class="faq-item"><summary class="text-white text-sm font-medium">"Si no voy al máximo, no sirve"</summary><div class="faq-body">Falso. El 80% de las adaptaciones fisiológicas ocurren en intensidades moderadas (Z2). Los pros corren lento la mayoría del tiempo. Correr siempre intenso lleva al sobreentrenamiento y lesiones.</div></details>
+        <details class="faq-item"><summary class="text-white text-sm font-medium">"Solo la FC máxima importa"</summary><div class="faq-body">Tu FC en reposo es igual de importante. Una FC en reposo baja indica un corazón más eficiente. Si notas tu FC en reposo 5-10 pulsaciones más alta de lo normal, probablemente estás en sobreentrenamiento o enfermo.</div></details>
+        <details class="faq-item"><summary class="text-white text-sm font-medium">"Necesito un monitor cardíaco sí o sí"</summary><div class="faq-body">No es obligatorio pero ayuda mucho. Puedes entrenar por sensaciones (Escala de Borg) o por ritmo. Sin embargo, un monitor de FC te da datos objetivos para evitar sobreesfuerzos y asegurarte de que realmente estás en Z2.</div></details>
+        <details class="faq-item"><summary class="text-white text-sm font-medium">"Mi FC sube sola con el calor"</summary><div class="faq-body">Cierto. Con calor, tu corazón bombea más sangre a la piel para enfriarte, elevando tu FC entre 10 y 20 pulsaciones. Ajusta tus zonas o usa la escala de esfuerzo percibido en días calurosos. No luches contra la biología.</div></details>
+      </div>
+    </div>
+  </section>
+
+  <div id="footer-placeholder"></div>
+  <script src="/assets/js/config.js"></script>
+  <script src="/assets/js/store.js"></script>
+  <script src="/components/navbar.js"></script>
+  <script src="/components/footer.js"></script>
+  <script src="/assets/js/profile-modal.js"></script>
+  <script src="/assets/js/components.js"></script>
+</body>
+</html>
