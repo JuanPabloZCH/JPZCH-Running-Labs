@@ -77,7 +77,7 @@ const JPZCH_Components = (() => {
     window.addEventListener('scroll', () => {
       const navbar = document.getElementById('jpzch-navbar');
       if (!navbar) return;
-      if (window.scrollY > 20) {
+      if (window.scrollY > 20 || window.innerWidth < 768) {
         navbar.classList.add('glass-strong');
         navbar.classList.remove('bg-transparent');
       } else {
