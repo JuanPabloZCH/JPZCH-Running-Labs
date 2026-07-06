@@ -2,16 +2,12 @@ const JPZCH_Config = {
   BASE_URL: '/',
   APP_NAME: 'JPZCH Running Labs',
   VERSION: '1.0.0',
-  REPO_URL: 'https://github.com/jpzch/jpzch-running-labs',
+  REPO_URL: 'https://github.com/JuanPabloZCH/JPZCH-Running-Labs',
 
-  // ── GitHub Pages: si el proyecto se sirve desde un subdirectorio,
-  //    cambia BASE_URL para que coincida (ej: '/jpzch-running-labs/').
-  //    En desarrollo local con Live Server, dejar '/' funciona bien.
-  //    En GitHub Pages project site, ajustar manualmente.
   init() {
-    // Detección automática: si ve que no está en la raíz, ajusta BASE_URL
+    // Detección automática de base path (GitHub Pages project site)
     const path = window.location.pathname;
-    if (path.startsWith('/jpzch-running-labs/') || path.startsWith('/running-labs/')) {
+    if (path.startsWith('/JPZCH-Running-Labs/')) {
       const match = path.match(/^(\/[^\/]+\/[^\/]+)\//);
       if (match) {
         this.BASE_URL = match[1] + '/';

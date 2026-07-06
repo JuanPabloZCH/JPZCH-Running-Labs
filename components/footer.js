@@ -21,39 +21,39 @@ const JPZCH_FOOTER = `
       <div>
         <h4 class="text-white font-semibold text-sm uppercase tracking-wider mb-4">Herramientas</h4>
         <ul class="space-y-3">
-          <li><a href="/tools/cadence-analyzer/" class="text-[#64748B] hover:text-[#CCFF00] text-sm transition-colors duration-300">Analizador de Cadencia</a></li>
-          <li><a href="/tools/pace-calculator/" class="text-[#64748B] hover:text-[#CCFF00] text-sm transition-colors duration-300">Calculadora de Ritmo</a></li>
-          <li><a href="/tools/training-zones/" class="text-[#64748B] hover:text-[#CCFF00] text-sm transition-colors duration-300">Zonas Cardíacas</a></li>
-          <li><a href="/tools/race-predictor/" class="text-[#64748B] hover:text-[#CCFF00] text-sm transition-colors duration-300">Predictor de Carreras</a></li>
-          <li><a href="/tools/vo2max-calculator/" class="text-[#64748B] hover:text-[#CCFF00] text-sm transition-colors duration-300">Calculadora VO₂Max</a></li>
-          <li><a href="/tools/hydration-calculator/" class="text-[#64748B] hover:text-[#CCFF00] text-sm transition-colors duration-300">Calculadora de Hidratación</a></li>
-          <li><a href="/tools/running-cost/" class="text-[#64748B] hover:text-[#CCFF00] text-sm transition-colors duration-300">Calculadora de Costos</a></li>
-          <li><a href="/tools/gpx-dashboard/" class="text-[#64748B] hover:text-[#CCFF00] text-sm transition-colors duration-300">Analizador GPX</a></li>
-          <li><a href="/tools/progression-calculator/" class="text-[#64748B] hover:text-[#CCFF00] text-sm transition-colors duration-300">Calculadora de Progresión</a></li>
-          <li><a href="/tools/training-planner/" class="text-[#64748B] hover:text-[#CCFF00] text-sm transition-colors duration-300">Planificador de Entrenos</a></li>
-          <li><a href="/tools/sleep-analyzer/" class="text-[#64748B] hover:text-[#CCFF00] text-sm transition-colors duration-300">Analizador de Sueño</a></li>
-          <li><a href="/tools/shoe-compare/" class="text-[#64748B] hover:text-[#CCFF00] text-sm transition-colors duration-300">Comparador de Zapatillas</a></li>
+          <li><a href="/JPZCH-Running-Labs/tools/cadence-analyzer/" class="text-[#64748B] hover:text-[#CCFF00] text-sm transition-colors duration-300">Analizador de Cadencia</a></li>
+          <li><a href="/JPZCH-Running-Labs/tools/pace-calculator/" class="text-[#64748B] hover:text-[#CCFF00] text-sm transition-colors duration-300">Calculadora de Ritmo</a></li>
+          <li><a href="/JPZCH-Running-Labs/tools/training-zones/" class="text-[#64748B] hover:text-[#CCFF00] text-sm transition-colors duration-300">Zonas Cardíacas</a></li>
+          <li><a href="/JPZCH-Running-Labs/tools/race-predictor/" class="text-[#64748B] hover:text-[#CCFF00] text-sm transition-colors duration-300">Predictor de Carreras</a></li>
+          <li><a href="/JPZCH-Running-Labs/tools/vo2max-calculator/" class="text-[#64748B] hover:text-[#CCFF00] text-sm transition-colors duration-300">Calculadora VO₂Max</a></li>
+          <li><a href="/JPZCH-Running-Labs/tools/hydration-calculator/" class="text-[#64748B] hover:text-[#CCFF00] text-sm transition-colors duration-300">Calculadora de Hidratación</a></li>
+          <li><a href="/JPZCH-Running-Labs/tools/running-cost/" class="text-[#64748B] hover:text-[#CCFF00] text-sm transition-colors duration-300">Calculadora de Costos</a></li>
+          <li><a href="/JPZCH-Running-Labs/tools/gpx-dashboard/" class="text-[#64748B] hover:text-[#CCFF00] text-sm transition-colors duration-300">Analizador GPX</a></li>
+          <li><a href="/JPZCH-Running-Labs/tools/progression-calculator/" class="text-[#64748B] hover:text-[#CCFF00] text-sm transition-colors duration-300">Calculadora de Progresión</a></li>
+          <li><a href="/JPZCH-Running-Labs/tools/training-planner/" class="text-[#64748B] hover:text-[#CCFF00] text-sm transition-colors duration-300">Planificador de Entrenos</a></li>
+          <li><a href="/JPZCH-Running-Labs/tools/sleep-analyzer/" class="text-[#64748B] hover:text-[#CCFF00] text-sm transition-colors duration-300">Analizador de Sueño</a></li>
+          <li><a href="/JPZCH-Running-Labs/tools/shoe-compare/" class="text-[#64748B] hover:text-[#CCFF00] text-sm transition-colors duration-300">Comparador de Zapatillas</a></li>
         </ul>
       </div>
       <div>
         <h4 class="text-white font-semibold text-sm uppercase tracking-wider mb-4">Recursos</h4>
         <ul class="space-y-3">
           <li class="text-[#475569] text-xs font-medium uppercase tracking-wider mt-1 mb-1.5">Información</li>
-          <li><a href="/recursos/tabla-de-ritmos/" class="text-[#64748B] hover:text-[#CCFF00] text-sm transition-colors duration-300">Tabla de Ritmos</a></li>
-          <li><a href="/recursos/zonas-cardiacas/" class="text-[#64748B] hover:text-[#CCFF00] text-sm transition-colors duration-300">Zonas Cardíacas</a></li>
-          <li><a href="/recursos/glosario/" class="text-[#64748B] hover:text-[#CCFF00] text-sm transition-colors duration-300">Glosario Runner</a></li>
+          <li><a href="/JPZCH-Running-Labs/recursos/tabla-de-ritmos/" class="text-[#64748B] hover:text-[#CCFF00] text-sm transition-colors duration-300">Tabla de Ritmos</a></li>
+          <li><a href="/JPZCH-Running-Labs/recursos/zonas-cardiacas/" class="text-[#64748B] hover:text-[#CCFF00] text-sm transition-colors duration-300">Zonas Cardíacas</a></li>
+          <li><a href="/JPZCH-Running-Labs/recursos/glosario/" class="text-[#64748B] hover:text-[#CCFF00] text-sm transition-colors duration-300">Glosario Runner</a></li>
           <li class="text-[#475569] text-xs font-medium uppercase tracking-wider mt-4 mb-1.5">Cultura &amp; Análisis</li>
-          <li><a href="/recursos/laboratorio-de-elite/" class="text-[#64748B] hover:text-[#CCFF00] text-sm transition-colors duration-300">El Mural</a></li>
-          <li><a href="/recursos/playlists-bpm/" class="text-[#64748B] hover:text-[#CCFF00] text-sm transition-colors duration-300">Playlists BPM</a></li>
+          <li><a href="/JPZCH-Running-Labs/recursos/laboratorio-de-elite/" class="text-[#64748B] hover:text-[#CCFF00] text-sm transition-colors duration-300">El Mural</a></li>
+          <li><a href="/JPZCH-Running-Labs/recursos/playlists-bpm/" class="text-[#64748B] hover:text-[#CCFF00] text-sm transition-colors duration-300">Playlists BPM</a></li>
         </ul>
       </div>
       <div>
         <h4 class="text-white font-semibold text-sm uppercase tracking-wider mb-4">Proyecto</h4>
         <ul class="space-y-3">
-          <li><a href="/acerca/" class="text-[#64748B] hover:text-[#CCFF00] text-sm transition-colors duration-300">Acerca de</a></li>
-          <li><a href="/reportar-error/" class="text-[#64748B] hover:text-[#CCFF00] text-sm transition-colors duration-300">Reportar Error</a></li>
-          <li><a href="/sugerir-herramienta/" class="text-[#64748B] hover:text-[#CCFF00] text-sm transition-colors duration-300">Sugerir Herramienta</a></li>
-          <li><a href="/privacidad/" class="text-[#64748B] hover:text-[#CCFF00] text-sm transition-colors duration-300">Privacidad</a></li>
+          <li><a href="/JPZCH-Running-Labs/acerca/" class="text-[#64748B] hover:text-[#CCFF00] text-sm transition-colors duration-300">Acerca de</a></li>
+          <li><a href="/JPZCH-Running-Labs/reportar-error/" class="text-[#64748B] hover:text-[#CCFF00] text-sm transition-colors duration-300">Reportar Error</a></li>
+          <li><a href="/JPZCH-Running-Labs/sugerir-herramienta/" class="text-[#64748B] hover:text-[#CCFF00] text-sm transition-colors duration-300">Sugerir Herramienta</a></li>
+          <li><a href="/JPZCH-Running-Labs/privacidad/" class="text-[#64748B] hover:text-[#CCFF00] text-sm transition-colors duration-300">Privacidad</a></li>
         </ul>
       </div>
     </div>

@@ -2,7 +2,7 @@ const JPZCH_NAVBAR = `
 <nav id="jpzch-navbar" class="fixed top-0 left-0 right-0 z-[100] transition-all duration-500" style="will-change:transform">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex items-center justify-between h-16 md:h-20">
-      <a href="/" class="flex items-center gap-2 group">
+      <a href="/JPZCH-Running-Labs/" class="flex items-center gap-2 group">
         <div class="w-9 h-9 md:w-10 md:h-10 rounded-xl bg-gradient-to-br from-[#CCFF00] to-[#99CC00] flex items-center justify-center font-black text-[#0B0F19] text-lg md:text-xl transition-transform duration-300 group-hover:scale-110">JP</div>
         <div class="hidden sm:block">
           <span class="text-white font-bold text-base md:text-lg tracking-tight">JPZCH</span>
@@ -11,7 +11,7 @@ const JPZCH_NAVBAR = `
       </a>
 
       <div class="hidden md:flex items-center gap-1">
-        <a href="/" class="nav-link" data-nav="inicio">
+        <a href="/JPZCH-Running-Labs/" class="nav-link" data-nav="inicio">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
           <span>Inicio</span>
         </a>
@@ -24,62 +24,62 @@ const JPZCH_NAVBAR = `
           </button>
           <div class="nav-dropdown absolute top-full left-0 w-64 opacity-0 invisible group-hover:opacity-100 group-hover:visible">
             <div class="bg-[#131A2B]/95 backdrop-blur-xl rounded-xl border border-white/10 p-2 shadow-2xl shadow-black/50">
-              <a href="/tools/cadence-analyzer/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-white hover:bg-white/5 transition-colors">
+              <a href="/JPZCH-Running-Labs/tools/cadence-analyzer/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-white hover:bg-white/5 transition-colors">
                 <span class="w-2 h-2 rounded-full bg-[#CCFF00] shrink-0"></span>
                 <span class="font-medium">Analizador de Cadencia</span>
                 <span class="ml-auto text-[10px] font-semibold text-[#22C55E] bg-[#22C55E]/10 px-2 py-0.5 rounded-full">Disponible</span>
               </a>
-              <a href="/tools/pace-calculator/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-white hover:bg-white/5 transition-colors">
+              <a href="/JPZCH-Running-Labs/tools/pace-calculator/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-white hover:bg-white/5 transition-colors">
                 <span class="w-2 h-2 rounded-full bg-[#CCFF00] shrink-0"></span>
                 <span class="font-medium">Calculadora de Ritmo</span>
                 <span class="ml-auto text-[10px] font-semibold text-[#22C55E] bg-[#22C55E]/10 px-2 py-0.5 rounded-full">Disponible</span>
               </a>
-              <a href="/tools/training-zones/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-white hover:bg-white/5 transition-colors">
+              <a href="/JPZCH-Running-Labs/tools/training-zones/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-white hover:bg-white/5 transition-colors">
                 <span class="w-2 h-2 rounded-full bg-[#CCFF00] shrink-0"></span>
                 <span class="font-medium">Zonas Cardíacas</span>
                 <span class="ml-auto text-[10px] font-semibold text-[#22C55E] bg-[#22C55E]/10 px-2 py-0.5 rounded-full">Disponible</span>
               </a>
-              <a href="/tools/race-predictor/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-white hover:bg-white/5 transition-colors">
+              <a href="/JPZCH-Running-Labs/tools/race-predictor/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-white hover:bg-white/5 transition-colors">
                 <span class="w-2 h-2 rounded-full bg-[#CCFF00] shrink-0"></span>
                 <span class="font-medium">Predictor de Carreras</span>
                 <span class="ml-auto text-[10px] font-semibold text-[#22C55E] bg-[#22C55E]/10 px-2 py-0.5 rounded-full">Disponible</span>
               </a>
-              <a href="/tools/vo2max-calculator/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-white hover:bg-white/5 transition-colors">
+              <a href="/JPZCH-Running-Labs/tools/vo2max-calculator/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-white hover:bg-white/5 transition-colors">
                 <span class="w-2 h-2 rounded-full bg-[#CCFF00] shrink-0"></span>
                 <span class="font-medium">Calculadora VO₂Max</span>
                 <span class="ml-auto text-[10px] font-semibold text-[#22C55E] bg-[#22C55E]/10 px-2 py-0.5 rounded-full">Disponible</span>
               </a>
-              <a href="/tools/hydration-calculator/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-white hover:bg-white/5 transition-colors">
+              <a href="/JPZCH-Running-Labs/tools/hydration-calculator/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-white hover:bg-white/5 transition-colors">
                 <span class="w-2 h-2 rounded-full bg-[#CCFF00] shrink-0"></span>
                 <span class="font-medium">Calculadora de Hidratación</span>
                 <span class="ml-auto text-[10px] font-semibold text-[#22C55E] bg-[#22C55E]/10 px-2 py-0.5 rounded-full">Disponible</span>
               </a>
-              <a href="/tools/running-cost/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-white hover:bg-white/5 transition-colors">
+              <a href="/JPZCH-Running-Labs/tools/running-cost/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-white hover:bg-white/5 transition-colors">
                 <span class="w-2 h-2 rounded-full bg-[#CCFF00] shrink-0"></span>
                 <span class="font-medium">Calculadora de Costos</span>
                 <span class="ml-auto text-[10px] font-semibold text-[#22C55E] bg-[#22C55E]/10 px-2 py-0.5 rounded-full">Disponible</span>
               </a>
-              <a href="/tools/gpx-dashboard/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-white hover:bg-white/5 transition-colors">
+              <a href="/JPZCH-Running-Labs/tools/gpx-dashboard/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-white hover:bg-white/5 transition-colors">
                 <span class="w-2 h-2 rounded-full bg-[#CCFF00] shrink-0"></span>
                 <span class="font-medium">Analizador GPX</span>
                 <span class="ml-auto text-[10px] font-semibold text-[#22C55E] bg-[#22C55E]/10 px-2 py-0.5 rounded-full">Disponible</span>
               </a>
-              <a href="/tools/progression-calculator/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-white hover:bg-white/5 transition-colors">
+              <a href="/JPZCH-Running-Labs/tools/progression-calculator/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-white hover:bg-white/5 transition-colors">
                 <span class="w-2 h-2 rounded-full bg-[#CCFF00] shrink-0"></span>
                 <span class="font-medium">Calculadora de Progresión</span>
                 <span class="ml-auto text-[10px] font-semibold text-[#22C55E] bg-[#22C55E]/10 px-2 py-0.5 rounded-full">Disponible</span>
               </a>
-              <a href="/tools/training-planner/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-white hover:bg-white/5 transition-colors">
+              <a href="/JPZCH-Running-Labs/tools/training-planner/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-white hover:bg-white/5 transition-colors">
                 <span class="w-2 h-2 rounded-full bg-[#CCFF00] shrink-0"></span>
                 <span class="font-medium">Planificador de Entrenos</span>
                 <span class="ml-auto text-[10px] font-semibold text-[#22C55E] bg-[#22C55E]/10 px-2 py-0.5 rounded-full">Disponible</span>
               </a>
-              <a href="/tools/sleep-analyzer/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-white hover:bg-white/5 transition-colors">
+              <a href="/JPZCH-Running-Labs/tools/sleep-analyzer/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-white hover:bg-white/5 transition-colors">
                 <span class="w-2 h-2 rounded-full bg-[#CCFF00] shrink-0"></span>
                 <span class="font-medium">Analizador de Sueño</span>
                 <span class="ml-auto text-[10px] font-semibold text-[#22C55E] bg-[#22C55E]/10 px-2 py-0.5 rounded-full">Disponible</span>
               </a>
-              <a href="/tools/shoe-compare/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-white hover:bg-white/5 transition-colors">
+              <a href="/JPZCH-Running-Labs/tools/shoe-compare/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-white hover:bg-white/5 transition-colors">
                 <span class="w-2 h-2 rounded-full bg-[#CCFF00] shrink-0"></span>
                 <span class="font-medium">Comparador de Zapatillas</span>
                 <span class="ml-auto text-[10px] font-semibold text-[#22C55E] bg-[#22C55E]/10 px-2 py-0.5 rounded-full">Disponible</span>
@@ -97,25 +97,25 @@ const JPZCH_NAVBAR = `
           <div class="nav-dropdown absolute top-full left-0 w-64 opacity-0 invisible group-hover:opacity-100 group-hover:visible">
             <div class="bg-[#131A2B]/95 backdrop-blur-xl rounded-xl border border-white/10 p-2 shadow-2xl shadow-black/50">
               <div class="px-3 py-2 text-[11px] font-medium text-[#475569] uppercase tracking-wider">Información</div>
-              <a href="/recursos/tabla-de-ritmos/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#94A3B8] hover:text-white hover:bg-white/5 transition-colors">
+              <a href="/JPZCH-Running-Labs/recursos/tabla-de-ritmos/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#94A3B8] hover:text-white hover:bg-white/5 transition-colors">
                 <svg class="w-4 h-4 text-[#CCFF00] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                 Tabla de Ritmos
               </a>
-              <a href="/recursos/zonas-cardiacas/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#94A3B8] hover:text-white hover:bg-white/5 transition-colors">
+              <a href="/JPZCH-Running-Labs/recursos/zonas-cardiacas/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#94A3B8] hover:text-white hover:bg-white/5 transition-colors">
                 <svg class="w-4 h-4 text-[#22D3EE] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
                 Zonas Cardíacas
               </a>
-              <a href="/recursos/glosario/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#94A3B8] hover:text-white hover:bg-white/5 transition-colors">
+              <a href="/JPZCH-Running-Labs/recursos/glosario/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#94A3B8] hover:text-white hover:bg-white/5 transition-colors">
                 <svg class="w-4 h-4 text-[#FF5722] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
                 Glosario Runner
               </a>
               <div class="border-t border-white/5 my-1.5 mx-2"></div>
               <div class="px-3 py-2 text-[11px] font-medium text-[#475569] uppercase tracking-wider">Cultura &amp; Análisis</div>
-              <a href="/recursos/laboratorio-de-elite/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#94A3B8] hover:text-white hover:bg-white/5 transition-colors">
+              <a href="/JPZCH-Running-Labs/recursos/laboratorio-de-elite/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#94A3B8] hover:text-white hover:bg-white/5 transition-colors">
                 <svg class="w-4 h-4 text-[#FBBF24] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
                 El Mural
               </a>
-              <a href="/recursos/playlists-bpm/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#94A3B8] hover:text-white hover:bg-white/5 transition-colors">
+              <a href="/JPZCH-Running-Labs/recursos/playlists-bpm/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#94A3B8] hover:text-white hover:bg-white/5 transition-colors">
                 <svg class="w-4 h-4 text-[#8B5CF6] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/></svg>
                 Playlists BPM
               </a>
@@ -131,20 +131,20 @@ const JPZCH_NAVBAR = `
           </button>
           <div class="nav-dropdown absolute top-full left-0 w-52 opacity-0 invisible group-hover:opacity-100 group-hover:visible">
             <div class="bg-[#131A2B]/95 backdrop-blur-xl rounded-xl border border-white/10 p-2 shadow-2xl shadow-black/50">
-              <a href="/acerca/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#94A3B8] hover:text-white hover:bg-white/5 transition-colors">
+              <a href="/JPZCH-Running-Labs/acerca/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#94A3B8] hover:text-white hover:bg-white/5 transition-colors">
                 <svg class="w-4 h-4 text-[#CCFF00] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                 Acerca de
               </a>
-              <a href="/reportar-error/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#94A3B8] hover:text-white hover:bg-white/5 transition-colors">
+              <a href="/JPZCH-Running-Labs/reportar-error/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#94A3B8] hover:text-white hover:bg-white/5 transition-colors">
                 <svg class="w-4 h-4 text-[#FF5722] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4.5c-.77-.833-2.694-.833-3.464 0L3.34 16.5c-.77.833.192 2.5 1.732 2.5z"/></svg>
                 Reportar Error
               </a>
-              <a href="/sugerir-herramienta/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#94A3B8] hover:text-white hover:bg-white/5 transition-colors">
+              <a href="/JPZCH-Running-Labs/sugerir-herramienta/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#94A3B8] hover:text-white hover:bg-white/5 transition-colors">
                 <svg class="w-4 h-4 text-[#CCFF00] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
                 Sugerir Herramienta
               </a>
               <div class="border-t border-white/5 my-1.5 mx-2"></div>
-              <a href="/privacidad/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#94A3B8] hover:text-white hover:bg-white/5 transition-colors">
+              <a href="/JPZCH-Running-Labs/privacidad/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#94A3B8] hover:text-white hover:bg-white/5 transition-colors">
                 <svg class="w-4 h-4 text-[#475569] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
                 Privacidad
               </a>
@@ -167,7 +167,7 @@ const JPZCH_NAVBAR = `
 
   <div id="mobileMenu" class="md:hidden hidden px-4 pb-4 pt-2 relative z-[101]">
     <div class="bg-[#131A2B]/95 backdrop-blur-xl rounded-2xl border border-white/10 overflow-hidden">
-      <a href="/" class="flex items-center gap-3 px-4 py-3 text-white hover:bg-white/5 transition-colors">
+      <a href="/JPZCH-Running-Labs/" class="flex items-center gap-3 px-4 py-3 text-white hover:bg-white/5 transition-colors">
         <svg class="w-5 h-5 text-[#CCFF00]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
         <span class="font-medium">Inicio</span>
       </a>
@@ -179,62 +179,62 @@ const JPZCH_NAVBAR = `
           <svg class="mobile-dd-chevron w-4 h-4 text-[#475569] transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
         </button>
         <div class="mobile-dd-content hidden bg-white/5">
-          <a href="/tools/cadence-analyzer/" class="flex items-center gap-3 px-8 py-3 text-white hover:bg-white/5 transition-colors">
+          <a href="/JPZCH-Running-Labs/tools/cadence-analyzer/" class="flex items-center gap-3 px-8 py-3 text-white hover:bg-white/5 transition-colors">
             <span class="w-2 h-2 rounded-full bg-[#CCFF00] shrink-0"></span>
             <span class="text-sm">Analizador de Cadencia</span>
             <span class="ml-auto text-[10px] font-semibold text-[#22C55E] bg-[#22C55E]/10 px-2 py-0.5 rounded-full">Disponible</span>
           </a>
-          <a href="/tools/pace-calculator/" class="flex items-center gap-3 px-8 py-3 text-white hover:bg-white/5 transition-colors">
+          <a href="/JPZCH-Running-Labs/tools/pace-calculator/" class="flex items-center gap-3 px-8 py-3 text-white hover:bg-white/5 transition-colors">
             <span class="w-2 h-2 rounded-full bg-[#CCFF00] shrink-0"></span>
             <span class="text-sm">Calculadora de Ritmo</span>
             <span class="ml-auto text-[10px] font-semibold text-[#22C55E] bg-[#22C55E]/10 px-2 py-0.5 rounded-full">Disponible</span>
           </a>
-          <a href="/tools/training-zones/" class="flex items-center gap-3 px-8 py-3 text-white hover:bg-white/5 transition-colors">
+          <a href="/JPZCH-Running-Labs/tools/training-zones/" class="flex items-center gap-3 px-8 py-3 text-white hover:bg-white/5 transition-colors">
             <span class="w-2 h-2 rounded-full bg-[#CCFF00] shrink-0"></span>
             <span class="text-sm">Zonas Cardíacas</span>
             <span class="ml-auto text-[10px] font-semibold text-[#22C55E] bg-[#22C55E]/10 px-2 py-0.5 rounded-full">Disponible</span>
           </a>
-          <a href="/tools/race-predictor/" class="flex items-center gap-3 px-8 py-3 text-white hover:bg-white/5 transition-colors">
+          <a href="/JPZCH-Running-Labs/tools/race-predictor/" class="flex items-center gap-3 px-8 py-3 text-white hover:bg-white/5 transition-colors">
             <span class="w-2 h-2 rounded-full bg-[#CCFF00] shrink-0"></span>
             <span class="text-sm">Predictor de Carreras</span>
             <span class="ml-auto text-[10px] font-semibold text-[#22C55E] bg-[#22C55E]/10 px-2 py-0.5 rounded-full">Disponible</span>
           </a>
-          <a href="/tools/vo2max-calculator/" class="flex items-center gap-3 px-8 py-3 text-white hover:bg-white/5 transition-colors">
+          <a href="/JPZCH-Running-Labs/tools/vo2max-calculator/" class="flex items-center gap-3 px-8 py-3 text-white hover:bg-white/5 transition-colors">
             <span class="w-2 h-2 rounded-full bg-[#CCFF00] shrink-0"></span>
             <span class="text-sm">Calculadora VO₂Max</span>
             <span class="ml-auto text-[10px] font-semibold text-[#22C55E] bg-[#22C55E]/10 px-2 py-0.5 rounded-full">Disponible</span>
           </a>
-          <a href="/tools/hydration-calculator/" class="flex items-center gap-3 px-8 py-3 text-white hover:bg-white/5 transition-colors">
+          <a href="/JPZCH-Running-Labs/tools/hydration-calculator/" class="flex items-center gap-3 px-8 py-3 text-white hover:bg-white/5 transition-colors">
             <span class="w-2 h-2 rounded-full bg-[#CCFF00] shrink-0"></span>
             <span class="text-sm">Calculadora de Hidratación</span>
             <span class="ml-auto text-[10px] font-semibold text-[#22C55E] bg-[#22C55E]/10 px-2 py-0.5 rounded-full">Disponible</span>
           </a>
-          <a href="/tools/running-cost/" class="flex items-center gap-3 px-8 py-3 text-white hover:bg-white/5 transition-colors">
+          <a href="/JPZCH-Running-Labs/tools/running-cost/" class="flex items-center gap-3 px-8 py-3 text-white hover:bg-white/5 transition-colors">
             <span class="w-2 h-2 rounded-full bg-[#CCFF00] shrink-0"></span>
             <span class="text-sm">Calculadora de Costos</span>
             <span class="ml-auto text-[10px] font-semibold text-[#22C55E] bg-[#22C55E]/10 px-2 py-0.5 rounded-full">Disponible</span>
           </a>
-          <a href="/tools/gpx-dashboard/" class="flex items-center gap-3 px-8 py-3 text-white hover:bg-white/5 transition-colors">
+          <a href="/JPZCH-Running-Labs/tools/gpx-dashboard/" class="flex items-center gap-3 px-8 py-3 text-white hover:bg-white/5 transition-colors">
             <span class="w-2 h-2 rounded-full bg-[#CCFF00] shrink-0"></span>
             <span class="text-sm">Analizador GPX</span>
             <span class="ml-auto text-[10px] font-semibold text-[#22C55E] bg-[#22C55E]/10 px-2 py-0.5 rounded-full">Disponible</span>
           </a>
-          <a href="/tools/progression-calculator/" class="flex items-center gap-3 px-8 py-3 text-white hover:bg-white/5 transition-colors">
+          <a href="/JPZCH-Running-Labs/tools/progression-calculator/" class="flex items-center gap-3 px-8 py-3 text-white hover:bg-white/5 transition-colors">
             <span class="w-2 h-2 rounded-full bg-[#CCFF00] shrink-0"></span>
             <span class="text-sm">Calculadora de Progresión</span>
             <span class="ml-auto text-[10px] font-semibold text-[#22C55E] bg-[#22C55E]/10 px-2 py-0.5 rounded-full">Disponible</span>
           </a>
-          <a href="/tools/training-planner/" class="flex items-center gap-3 px-8 py-3 text-white hover:bg-white/5 transition-colors">
+          <a href="/JPZCH-Running-Labs/tools/training-planner/" class="flex items-center gap-3 px-8 py-3 text-white hover:bg-white/5 transition-colors">
             <span class="w-2 h-2 rounded-full bg-[#CCFF00] shrink-0"></span>
             <span class="text-sm">Planificador de Entrenos</span>
             <span class="ml-auto text-[10px] font-semibold text-[#22C55E] bg-[#22C55E]/10 px-2 py-0.5 rounded-full">Disponible</span>
           </a>
-          <a href="/tools/sleep-analyzer/" class="flex items-center gap-3 px-8 py-3 text-white hover:bg-white/5 transition-colors">
+          <a href="/JPZCH-Running-Labs/tools/sleep-analyzer/" class="flex items-center gap-3 px-8 py-3 text-white hover:bg-white/5 transition-colors">
             <span class="w-2 h-2 rounded-full bg-[#CCFF00] shrink-0"></span>
             <span class="text-sm">Analizador de Sueño</span>
             <span class="ml-auto text-[10px] font-semibold text-[#22C55E] bg-[#22C55E]/10 px-2 py-0.5 rounded-full">Disponible</span>
           </a>
-          <a href="/tools/shoe-compare/" class="flex items-center gap-3 px-8 py-3 text-white hover:bg-white/5 transition-colors">
+          <a href="/JPZCH-Running-Labs/tools/shoe-compare/" class="flex items-center gap-3 px-8 py-3 text-white hover:bg-white/5 transition-colors">
             <span class="w-2 h-2 rounded-full bg-[#CCFF00] shrink-0"></span>
             <span class="text-sm">Comparador de Zapatillas</span>
             <span class="ml-auto text-[10px] font-semibold text-[#22C55E] bg-[#22C55E]/10 px-2 py-0.5 rounded-full">Disponible</span>
@@ -251,13 +251,13 @@ const JPZCH_NAVBAR = `
         </button>
         <div class="mobile-dd-content hidden bg-white/5">
           <div class="px-8 pt-3 pb-1 text-[10px] font-medium text-[#475569] uppercase tracking-wider">Información</div>
-          <a href="/recursos/tabla-de-ritmos/" class="flex items-center gap-3 px-8 py-2.5 text-sm text-[#94A3B8] hover:text-white hover:bg-white/5 transition-colors">Tabla de Ritmos</a>
-          <a href="/recursos/zonas-cardiacas/" class="flex items-center gap-3 px-8 py-2.5 text-sm text-[#94A3B8] hover:text-white hover:bg-white/5 transition-colors">Zonas Cardíacas</a>
-          <a href="/recursos/glosario/" class="flex items-center gap-3 px-8 py-2.5 text-sm text-[#94A3B8] hover:text-white hover:bg-white/5 transition-colors">Glosario Runner</a>
+          <a href="/JPZCH-Running-Labs/recursos/tabla-de-ritmos/" class="flex items-center gap-3 px-8 py-2.5 text-sm text-[#94A3B8] hover:text-white hover:bg-white/5 transition-colors">Tabla de Ritmos</a>
+          <a href="/JPZCH-Running-Labs/recursos/zonas-cardiacas/" class="flex items-center gap-3 px-8 py-2.5 text-sm text-[#94A3B8] hover:text-white hover:bg-white/5 transition-colors">Zonas Cardíacas</a>
+          <a href="/JPZCH-Running-Labs/recursos/glosario/" class="flex items-center gap-3 px-8 py-2.5 text-sm text-[#94A3B8] hover:text-white hover:bg-white/5 transition-colors">Glosario Runner</a>
           <div class="border-t border-white/5 my-1.5 mx-6"></div>
           <div class="px-8 pt-1 pb-1 text-[10px] font-medium text-[#475569] uppercase tracking-wider">Cultura &amp; Análisis</div>
-          <a href="/recursos/laboratorio-de-elite/" class="flex items-center gap-3 px-8 py-2.5 text-sm text-[#94A3B8] hover:text-white hover:bg-white/5 transition-colors">El Mural</a>
-          <a href="/recursos/playlists-bpm/" class="flex items-center gap-3 px-8 py-2.5 text-sm text-[#94A3B8] hover:text-white hover:bg-white/5 transition-colors">Playlists BPM</a>
+          <a href="/JPZCH-Running-Labs/recursos/laboratorio-de-elite/" class="flex items-center gap-3 px-8 py-2.5 text-sm text-[#94A3B8] hover:text-white hover:bg-white/5 transition-colors">El Mural</a>
+          <a href="/JPZCH-Running-Labs/recursos/playlists-bpm/" class="flex items-center gap-3 px-8 py-2.5 text-sm text-[#94A3B8] hover:text-white hover:bg-white/5 transition-colors">Playlists BPM</a>
         </div>
       </div>
 
@@ -268,11 +268,11 @@ const JPZCH_NAVBAR = `
           <svg class="mobile-dd-chevron w-4 h-4 text-[#475569] transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
         </button>
         <div class="mobile-dd-content hidden bg-white/5">
-          <a href="/acerca/" class="flex items-center gap-3 px-8 py-3 text-sm text-[#94A3B8] hover:text-white hover:bg-white/5 transition-colors">Acerca de</a>
-          <a href="/reportar-error/" class="flex items-center gap-3 px-8 py-3 text-sm text-[#94A3B8] hover:text-white hover:bg-white/5 transition-colors">Reportar Error</a>
-          <a href="/sugerir-herramienta/" class="flex items-center gap-3 px-8 py-3 text-sm text-[#94A3B8] hover:text-white hover:bg-white/5 transition-colors">Sugerir Herramienta</a>
+          <a href="/JPZCH-Running-Labs/acerca/" class="flex items-center gap-3 px-8 py-3 text-sm text-[#94A3B8] hover:text-white hover:bg-white/5 transition-colors">Acerca de</a>
+          <a href="/JPZCH-Running-Labs/reportar-error/" class="flex items-center gap-3 px-8 py-3 text-sm text-[#94A3B8] hover:text-white hover:bg-white/5 transition-colors">Reportar Error</a>
+          <a href="/JPZCH-Running-Labs/sugerir-herramienta/" class="flex items-center gap-3 px-8 py-3 text-sm text-[#94A3B8] hover:text-white hover:bg-white/5 transition-colors">Sugerir Herramienta</a>
           <div class="border-t border-white/5 mx-4 my-1"></div>
-          <a href="/privacidad/" class="flex items-center gap-3 px-8 py-3 text-sm text-[#94A3B8] hover:text-white hover:bg-white/5 transition-colors">Privacidad</a>
+          <a href="/JPZCH-Running-Labs/privacidad/" class="flex items-center gap-3 px-8 py-3 text-sm text-[#94A3B8] hover:text-white hover:bg-white/5 transition-colors">Privacidad</a>
         </div>
       </div>
 

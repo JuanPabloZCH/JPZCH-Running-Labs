@@ -1,80 +1,100 @@
-# 🏃 JPZCH Running Labs
+# JPZCH Running Labs
 
-**Ecosistema digital gratuito para corredores.** Suite de herramientas web progresivas (PWA-ready) para calcular, predecir y analizar rendimiento running.
+Ecosistema digital gratuito para corredores. Suite de 12 herramientas web progresivas (PWA) para calcular, predecir y analizar rendimiento running.
 
-## 🚀 Stack Técnico
+## Stack Tecnico
 
 | Recurso | CDN |
 |---------|-----|
-| **Estilos** | Tailwind CSS |
-| **Animaciones** | GSAP + ScrollTrigger |
-| **Gráficos** | Chart.js / ApexCharts (próximamente) |
-| **Mapas** | Leaflet.js (próximamente) |
-| **Fechas** | Day.js / Luxon (próximamente) |
-| **Persistencia** | LocalStorage API |
+| Estilos | Tailwind CSS |
+| Animaciones | GSAP + ScrollTrigger |
+| Graficos | Chart.js |
+| Mapas | Leaflet.js |
+| Persistencia | LocalStorage API |
+| Service Worker | Cache-first + Stale-while-revalidate |
 
-## 📂 Estructura del Proyecto
+## Estructura del Proyecto
 
 ```
 /
-├── index.html              ← Hub / Dashboard principal
+├── index.html                  Hub / Dashboard principal
+├── manifest.json               Web App Manifest (PWA)
+├── sw.js                       Service Worker
+├── robots.txt
+├── sitemap.xml
 ├── assets/
-│   ├── css/styles.css      ← Estilos globales (Dark Mode)
+│   ├── css/styles.css          Estilos globales (Dark Mode)
+│   ├── icons/                  Iconos PWA y OG Image
 │   └── js/
-│       ├── config.js       ← Configuración de URLs / entorno
-│       ├── store.js        ← LocalStorage manager (perfil runner)
-│       ├── components.js   ← Inyector de Navbar + Footer
-│       ├── profile-modal.js← Modal de perfil de usuario
-│       └── app.js          ← Lógica del Hub (filtros, búsqueda, GSAP)
+│       ├── config.js           Configuracion de URLs / entorno
+│       ├── store.js            LocalStorage manager (perfil runner)
+│       ├── components.js       Inyector de Navbar + Footer + SW
+│       ├── profile-modal.js    Modal de perfil de usuario
+│       └── app.js              Logica del Hub (filtros, busqueda, GSAP)
 ├── components/
-│   ├── navbar.js           ← Navbar template unificado
-│   └── footer.js           ← Footer template unificado
-└── tools/                  ← Herramientas independientes
-    ├── pace-calculator/    ← Calculadora de Ritmo
-    ├── race-predictor/     ← Predictor de Carreras
-    ├── vo2max-calculator/  ← VO₂Max
-    ├── training-zones/     ← Zonas de Entrenamiento
-    ├── gpx-dashboard/      ← Analizador GPX (próximamente)
-    ├── hydration-calculator/
-    ├── running-cost/
-    ├── cadence-analyzer/
-    ├── progression-calculator/
-    ├── training-planner/   ← (próximamente)
-    ├── shoe-compare/       ← (próximamente)
-    └── sleep-analyzer/     ← (próximamente)
+│   ├── navbar.js               Navbar template unificado
+│   └── footer.js               Footer template unificado
+├── recursos/                   Paginas de informacion y referencia
+│   ├── glosario/
+│   ├── laboratorio-de-elite/
+│   ├── playlists-bpm/
+│   ├── tabla-de-ritmos/
+│   └── zonas-cardiacas/
+└── tools/                      12 herramientas independientes
+    ├── cadence-analyzer/       Analizador de Cadencia
+    ├── gpx-dashboard/          Analizador GPX (mapa + elevacion)
+    ├── hydration-calculator/   Calculadora de Hidratacion
+    ├── pace-calculator/        Calculadora de Ritmo
+    ├── progression-calculator/ Calculadora de Progresion
+    ├── race-predictor/         Predictor de Carreras
+    ├── running-cost/           Calculadora de Costos
+    ├── shoe-compare/           Comparador de Zapatillas
+    ├── sleep-analyzer/         Analizador de Sueno
+    ├── training-planner/       Planificador de Entrenos
+    ├── training-zones/         Zonas Cardiacas
+    └── vo2max-calculator/      Calculadora VO2Max
 ```
 
-## 🎨 Principios de Diseño
+## Principios de Diseno
 
-- **Dark Mode premium** por defecto (`#0B0F19`)
-- **Mobile-First** — los runners usan el móvil en pista/gimnasio
-- **Acentos neón**: Verde Lima `#CCFF00` · Naranja Racing `#FF5722`
-- **Componentes reutilizables** con inyección vía JavaScript
-- **Persistencia entre herramientas** con `LocalStorage`
-- **Animaciones progresivas** con GSAP + `prefers-reduced-motion`
+- Dark Mode premium por defecto (`#0B0F19`)
+- Mobile-First: los runners usan el movil en pista/gimnasio
+- Acentos neon: Verde Lima `#CCFF00` / Naranja Racing `#FF5722` / Cyan `#22D3EE` / Purpura `#8B5CF6`
+- Componentes reutilizables con inyeccion via JavaScript
+- Persistencia entre herramientas con LocalStorage
+- Animaciones progresivas con GSAP + prefers-reduced-motion
+- PWA: instalable, offline parcial, Service Worker
 
-## 🔧 Desarrollo Local
+## URL del Proyecto
+
+```
+https://juanpablozch.github.io/JPZCH-Running-Labs/
+```
+
+## Desarrollo Local
 
 ```bash
-# Servir con cualquier servidor estático
+# Servir con cualquier servidor estatico
 npx serve .
 # o
 python -m http.server 8000
+# o
+npx live-server .
 ```
 
-## 🌐 Despliegue (GitHub Pages)
+## Despliegue (GitHub Pages)
 
 1. Subir el repositorio a GitHub
-2. Activar GitHub Pages desde `Settings > Pages > Source: main branch / (root)`
-3. Si el proyecto se sirve desde un subdirectorio, actualizar `BASE_URL` en `assets/js/config.js`
+2. Activar GitHub Pages desde Settings > Pages > Source: main branch / (root)
+3. El proyecto usa deteccion automatica de base path en config.js
 
-## 📐 Arquitectura
+## Arquitectura
 
-Cada herramienta en `tools/` es una página HTML independiente que:
-1. Incluye los scripts compartidos (config → store → components → navbar/footer)
+Cada herramienta en `tools/` es una pagina HTML independiente que:
+1. Incluye los scripts compartidos (config, store, components, navbar, footer)
 2. Puede acceder al perfil del runner desde `JPZCH_Store.getProfile()`
-3. Dispone de navbar y footer unificados con navegación entre herramientas
+3. Dispone de navbar y footer unificados con navegacion entre herramientas
 
-## 📄 Licencia
+## Licencia
 
-Código abierto. Sin fines de lucro.
+Version 1. Codigo abierto.
