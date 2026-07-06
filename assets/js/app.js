@@ -127,7 +127,7 @@ const JPZCH_App = (() => {
       description: 'Registra y analiza la calidad de tu sueño para optimizar la recuperación y el rendimiento.',
       category: 'analizadores',
       icon: 'moon',
-      status: 'coming-soon',
+      status: 'available',
       accent: '#8B5CF6',
       url: '/tools/sleep-analyzer/',
       features: ['Calidad', 'Horas', 'Recuperación', 'Tendencias']
@@ -194,7 +194,7 @@ const JPZCH_App = (() => {
   function renderStats() {
     const stats = [
       { value: '12', label: 'Herramientas', suffix: '' },
-      { value: '9', label: 'Disponible', suffix: '' },
+      { value: '10', label: 'Disponible', suffix: '' },
       { value: '6', label: 'Categorías', suffix: '' },
       { value: '100', label: 'Gratuito', suffix: '%' }
     ];

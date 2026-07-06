@@ -1,2 +1,553 @@
-<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Sueño  JPZCH Running Labs</title><meta name="theme-color" content="#0B0F19"><script src="https://cdn.tailwindcss.com"></script><link rel="stylesheet" href="/assets/css/styles.css"></head><body><div id="navbar-placeholder"></div><main class="min-h-screen pt-24 pb-12"><div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8"><div class="text-center mb-10"><h1 class="text-3xl md:text-4xl font-black text-white mb-3">Analizador de Sueño</h1></div><div class="glass rounded-2xl p-6 md:p-8 text-center"><p class="text-[#94A3B8]">Próximamente.</p><a href="/" class="btn-secondary mt-6 inline-flex">Volver</a></div></div></main><div id="footer-placeholder"></div><script src="/assets/js/config.js"></script><script src="/assets/js/store.js"></script><script src="/components/navbar.js"></script><script src="/components/footer.js"></script><script src="/assets/js/profile-modal.js"></script>
-  <script src="/assets/js/components.js"></script></body></html>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Analizador de Sueño — JPZCH Running Labs</title>
+  <meta name="theme-color" content="#0B0F19">
+  <meta name="description" content="Registra y analiza la calidad de tu sueño para optimizar la recuperación y el rendimiento.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/assets/css/styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+  <style>
+    .hr-input{width:100%;padding:0.625rem 0.75rem;background:rgba(11,15,25,0.6);border:1px solid rgba(255,255,255,0.06);border-radius:0.75rem;color:#F1F5F9;font-size:1rem;font-weight:600;text-align:center;outline:none;transition:all 0.3s ease}
+    .hr-input:focus{border-color:rgba(204,255,0,0.3);box-shadow:0 0 0 3px rgba(204,255,0,0.06)}
+    .hr-input::placeholder{color:#475569;font-weight:400}
+    .hr-select{width:100%;padding:0.625rem 0.75rem;background:rgba(11,15,25,0.6);border:1px solid rgba(255,255,255,0.06);border-radius:0.75rem;color:#F1F5F9;font-size:0.85rem;font-weight:500;outline:none;transition:all 0.3s ease;cursor:pointer}
+    .hr-select:focus{border-color:rgba(204,255,0,0.3);box-shadow:0 0 0 3px rgba(204,255,0,0.06)}
+    .star-btn{background:none;border:none;cursor:pointer;font-size:1.3rem;padding:0.2rem;color:#475569;transition:color 0.2s;line-height:1}
+    .star-btn.active{color:#FBBF24}
+    .star-btn:hover{color:#FBBF24}
+    .stat-card{text-align:center;padding:1rem 0.75rem;background:rgba(11,15,25,0.4);border:1px solid rgba(255,255,255,0.04);border-radius:0.875rem}
+    .stat-card .value{font-size:1.5rem;font-weight:800;color:#F1F5F9}
+    .stat-card .sublabel{font-size:0.65rem;color:#64748B;text-transform:uppercase;letter-spacing:0.05em;margin-top:0.2rem}
+    .entry-row{display:grid;grid-template-columns:2fr 1.2fr 1fr 0.8fr 2fr 0.5fr;gap:0.5rem;padding:0.6rem 0.75rem;align-items:center;border-bottom:1px solid rgba(255,255,255,0.04);font-size:0.8rem;transition:background 0.2s}
+    .entry-row:hover{background:rgba(255,255,255,0.02)}
+    .entry-row.header{color:#64748B;font-weight:700;font-size:0.65rem;text-transform:uppercase;letter-spacing:0.05em;border-bottom:1px solid rgba(255,255,255,0.08)}
+    .entry-row .del-btn{background:none;border:none;color:#DC2626;cursor:pointer;font-size:0.75rem;padding:0.2rem 0.4rem;border-radius:0.3rem;transition:all 0.2s}
+    .entry-row .del-btn:hover{background:rgba(220,38,38,0.15)}
+    .quality-dot{display:inline-block;width:0.5rem;height:0.5rem;border-radius:50%;margin-right:0.2rem}
+    .fade-up{opacity:0;transform:translateY(12px);animation:fadeUp 0.4s ease forwards}
+    @keyframes fadeUp{to{opacity:1;transform:translateY(0)}}
+    .no-data{text-align:center;padding:2rem;color:#475569;font-size:0.85rem}
+    @media(max-width:640px){.entry-row{grid-template-columns:1fr 1fr 0.8fr 0.6fr 1.5fr 0.5fr;font-size:0.7rem;padding:0.5rem 0.5rem;gap:0.3rem}.stat-card .value{font-size:1.2rem}}
+    .tab-btn{padding:0.5rem 1rem;border-radius:0.75rem;font-size:0.8rem;font-weight:600;border:1px solid rgba(255,255,255,0.06);background:rgba(11,15,25,0.5);color:#94A3B8;cursor:pointer;transition:all 0.3s ease}
+    .tab-btn:hover{border-color:rgba(204,255,0,0.2);color:#F1F5F9}
+    .tab-btn.active{background:rgba(204,255,0,0.12);border-color:rgba(204,255,0,0.3);color:#CCFF00}
+    .chart-container{position:relative;height:220px;width:100%}
+  </style>
+</head>
+<body class="antialiased">
+  <div id="navbar-placeholder"></div>
+
+  <main class="min-h-screen pt-24 pb-16">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+
+      <!-- Hero -->
+      <section class="text-center mb-8">
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#8B5CF6]/10 border border-[#8B5CF6]/20 text-[#8B5CF6] text-xs font-semibold mb-5">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+          Analizadores
+        </div>
+        <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black leading-[1.1] tracking-tight mb-4">
+          <span class="text-white">Analizador de</span><br>
+          <span class="text-gradient-green">Sueño</span>
+        </h1>
+        <p class="text-[#94A3B8] text-sm sm:text-base md:text-lg max-w-xl mx-auto leading-relaxed">
+          Registra tus horas de sueño, calidad de descanso y correlaciona con tu rendimiento al correr.
+        </p>
+      </section>
+
+      <!-- Log Form -->
+      <section class="mb-6 fade-up" style="animation-delay:0.05s">
+        <div class="glass rounded-2xl p-5 md:p-7">
+          <h2 class="text-white font-bold text-sm uppercase tracking-wider mb-5">
+            <span id="formTitle">Registrar Sueño</span>
+          </h2>
+          <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div>
+              <label class="text-xs font-semibold text-[#64748B] uppercase tracking-wider mb-1.5 block">Fecha</label>
+              <input type="date" id="sleepDate" class="hr-input">
+            </div>
+            <div>
+              <label class="text-xs font-semibold text-[#64748B] uppercase tracking-wider mb-1.5 block">Horas dormidas</label>
+              <input type="number" id="sleepHours" class="hr-input" placeholder="7.5" min="0" max="24" step="0.5" style="max-width:8rem">
+            </div>
+            <div>
+              <label class="text-xs font-semibold text-[#64748B] uppercase tracking-wider mb-1.5 block">Calidad</label>
+              <div class="flex gap-0.5 mt-1" id="qualityStars">
+                <button class="star-btn" data-star="1">★</button>
+                <button class="star-btn" data-star="2">★</button>
+                <button class="star-btn" data-star="3">★</button>
+                <button class="star-btn" data-star="4">★</button>
+                <button class="star-btn" data-star="5">★</button>
+              </div>
+            </div>
+            <div>
+              <label class="text-xs font-semibold text-[#64748B] uppercase tracking-wider mb-1.5 block">Notas</label>
+              <input type="text" id="sleepNotes" class="hr-input" placeholder="Opcional..." style="text-align:left;font-weight:400">
+            </div>
+          </div>
+
+          <!-- Optional run data -->
+          <div class="mt-4">
+            <button id="toggleRunData" class="text-xs text-[#8B5CF6] font-semibold hover:underline bg-transparent border-none cursor-pointer flex items-center gap-1">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              Agregar dato de carrera
+            </button>
+            <div id="runDataFields" class="grid md:grid-cols-3 gap-4 mt-3" style="display:none">
+              <div>
+                <label class="text-xs font-semibold text-[#64748B] uppercase tracking-wider mb-1.5 block">Distancia (km)</label>
+                <input type="number" id="runDist" class="hr-input" placeholder="0" min="0" step="0.1" style="max-width:8rem">
+              </div>
+              <div>
+                <label class="text-xs font-semibold text-[#64748B] uppercase tracking-wider mb-1.5 block">Duración (min)</label>
+                <input type="number" id="runDuration" class="hr-input" placeholder="0" min="0" style="max-width:8rem">
+              </div>
+              <div>
+                <label class="text-xs font-semibold text-[#64748B] uppercase tracking-wider mb-1.5 block">Esfuerzo percibido</label>
+                <select id="runEffort" class="hr-select">
+                  <option value="">—</option>
+                  <option value="1">1 - Muy fácil</option>
+                  <option value="2">2 - Fácil</option>
+                  <option value="3">3 - Moderado</option>
+                  <option value="4">4 - Algo duro</option>
+                  <option value="5">5 - Duro</option>
+                  <option value="6">6 - Muy duro</option>
+                  <option value="7">7 - Máximo</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex gap-3 mt-5">
+            <button id="saveEntryBtn" class="inline-flex items-center gap-2 px-5 py-2.5 bg-[#CCFF00] text-[#0B0F19] font-bold text-sm rounded-xl hover:bg-[#D9FF33] transition-all hover:translate-y-[-1px] hover:shadow-[0_4px_15px_rgba(204,255,0,0.2)] active:translate-y-0">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+              Guardar
+            </button>
+            <button id="cancelEditBtn" class="px-4 py-2.5 bg-white/[0.06] hover:bg-white/[0.1] text-[#94A3B8] text-sm font-semibold rounded-xl border border-white/[0.06] transition-all" style="display:none">Cancelar</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Stats Summary -->
+      <div id="statsArea" class="mb-6 fade-up" style="animation-delay:0.1s">
+        <div class="glass rounded-2xl p-5 md:p-7">
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+            <div class="stat-card"><div class="value" id="statAvgHours">—</div><div class="sublabel">Promedio horas</div></div>
+            <div class="stat-card"><div class="value" id="statAvgQuality">—</div><div class="sublabel">Calidad prom.</div></div>
+            <div class="stat-card"><div class="value" id="statConsistency">—</div><div class="sublabel">Consistencia</div></div>
+            <div class="stat-card"><div class="value" id="statTotalEntries">—</div><div class="sublabel">Registros</div></div>
+          </div>
+          <!-- Chart -->
+          <div class="mt-4">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-semibold text-[#64748B] uppercase tracking-wider">Horas de sueño por día</span>
+              <div class="flex gap-1.5" id="rangeTabs">
+                <button class="tab-btn" data-range="7">7 días</button>
+                <button class="tab-btn active" data-range="14">14 días</button>
+                <button class="tab-btn" data-range="30">30 días</button>
+              </div>
+            </div>
+            <div class="chart-container">
+              <canvas id="sleepChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Correlation -->
+      <div id="correlationArea" class="mb-6 fade-up" style="display:none;animation-delay:0.15s">
+        <div class="glass rounded-2xl p-5 md:p-7">
+          <h2 class="text-white font-bold text-sm uppercase tracking-wider mb-3">Sueño vs Rendimiento</h2>
+          <p class="text-[#94A3B8] text-xs mb-4">Correlación entre horas de sueño y ritmo en tus carreras registradas.</p>
+          <div id="correlationContent" class="text-center text-[#475569] text-sm py-6">Registra carreras junto con tu sueño para ver la correlación.</div>
+        </div>
+      </div>
+
+      <!-- History -->
+      <section class="fade-up" style="animation-delay:0.2s">
+        <div class="glass rounded-2xl p-5 md:p-7">
+          <h2 class="text-white font-bold text-sm uppercase tracking-wider mb-3">Historial</h2>
+          <div id="historyContainer">
+            <div class="entry-row header">
+              <span>Fecha</span>
+              <span>Horas</span>
+              <span>Calidad</span>
+              <span>Carrera</span>
+              <span>Notas</span>
+              <span></span>
+            </div>
+            <div id="historyBody"></div>
+          </div>
+          <button id="clearAllBtn" class="mt-4 text-xs text-[#DC2626] hover:text-[#EF4444] bg-transparent border-none cursor-pointer font-semibold transition">Eliminar todos los registros</button>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <div id="footer-placeholder"></div>
+
+  <script src="/assets/js/config.js"></script>
+  <script src="/assets/js/store.js"></script>
+  <script src="/components/navbar.js"></script>
+  <script src="/components/footer.js"></script>
+  <script src="/assets/js/profile-modal.js"></script>
+  <script src="/assets/js/components.js"></script>
+
+  <script>
+  (() => {
+    'use strict';
+
+    const TOOL_ID = 'sleep-analyzer';
+    let sleepChart = null;
+    let editingIndex = -1;
+    let selectedQuality = 0;
+    let chartRange = 14;
+
+    // ── Data ──
+    function getEntries() { return JPZCH_Store.getToolData(TOOL_ID) || []; }
+
+    function saveEntries(entries) { JPZCH_Store.saveToolData(TOOL_ID, entries); }
+
+    function todayStr() { return new Date().toISOString().split('T')[0]; }
+
+    // ── Stars ──
+    document.querySelectorAll('.star-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const val = parseInt(btn.dataset.star);
+        selectedQuality = val;
+        document.querySelectorAll('.star-btn').forEach((b, i) => {
+          b.classList.toggle('active', i < val);
+        });
+      });
+    });
+
+    // ── Toggle run fields ──
+    document.getElementById('toggleRunData').addEventListener('click', () => {
+      const area = document.getElementById('runDataFields');
+      const isHidden = area.style.display === 'none';
+      area.style.display = isHidden ? 'grid' : 'none';
+    });
+
+    // ── Save ──
+    document.getElementById('saveEntryBtn').addEventListener('click', () => {
+      const date = document.getElementById('sleepDate').value;
+      const hours = parseFloat(document.getElementById('sleepHours').value);
+      const notes = document.getElementById('sleepNotes').value.trim();
+      const runDist = parseFloat(document.getElementById('runDist').value) || 0;
+      const runDuration = parseFloat(document.getElementById('runDuration').value) || 0;
+      const runEffort = parseInt(document.getElementById('runEffort').value) || 0;
+
+      if (!date) { alert('Selecciona una fecha.'); return; }
+      if (!hours || hours <= 0 || hours > 24) { alert('Ingresa horas válidas (0.5–24).'); return; }
+      if (selectedQuality === 0) { alert('Selecciona la calidad del sueño.'); return; }
+
+      const entries = getEntries();
+      const entry = { date, hours, quality: selectedQuality, notes, runDist, runDuration, runEffort };
+
+      if (editingIndex >= 0) {
+        entries[editingIndex] = entry;
+        editingIndex = -1;
+        document.getElementById('formTitle').textContent = 'Registrar Sueño';
+        document.getElementById('cancelEditBtn').style.display = 'none';
+      } else {
+        // Check for duplicate date
+        const existing = entries.findIndex(e => e.date === date);
+        if (existing >= 0) {
+          if (!confirm(`Ya existe un registro para ${date}. ¿Reemplazarlo?`)) return;
+          entries[existing] = entry;
+        } else {
+          entries.push(entry);
+        }
+      }
+
+      entries.sort((a, b) => a.date.localeCompare(b.date));
+      saveEntries(entries);
+      clearForm();
+      refresh();
+    });
+
+    document.getElementById('cancelEditBtn').addEventListener('click', () => {
+      editingIndex = -1;
+      document.getElementById('formTitle').textContent = 'Registrar Sueño';
+      document.getElementById('cancelEditBtn').style.display = 'none';
+      clearForm();
+    });
+
+    // ── Clear all ──
+    document.getElementById('clearAllBtn').addEventListener('click', () => {
+      if (confirm('¿Eliminar todos los registros de sueño?')) {
+        saveEntries([]);
+        refresh();
+      }
+    });
+
+    // ── Clear form ──
+    function clearForm() {
+      document.getElementById('sleepDate').value = todayStr();
+      document.getElementById('sleepHours').value = '';
+      document.getElementById('sleepNotes').value = '';
+      document.getElementById('runDist').value = '';
+      document.getElementById('runDuration').value = '';
+      document.getElementById('runEffort').value = '';
+      document.getElementById('runDataFields').style.display = 'none';
+      selectedQuality = 0;
+      document.querySelectorAll('.star-btn').forEach(b => b.classList.remove('active'));
+    }
+
+    // ── Edit ──
+    function editEntry(index) {
+      const entries = getEntries();
+      const e = entries[index];
+      if (!e) return;
+      editingIndex = index;
+      document.getElementById('formTitle').textContent = 'Editar Registro';
+      document.getElementById('cancelEditBtn').style.display = 'inline-flex';
+      document.getElementById('sleepDate').value = e.date;
+      document.getElementById('sleepHours').value = e.hours;
+      document.getElementById('sleepNotes').value = e.notes || '';
+      selectedQuality = e.quality || 0;
+      document.querySelectorAll('.star-btn').forEach((b, i) => b.classList.toggle('active', i < selectedQuality));
+      if (e.runDist > 0 || e.runDuration > 0) {
+        document.getElementById('runDataFields').style.display = 'grid';
+        document.getElementById('runDist').value = e.runDist || '';
+        document.getElementById('runDuration').value = e.runDuration || '';
+        document.getElementById('runEffort').value = e.runEffort || '';
+      }
+      document.getElementById('sleepDate').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    // ── Delete ──
+    function deleteEntry(index) {
+      if (!confirm('¿Eliminar este registro?')) return;
+      const entries = getEntries();
+      entries.splice(index, 1);
+      saveEntries(entries);
+      refresh();
+    }
+
+    // ── Stats ──
+    function computeStats(entries) {
+      if (entries.length === 0) return null;
+      const total = entries.length;
+      const avgHours = entries.reduce((s, e) => s + e.hours, 0) / total;
+      const avgQuality = entries.reduce((s, e) => s + e.quality, 0) / total;
+
+      // Consistency: inverse of std dev of hours
+      const variance = entries.reduce((s, e) => s + Math.pow(e.hours - avgHours, 2), 0) / total;
+      const stdDev = Math.sqrt(variance);
+      const consistency = Math.max(0, Math.min(100, Math.round(100 - stdDev * 20)));
+
+      return { avgHours: avgHours.toFixed(1), avgQuality: avgQuality.toFixed(1), consistency, total };
+    }
+
+    // ── Render chart ──
+    function renderChart(entries, range) {
+      const ctx = document.getElementById('sleepChart').getContext('2d');
+      if (sleepChart) { sleepChart.destroy(); sleepChart = null; }
+
+      if (entries.length === 0) {
+        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+        return;
+      }
+
+      const now = new Date();
+      const cutoff = new Date(now);
+      cutoff.setDate(cutoff.getDate() - range);
+      const cutoffStr = cutoff.toISOString().split('T')[0];
+
+      const filtered = entries.filter(e => e.date >= cutoffStr);
+      if (filtered.length === 0) {
+        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+        return;
+      }
+
+      const labels = filtered.map(e => {
+        const d = new Date(e.date + 'T12:00:00');
+        return d.toLocaleDateString('es', { weekday: 'short', day: 'numeric', month: 'short' });
+      });
+      const hours = filtered.map(e => e.hours);
+      const qualities = filtered.map(e => e.quality);
+
+      const colors = qualities.map(q => {
+        if (q >= 4) return 'rgba(52,211,153,0.7)';
+        if (q >= 3) return 'rgba(251,191,36,0.7)';
+        return 'rgba(239,68,68,0.7)';
+      });
+
+      sleepChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels,
+          datasets: [{
+            data: hours,
+            backgroundColor: colors,
+            borderColor: colors.map(c => c.replace('0.7', '1')),
+            borderWidth: 1,
+            borderRadius: 4,
+            barPercentage: 0.7
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          animation: { duration: 300 },
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              backgroundColor: 'rgba(11,15,25,0.95)',
+              titleColor: '#F1F5F9',
+              bodyColor: '#94A3B8',
+              borderColor: 'rgba(255,255,255,0.06)',
+              borderWidth: 1,
+              padding: 10,
+              cornerRadius: 8,
+              callbacks: {
+                label: (ctx) => {
+                  const i = ctx.dataIndex;
+                  return `${hours[i]}h · Calidad: ${'★'.repeat(qualities[i])}${'☆'.repeat(5-qualities[i])}`;
+                }
+              }
+            }
+          },
+          scales: {
+            x: {
+              grid: { display: false },
+              ticks: { color: '#475569', font: { size: 9, weight: '500' }, maxRotation: 45 }
+            },
+            y: {
+              beginAtZero: true,
+              max: 12,
+              grid: { color: 'rgba(255,255,255,0.03)' },
+              ticks: { color: '#475569', font: { size: 9 }, callback: v => v + 'h' }
+            }
+          }
+        }
+      });
+    }
+
+    // ── Render history ──
+    function renderHistory(entries) {
+      const body = document.getElementById('historyBody');
+      if (entries.length === 0) {
+        body.innerHTML = '<div class="no-data">Aún no hay registros. ¡Agrega tu primera noche!</div>';
+        return;
+      }
+
+      body.innerHTML = entries.map((e, i) => {
+        const stars = '★'.repeat(e.quality) + '☆'.repeat(5 - e.quality);
+        const runInfo = e.runDist > 0 ? `${e.runDist.toFixed(1)} km` : '—';
+        return `<div class="entry-row">
+          <span class="text-white font-medium">${e.date}</span>
+          <span class="text-white font-semibold">${e.hours}h</span>
+          <span style="color:#FBBF24;font-size:0.75rem">${stars}</span>
+          <span class="text-[#94A3B8]">${runInfo}</span>
+          <span class="text-[#64748B] truncate" title="${e.notes || ''}">${e.notes || '—'}</span>
+          <div class="flex gap-1">
+            <button class="edit-btn text-[#8B5CF6] hover:text-[#A78BFA] bg-transparent border-none cursor-pointer text-xs font-semibold p-0.5" data-idx="${i}">Editar</button>
+            <button class="del-btn" data-idx="${i}">✕</button>
+          </div>
+        </div>`;
+      }).join('');
+
+      body.querySelectorAll('.edit-btn').forEach(b => {
+        b.addEventListener('click', () => editEntry(parseInt(b.dataset.idx)));
+      });
+      body.querySelectorAll('.del-btn').forEach(b => {
+        b.addEventListener('click', () => deleteEntry(parseInt(b.dataset.idx)));
+      });
+    }
+
+    // ── Render correlation ──
+    function renderCorrelation(entries) {
+      const area = document.getElementById('correlationArea');
+      const content = document.getElementById('correlationContent');
+      const withRuns = entries.filter(e => e.runDist > 0 && e.runDuration > 0 && e.runEffort > 0);
+
+      if (withRuns.length < 3) {
+        area.style.display = withRuns.length > 0 ? 'block' : 'none';
+        content.innerHTML = withRuns.length > 0
+          ? `Solo ${withRuns.length} registros con datos de carrera. Se necesitan al menos 3 para mostrar correlación.`
+          : 'Registra carreras junto con tu sueño para ver la correlación.';
+        return;
+      }
+
+      area.style.display = 'block';
+      const paces = withRuns.map(e => e.runDuration / e.runDist);
+      const hours = withRuns.map(e => e.hours);
+
+      // Simple linear regression
+      const n = withRuns.length;
+      const sumX = hours.reduce((a, b) => a + b, 0);
+      const sumY = paces.reduce((a, b) => a + b, 0);
+      const sumXY = hours.reduce((s, h, i) => s + h * paces[i], 0);
+      const sumX2 = hours.reduce((s, h) => s + h * h, 0);
+      const slope = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
+      const avgPace = sumY / n;
+      const avgHours2 = sumX / n;
+
+      // Correlation coefficient
+      const sumY2 = paces.reduce((s, p) => s + p * p, 0);
+      const rNum = n * sumXY - sumX * sumY;
+      const rDen = Math.sqrt((n * sumX2 - sumX * sumX) * (n * sumY2 - sumY * sumY));
+      const r = rDen !== 0 ? rNum / rDen : 0;
+
+      const direction = slope < 0 ? 'positiva' : 'negativa';
+      const strength = Math.abs(r) > 0.7 ? 'fuerte' : Math.abs(r) > 0.4 ? 'moderada' : 'débil';
+      const insight = slope < 0
+        ? 'Más horas de sueño se asocian con mejor rendimiento (ritmo más rápido).'
+        : 'No se observa una relación clara entre sueño y rendimiento en tus datos.';
+
+      content.innerHTML = `
+        <div class="grid md:grid-cols-3 gap-4 text-left">
+          <div class="stat-card"><div class="value" style="font-size:1.2rem">${r.toFixed(2)}</div><div class="sublabel">Correlación (r)</div></div>
+          <div class="stat-card"><div class="value" style="font-size:1.2rem;color:${slope < 0 ? '#34D399' : '#FBBF24'}">${direction}</div><div class="sublabel">Dirección</div></div>
+          <div class="stat-card"><div class="value" style="font-size:1.2rem;color:${Math.abs(r) > 0.5 ? '#34D399' : '#64748B'}">${strength}</div><div class="sublabel">Fuerza</div></div>
+        </div>
+        <p class="text-[#94A3B8] text-xs mt-4 text-center">${insight} (basado en ${withRuns.length} registros con datos de carrera y sueño)</p>
+      `;
+    }
+
+    // ── Range tabs ──
+    document.querySelectorAll('[data-range]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('[data-range]').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        chartRange = parseInt(btn.dataset.range);
+        const entries = getEntries();
+        renderChart(entries, chartRange);
+      });
+    });
+
+    // ── Refresh ──
+    function refresh() {
+      const entries = getEntries();
+      const stats = computeStats(entries);
+
+      if (stats) {
+        document.getElementById('statAvgHours').textContent = stats.avgHours + 'h';
+        document.getElementById('statAvgQuality').textContent = '★ ' + stats.avgQuality;
+        document.getElementById('statConsistency').textContent = stats.consistency + '%';
+        document.getElementById('statTotalEntries').textContent = stats.total;
+      } else {
+        document.getElementById('statAvgHours').textContent = '—';
+        document.getElementById('statAvgQuality').textContent = '—';
+        document.getElementById('statConsistency').textContent = '—';
+        document.getElementById('statTotalEntries').textContent = '0';
+      }
+
+      renderChart(entries, chartRange);
+      renderHistory(entries);
+      renderCorrelation(entries);
+    }
+
+    // ── Init ──
+    document.getElementById('sleepDate').value = todayStr();
+    refresh();
+
+  })();
+  </script>
+</body>
+</html>
