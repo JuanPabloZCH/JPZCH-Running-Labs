@@ -1,6 +1,17 @@
 const JPZCH_App = (() => {
   const TOOLS = [
     {
+      id: 'ai-coach',
+      name: 'AI Coach',
+      description: 'Analiza tus carreras con inteligencia artificial. Sube un GPX o ingresa datos manualmente y recibe un análisis detallado con recomendaciones personalizadas entrenador.',
+      category: 'analizadores',
+      icon: 'sparkles',
+      status: 'available',
+      accent: '#8B5CF6',
+      url: '/tools/ai-coach/',
+      features: ['GPX', 'Manual', 'IA', 'Dashboard']
+    },
+    {
       id: 'pace-calculator',
       name: 'Calculadora de Ritmo',
       description: 'Convierte ritmo a tiempo y viceversa para 5K, 10K, media maratón y maratón con tabla interactiva de ritmos.',
@@ -145,7 +156,8 @@ const JPZCH_App = (() => {
     'rotate-cw': '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>',
     'calendar': '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>',
     'shoe': '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 3 7.5 12m9 0H7.5m9 0h1.5a1.5 1.5 0 011.5 1.5v3a1.5 1.5 0 01-1.5 1.5H6.75a1.5 1.5 0 01-1.5-1.5v-3A1.5 1.5 0 016.75 12H7.5"/></svg>',
-    'moon': '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>'
+    'moon': '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>',
+    'sparkles': '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>'
   };
 
   const CATEGORIES = {
@@ -193,8 +205,8 @@ const JPZCH_App = (() => {
   /* ── Stats Counter ── */
   function renderStats() {
     const stats = [
-      { value: '12', label: 'Herramientas', suffix: '' },
-      { value: '12', label: 'Disponible', suffix: '' },
+      { value: '13', label: 'Herramientas', suffix: '' },
+      { value: '13', label: 'Disponible', suffix: '' },
       { value: '3', label: 'Categorías', suffix: '' },
       { value: '100', label: 'Gratuito', suffix: '%' }
     ];

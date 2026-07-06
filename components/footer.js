@@ -21,6 +21,7 @@ const JPZCH_FOOTER = `
       <div>
         <h4 class="text-white font-semibold text-sm uppercase tracking-wider mb-4">Herramientas</h4>
         <ul class="space-y-3">
+          <li><a href="/JPZCH-Running-Labs/tools/ai-coach/" class="text-[#8B5CF6] hover:text-[#CCFF00] text-sm transition-colors duration-300 font-semibold">AI Coach</a></li>
           <li><a href="/JPZCH-Running-Labs/tools/cadence-analyzer/" class="text-[#64748B] hover:text-[#CCFF00] text-sm transition-colors duration-300">Analizador de Cadencia</a></li>
           <li><a href="/JPZCH-Running-Labs/tools/pace-calculator/" class="text-[#64748B] hover:text-[#CCFF00] text-sm transition-colors duration-300">Calculadora de Ritmo</a></li>
           <li><a href="/JPZCH-Running-Labs/tools/training-zones/" class="text-[#64748B] hover:text-[#CCFF00] text-sm transition-colors duration-300">Zonas Cardíacas</a></li>

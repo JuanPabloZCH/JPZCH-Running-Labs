@@ -24,6 +24,11 @@ const JPZCH_NAVBAR = `
           </button>
           <div class="nav-dropdown absolute top-full left-0 w-64 opacity-0 invisible group-hover:opacity-100 group-hover:visible">
             <div class="bg-[#131A2B]/95 backdrop-blur-xl rounded-xl border border-white/10 p-2 shadow-2xl shadow-black/50">
+              <a href="/JPZCH-Running-Labs/tools/ai-coach/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-white hover:bg-white/5 transition-colors">
+                <span class="w-2 h-2 rounded-full bg-[#8B5CF6] shrink-0"></span>
+                <span class="font-medium">AI Coach</span>
+                <span class="ml-auto text-[10px] font-semibold text-[#FBBF24] bg-[#FBBF24]/10 px-2 py-0.5 rounded-full">Nuevo</span>
+              </a>
               <a href="/JPZCH-Running-Labs/tools/cadence-analyzer/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-white hover:bg-white/5 transition-colors">
                 <span class="w-2 h-2 rounded-full bg-[#CCFF00] shrink-0"></span>
                 <span class="font-medium">Analizador de Cadencia</span>
@@ -179,6 +184,11 @@ const JPZCH_NAVBAR = `
           <svg class="mobile-dd-chevron w-4 h-4 text-[#475569] transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
         </button>
         <div class="mobile-dd-content hidden">
+          <a href="/JPZCH-Running-Labs/tools/ai-coach/" class="flex items-center gap-3 px-8 py-3 text-white hover:bg-white/5 transition-colors">
+            <span class="w-2 h-2 rounded-full bg-[#8B5CF6] shrink-0"></span>
+            <span class="text-sm">AI Coach</span>
+            <span class="ml-auto text-[10px] font-semibold text-[#FBBF24] bg-[#FBBF24]/10 px-2 py-0.5 rounded-full">Nuevo</span>
+          </a>
           <a href="/JPZCH-Running-Labs/tools/cadence-analyzer/" class="flex items-center gap-3 px-8 py-3 text-white hover:bg-white/5 transition-colors">
             <span class="w-2 h-2 rounded-full bg-[#CCFF00] shrink-0"></span>
             <span class="text-sm">Analizador de Cadencia</span>
