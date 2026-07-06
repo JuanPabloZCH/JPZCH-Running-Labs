@@ -1,2 +1,431 @@
-<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Progresión  JPZCH Running Labs</title><meta name="theme-color" content="#0B0F19"><script src="https://cdn.tailwindcss.com"></script><link rel="stylesheet" href="/assets/css/styles.css"></head><body><div id="navbar-placeholder"></div><main class="min-h-screen pt-24 pb-12"><div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8"><div class="text-center mb-10"><h1 class="text-3xl md:text-4xl font-black text-white mb-3">Calculadora de Progresión</h1></div><div class="glass rounded-2xl p-6 md:p-8 text-center"><p class="text-[#94A3B8]">Próximamente.</p><a href="/" class="btn-secondary mt-6 inline-flex">Volver</a></div></div></main><div id="footer-placeholder"></div><script src="/assets/js/config.js"></script><script src="/assets/js/store.js"></script><script src="/components/navbar.js"></script><script src="/components/footer.js"></script><script src="/assets/js/profile-modal.js"></script>
-  <script src="/assets/js/components.js"></script></body></html>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculadora de Progresión — JPZCH Running Labs</title>
+  <meta name="theme-color" content="#0B0F19">
+  <meta name="description" content="Proyecta tu mejora en distancias basada en tu marca reciente y volumen de entrenamiento.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/assets/css/styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+  <style>
+    .hr-input{width:100%;padding:0.625rem 0.75rem;background:rgba(11,15,25,0.6);border:1px solid rgba(255,255,255,0.06);border-radius:0.75rem;color:#F1F5F9;font-size:1rem;font-weight:600;text-align:center;outline:none;transition:all 0.3s ease}
+    .hr-input:focus{border-color:rgba(204,255,0,0.3);box-shadow:0 0 0 3px rgba(204,255,0,0.06)}
+    .hr-input::placeholder{color:#475569;font-weight:400}
+    .hr-select{width:100%;padding:0.625rem 0.75rem;background:rgba(11,15,25,0.6);border:1px solid rgba(255,255,255,0.06);border-radius:0.75rem;color:#F1F5F9;font-size:0.85rem;font-weight:500;outline:none;transition:all 0.3s ease;cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%2394A3B8' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 0.75rem center;padding-right:2rem}
+    .hr-select:focus{border-color:rgba(204,255,0,0.3);box-shadow:0 0 0 3px rgba(204,255,0,0.06)}
+    .hr-select option{background:#0B0F19;color:#F1F5F9}
+    .pred-row{display:grid;grid-template-columns:2fr 1.5fr 1.5fr 1.2fr;gap:0.75rem;padding:0.75rem 1rem;align-items:center;border-bottom:1px solid rgba(255,255,255,0.04);transition:background 0.2s;border-radius:0.5rem}
+    .pred-row:hover{background:rgba(255,255,255,0.02)}
+    .pred-row.header{color:#64748B;font-weight:700;font-size:0.65rem;text-transform:uppercase;letter-spacing:0.05em;border-bottom:1px solid rgba(255,255,255,0.08);padding:0.5rem 1rem}
+    .pred-row.highlight{background:rgba(204,255,0,0.04);border:1px solid rgba(204,255,0,0.1)}
+    .stat-card{text-align:center;padding:1rem 0.75rem;background:rgba(11,15,25,0.4);border:1px solid rgba(255,255,255,0.04);border-radius:0.875rem}
+    .stat-card .value{font-size:1.5rem;font-weight:800;color:#F1F5F9}
+    .stat-card .sublabel{font-size:0.65rem;color:#64748B;text-transform:uppercase;letter-spacing:0.05em;margin-top:0.2rem}
+    .fade-up{opacity:0;transform:translateY(12px);animation:fadeUp 0.4s ease forwards}
+    @keyframes fadeUp{to{opacity:1;transform:translateY(0)}}
+    .chart-container{position:relative;height:200px;width:100%}
+    .pill-btn{padding:0.5rem 1rem;border-radius:0.75rem;font-size:0.8rem;font-weight:600;border:1px solid rgba(255,255,255,0.06);background:rgba(11,15,25,0.5);color:#94A3B8;cursor:pointer;transition:all 0.3s ease}
+    .pill-btn:hover{border-color:rgba(204,255,0,0.2);color:#F1F5F9}
+    .pill-btn.active{background:rgba(204,255,0,0.12);border-color:rgba(204,255,0,0.3);color:#CCFF00}
+    .vol-slider{-webkit-appearance:none;appearance:none;width:100%;height:6px;background:rgba(255,255,255,0.06);border-radius:3px;outline:none;transition:background 0.2s}
+    .vol-slider::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:20px;height:20px;border-radius:50%;background:#CCFF00;border:2px solid #0B0F19;cursor:pointer;box-shadow:0 0 10px rgba(204,255,0,0.2)}
+    .vol-slider::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:#CCFF00;border:2px solid #0B0F19;cursor:pointer}
+    .info-badge{display:inline-flex;align-items:center;gap:0.35rem;padding:0.2rem 0.6rem;border-radius:999px;font-size:0.65rem;font-weight:600}
+    @media(max-width:640px){.pred-row{grid-template-columns:1.5fr 1.2fr 1.2fr 1fr;gap:0.4rem;padding:0.5rem 0.6rem;font-size:0.75rem}}
+  </style>
+</head>
+<body class="antialiased">
+  <div id="navbar-placeholder"></div>
+
+  <main class="min-h-screen pt-24 pb-16">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+
+      <!-- Hero -->
+      <section class="text-center mb-8">
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#CCFF00]/10 border border-[#CCFF00]/20 text-[#CCFF00] text-xs font-semibold mb-5">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+          Planificadores
+        </div>
+        <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black leading-[1.1] tracking-tight mb-4">
+          <span class="text-white">Calculadora de</span><br>
+          <span class="text-gradient-green">Progresión</span>
+        </h1>
+        <p class="text-[#94A3B8] text-sm sm:text-base md:text-lg max-w-xl mx-auto leading-relaxed">
+          Proyecta tu rendimiento en distintas distancias a partir de tu mejor marca reciente.
+        </p>
+      </section>
+
+      <!-- Input form -->
+      <section class="mb-6 fade-up" style="animation-delay:0.05s">
+        <div class="glass rounded-2xl p-5 md:p-7">
+          <h2 class="text-white font-bold text-sm uppercase tracking-wider mb-5">Tu mejor marca</h2>
+          <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div>
+              <label class="text-xs font-semibold text-[#64748B] uppercase tracking-wider mb-1.5 block">Distancia</label>
+              <div class="flex flex-wrap gap-2" id="distPills">
+                <button class="pill-btn" data-d="1">1 km</button>
+                <button class="pill-btn" data-d="3">3 km</button>
+                <button class="pill-btn active" data-d="5">5 km</button>
+                <button class="pill-btn" data-d="10">10 km</button>
+                <button class="pill-btn" data-d="21">21.1 km</button>
+                <button class="pill-btn" data-d="42">42.2 km</button>
+              </div>
+            </div>
+            <div>
+              <label class="text-xs font-semibold text-[#64748B] uppercase tracking-wider mb-1.5 block">Tiempo</label>
+              <div class="flex items-center gap-2">
+                <input type="number" id="timeH" class="hr-input" placeholder="hh" min="0" max="9" style="max-width:4rem">
+                <span class="text-[#64748B] text-sm font-semibold">:</span>
+                <input type="number" id="timeM" class="hr-input" placeholder="mm" min="0" max="59" style="max-width:4rem">
+                <span class="text-[#64748B] text-sm font-semibold">:</span>
+                <input type="number" id="timeS" class="hr-input" placeholder="ss" min="0" max="59" style="max-width:4rem">
+              </div>
+            </div>
+            <div>
+              <label class="text-xs font-semibold text-[#64748B] uppercase tracking-wider mb-1.5 block">Volumen semanal (km)</label>
+              <div class="flex items-center gap-3">
+                <input type="range" id="volSlider" class="vol-slider" min="0" max="120" value="30" step="5">
+                <span class="text-white font-bold text-sm w-10 text-right" id="volDisplay">30</span>
+              </div>
+            </div>
+            <div>
+              <label class="text-xs font-semibold text-[#64748B] uppercase tracking-wider mb-1.5 block">Experiencia</label>
+              <div class="flex flex-wrap gap-2" id="expPills">
+                <button class="pill-btn" data-exp="beginner">Principiante</button>
+                <button class="pill-btn active" data-exp="intermediate">Intermedio</button>
+                <button class="pill-btn" data-exp="advanced">Avanzado</button>
+              </div>
+            </div>
+          </div>
+          <button id="calcBtn" class="mt-6 w-full inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#CCFF00] text-[#0B0F19] font-bold text-sm rounded-xl hover:bg-[#D9FF33] transition-all hover:translate-y-[-2px] hover:shadow-[0_8px_25px_rgba(204,255,0,0.25)] active:translate-y-0">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+            Calcular Progresión
+          </button>
+        </div>
+      </section>
+
+      <!-- Loading -->
+      <div id="loadingArea" class="glass rounded-2xl p-10 text-center fade-up" style="display:none">
+        <div class="w-10 h-10 border-2 border-[#CCFF00] border-t-transparent rounded-full animate-spin mx-auto mb-3"></div>
+        <p class="text-[#94A3B8] text-sm">Calculando proyecciones...</p>
+      </div>
+
+      <!-- Results -->
+      <div id="resultsArea" style="display:none">
+
+        <!-- Summary -->
+        <section class="mb-6 fade-up" style="animation-delay:0.1s">
+          <div class="glass rounded-2xl p-5 md:p-7">
+            <h2 class="text-white font-bold text-sm uppercase tracking-wider mb-4">Tiempos Proyectados</h2>
+
+            <div class="pred-row header">
+              <span>Distancia</span>
+              <span>Tiempo</span>
+              <span>Ritmo</span>
+              <span>vs. Actual</span>
+            </div>
+            <div id="predictionsBody"></div>
+
+            <div class="mt-5 pt-4 border-t border-white/[0.06]">
+              <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                <div class="stat-card"><div class="value" id="statRiegel">—</div><div class="sublabel">Factor Riegel</div></div>
+                <div class="stat-card"><div class="value" id="statVDOT">—</div><div class="sublabel">VDOT Estimado</div></div>
+                <div class="stat-card"><div class="value" id="statPaceActual">—</div><div class="sublabel">Ritmo actual</div></div>
+                <div class="stat-card"><div class="value" id="statLevel">—</div><div class="sublabel">Nivel</div></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Pace comparison chart -->
+        <section class="mb-6 fade-up" style="animation-delay:0.15s">
+          <div class="glass rounded-2xl p-5 md:p-7">
+            <h2 class="text-white font-bold text-sm uppercase tracking-wider mb-3">Comparativa de Ritmos</h2>
+            <p class="text-[#94A3B8] text-xs mb-3">Ritmo en min/km para cada distancia proyectada</p>
+            <div class="chart-container">
+              <canvas id="paceChart"></canvas>
+            </div>
+          </div>
+        </section>
+
+        <!-- How it works -->
+        <section class="mb-6 fade-up" style="animation-delay:0.2s">
+          <div class="glass rounded-2xl p-5 md:p-7">
+            <h2 class="text-white font-bold text-sm uppercase tracking-wider mb-2">¿Cómo funciona?</h2>
+            <p class="text-[#94A3B8] text-xs leading-relaxed">
+              La calculadora usa la <strong class="text-white">fórmula de Riegel</strong> para proyectar tiempos equivalentes entre distancias:
+              <strong class="text-[#CCFF00]">T₂ = T₁ × (D₂ ÷ D₁)^1.06</strong>.
+              El factor 1.06 es el estándar para corredores. También calculamos tu <strong class="text-white">VDOT</strong> estimado
+              (según el sistema Daniels) y ajustamos la proyección según tu volumen semanal y nivel de experiencia.
+              Las proyecciones son orientativas; el rendimiento real depende de tu plan de entrenamiento, nutrición y recuperación.
+            </p>
+          </div>
+        </section>
+
+      </div>
+
+    </div>
+  </main>
+
+  <div id="footer-placeholder"></div>
+
+  <script src="/assets/js/config.js"></script>
+  <script src="/assets/js/store.js"></script>
+  <script src="/components/navbar.js"></script>
+  <script src="/components/footer.js"></script>
+  <script src="/assets/js/profile-modal.js"></script>
+  <script src="/assets/js/components.js"></script>
+
+  <script>
+  (() => {
+    'use strict';
+
+    let paceChart = null;
+    const state = { dist: 5, hours: 0, mins: 22, secs: 0, volume: 30, exp: 'intermediate' };
+
+    // ── Pill buttons ──
+    document.querySelectorAll('#distPills .pill-btn').forEach(b => {
+      b.addEventListener('click', () => {
+        document.querySelectorAll('#distPills .pill-btn').forEach(x => x.classList.remove('active'));
+        b.classList.add('active');
+        state.dist = parseFloat(b.dataset.d);
+      });
+    });
+
+    document.querySelectorAll('#expPills .pill-btn').forEach(b => {
+      b.addEventListener('click', () => {
+        document.querySelectorAll('#expPills .pill-btn').forEach(x => x.classList.remove('active'));
+        b.classList.add('active');
+        state.exp = b.dataset.exp;
+      });
+    });
+
+    // ── Inputs ──
+    document.getElementById('timeH').addEventListener('input', e => { state.hours = parseInt(e.target.value) || 0; });
+    document.getElementById('timeM').addEventListener('input', e => { state.mins = parseInt(e.target.value) || 0; });
+    document.getElementById('timeS').addEventListener('input', e => { state.secs = parseInt(e.target.value) || 0; });
+
+    document.getElementById('volSlider').addEventListener('input', e => {
+      state.volume = parseInt(e.target.value);
+      document.getElementById('volDisplay').textContent = state.volume;
+    });
+
+    // ── Helpers ──
+    function toSeconds(h, m, s) { return h * 3600 + m * 60 + s; }
+
+    function formatTime(secs) {
+      if (!secs || secs <= 0) return '—';
+      const h = Math.floor(secs / 3600);
+      const m = Math.floor((secs % 3600) / 60);
+      const s = Math.round(secs % 60);
+      if (h > 0) return `${h}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+      return `${m}:${String(s).padStart(2,'0')}`;
+    }
+
+    function formatPace(secPerKm) {
+      if (!secPerKm || secPerKm <= 0) return '—';
+      const m = Math.floor(secPerKm / 60);
+      const s = Math.round(secPerKm % 60);
+      return `${m}:${String(s).padStart(2,'0')} /km`;
+    }
+
+    // ── Riegel formula: T2 = T1 * (D2/D1)^1.06 ──
+    function riegel(seconds, d1Km, d2Km, exp, volume) {
+      let factor = 1.06;
+      // Adjust factor based on experience and volume
+      if (exp === 'advanced') factor = 1.04;       // advanced runners have less degradation
+      else if (exp === 'beginner') factor = 1.09;   // beginners degrade more
+
+      // Volume adjustment: higher volume -> slightly better endurance
+      const volFactor = Math.max(0.98, 1 - (volume / 1000));
+      factor *= volFactor;
+
+      const pred = seconds * Math.pow(d2Km / d1Km, factor);
+      return pred;
+    }
+
+    // ── VDOT estimation (simplified from Daniels' tables) ──
+    function estimateVDOT(paceSecPerKm) {
+      if (paceSecPerKm <= 0) return 0;
+      const speed = 1000 / paceSecPerKm; // m/s
+      const vdot = 8.5 * speed + 7;
+      return Math.round(vdot * 10) / 10;
+    }
+
+    // ── Performance level string ──
+    function perfLevel(vdot) {
+      if (vdot >= 60) return 'Élite';
+      if (vdot >= 50) return 'Avanzado';
+      if (vdot >= 40) return 'Intermedio';
+      if (vdot >= 30) return 'Principiante';
+      return 'Recreativo';
+    }
+
+    // ── Calculate ──
+    function calculate() {
+      const d1 = state.dist;
+      const totalSecs = toSeconds(state.hours, state.mins, state.secs);
+      if (totalSecs <= 0) return null;
+
+      const racePace = totalSecs / d1;
+
+      const targets = [
+        { label: '1 km', km: 1, icon: '🟢' },
+        { label: '3 km', km: 3, icon: '🟡' },
+        { label: '5 km', km: 5, icon: '🔵' },
+        { label: '10 km', km: 10, icon: '🟣' },
+        { label: 'Media Maratón', km: 21.0975, icon: '🔶' },
+        { label: 'Maratón', km: 42.195, icon: '🔴' }
+      ];
+
+      const predictions = targets.map(t => {
+        const predSecs = riegel(totalSecs, d1, t.km, state.exp, state.volume);
+        const predPace = predSecs / t.km;
+        const isInput = Math.abs(t.km - d1) < 0.01;
+        const diff = isInput ? 0 : ((predPace - racePace) / racePace * 100);
+        return { ...t, predSecs, predPace, isInput, diff };
+      });
+
+      const vdot = estimateVDOT(racePace);
+
+      return { predictions, racePace, totalSecs, d1, vdot, level: perfLevel(vdot) };
+    }
+
+    // ── Render ──
+    function render(result) {
+      if (!result) return;
+
+      // Predictions table
+      const body = document.getElementById('predictionsBody');
+      body.innerHTML = result.predictions.map((p, i) => {
+        const isInput = p.isInput;
+        const diffStr = isInput ? '—' : (p.diff >= 0 ? `+${p.diff.toFixed(1)}%` : `${p.diff.toFixed(1)}%`);
+        const diffColor = isInput ? '#64748B' : (p.diff > 0 ? '#EF4444' : '#34D399');
+        return `<div class="pred-row ${isInput ? 'highlight' : ''}" style="animation-delay:${i * 50}ms">
+          <div class="flex items-center gap-2">
+            <span class="text-xs">${p.icon}</span>
+            <span class="text-white font-semibold text-sm">${p.label}</span>
+            ${isInput ? '<span class="info-badge bg-[#CCFF00]/10 text-[#CCFF00] border border-[#CCFF00]/20">Tu marca</span>' : ''}
+          </div>
+          <span class="text-white font-bold">${formatTime(p.predSecs)}</span>
+          <span class="text-[#94A3B8]">${formatPace(p.predPace)}</span>
+          <span style="color:${diffColor};font-weight:600;font-size:0.85rem">${diffStr}</span>
+        </div>`;
+      }).join('');
+
+      // Stats
+      document.getElementById('statRiegel').textContent = '1.06';
+      document.getElementById('statVDOT').textContent = result.vdot;
+      document.getElementById('statPaceActual').textContent = formatPace(result.racePace);
+      document.getElementById('statLevel').textContent = result.level;
+
+      // Chart
+      renderChart(result);
+
+      // Show
+      document.getElementById('resultsArea').style.display = 'block';
+      document.getElementById('resultsArea').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    // ── Chart ──
+    function renderChart(result) {
+      const ctx = document.getElementById('paceChart').getContext('2d');
+      if (paceChart) { paceChart.destroy(); paceChart = null; }
+
+      const labels = result.predictions.map(p => p.label);
+      const paces = result.predictions.map(p => p.predPace);
+      const inputIdx = result.predictions.findIndex(p => p.isInput);
+
+      const colors = result.predictions.map((p, i) => i === inputIdx ? 'rgba(204,255,0,0.8)' : 'rgba(139,92,246,0.8)');
+      const borderColors = result.predictions.map((p, i) => i === inputIdx ? '#CCFF00' : '#8B5CF6');
+
+      paceChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels,
+          datasets: [{
+            data: paces,
+            backgroundColor: colors,
+            borderColor: borderColors,
+            borderWidth: 1,
+            borderRadius: 4,
+            barPercentage: 0.6
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          animation: { duration: 400 },
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              backgroundColor: 'rgba(11,15,25,0.95)',
+              titleColor: '#F1F5F9',
+              bodyColor: '#94A3B8',
+              borderColor: 'rgba(255,255,255,0.06)',
+              borderWidth: 1,
+              padding: 10,
+              cornerRadius: 8,
+              callbacks: {
+                label: (ctx) => {
+                  const i = ctx.dataIndex;
+                  const p = result.predictions[i];
+                  return `${formatTime(p.predSecs)} · ${formatPace(p.predPace)}`;
+                }
+              }
+            }
+          },
+          scales: {
+            x: {
+              grid: { display: false },
+              ticks: { color: '#475569', font: { size: 9, weight: '500' } }
+            },
+            y: {
+              reverse: true,
+              grid: { color: 'rgba(255,255,255,0.03)' },
+              ticks: {
+                color: '#475569',
+                font: { size: 9 },
+                callback: v => formatPace(v)
+              }
+            }
+          }
+        }
+      });
+    }
+
+    // ── Auto-fill from profile ──
+    function fillFromProfile() {
+      try {
+        const profile = JPZCH_Store.getProfile();
+        // Could pre-fill based on profile data
+      } catch (e) { /* ignore */ }
+    }
+
+    // ── Button ──
+    document.getElementById('calcBtn').addEventListener('click', (e) => {
+      e.preventDefault();
+      const loading = document.getElementById('loadingArea');
+      loading.style.display = 'block';
+      document.getElementById('resultsArea').style.display = 'none';
+
+      setTimeout(() => {
+        const result = calculate();
+        loading.style.display = 'none';
+        if (result) render(result);
+      }, 350);
+    });
+
+    // ── Init ──
+    fillFromProfile();
+    document.getElementById('timeM').value = 22;
+
+    // Auto-calc on load
+    setTimeout(() => { document.getElementById('calcBtn').click(); }, 400);
+
+  })();
+  </script>
+</body>
+</html>

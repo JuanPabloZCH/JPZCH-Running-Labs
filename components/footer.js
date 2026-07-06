@@ -29,6 +29,7 @@ const JPZCH_FOOTER = `
           <li><a href="/tools/hydration-calculator/" class="text-[#64748B] hover:text-[#CCFF00] text-sm transition-colors duration-300">Calculadora de Hidratación</a></li>
           <li><a href="/tools/running-cost/" class="text-[#64748B] hover:text-[#CCFF00] text-sm transition-colors duration-300">Calculadora de Costos</a></li>
           <li><a href="/tools/gpx-dashboard/" class="text-[#64748B] hover:text-[#CCFF00] text-sm transition-colors duration-300">Analizador GPX</a></li>
+          <li><a href="/tools/progression-calculator/" class="text-[#64748B] hover:text-[#CCFF00] text-sm transition-colors duration-300">Calculadora de Progresión</a></li>
           <li><a href="/tools/training-planner/" class="text-[#64748B] hover:text-[#CCFF00] text-sm transition-colors duration-300">Planificador de Entrenos</a></li>
           <li><a href="/tools/sleep-analyzer/" class="text-[#64748B] hover:text-[#CCFF00] text-sm transition-colors duration-300">Analizador de Sueño</a></li>
           <li><span class="text-[#475569] text-sm cursor-default">Y más (próximamente)</span></li>

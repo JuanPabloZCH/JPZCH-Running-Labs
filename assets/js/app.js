@@ -94,7 +94,7 @@ const JPZCH_App = (() => {
       description: 'Proyecta tu mejora en distancias basada en tu volumen semanal y experiencia de entrenamiento.',
       category: 'planificadores',
       icon: 'trending-up',
-      status: 'coming-soon',
+      status: 'available',
       accent: '#CCFF00',
       url: '/tools/progression-calculator/',
       features: ['Proyección', 'Volumen', 'Carga', 'Periodización']
@@ -194,7 +194,7 @@ const JPZCH_App = (() => {
   function renderStats() {
     const stats = [
       { value: '12', label: 'Herramientas', suffix: '' },
-      { value: '10', label: 'Disponible', suffix: '' },
+      { value: '11', label: 'Disponible', suffix: '' },
       { value: '6', label: 'Categorías', suffix: '' },
       { value: '100', label: 'Gratuito', suffix: '%' }
     ];
