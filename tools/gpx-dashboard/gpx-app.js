@@ -334,9 +334,8 @@
     }
 
     function loadSample(route) {
-      const isFull = route === 'full' || route === 'maraton';
-      const pts = isFull ? MARATON_PTS : MEDIA_MARATON_PTS;
-      const name = isFull ? 'Marat\u00f3n Lima 42K 2026' : 'Media Marat\u00f3n de Lima 2025';
+      const pts = MARATON_PTS;
+      const name = 'Marat\u00f3n Lima 42K 2026';
       document.getElementById('loadingArea').style.display = 'block';
       document.getElementById('analysisArea').style.display = 'none';
       document.getElementById('errorArea').style.display = 'none';

@@ -35,7 +35,7 @@ const JPZCH_App = (() => {
     },
     {
       id: 'training-zones',
-      name: 'Zonas de Entrenamiento',
+      name: 'Zonas Cardíacas',
       description: 'Calcula tus zonas de frecuencia cardíaca y ritmo objetivo según tu perfil fisiológico y umbrales.',
       category: 'planificadores',
       icon: 'activity',
@@ -80,13 +80,13 @@ const JPZCH_App = (() => {
     {
       id: 'cadence-analyzer',
       name: 'Analizador de Cadencia',
-      description: 'Calcula tu cadencia óptima usando el test de 30 segundos y descubre tu eficiencia de zancada.',
+      description: 'Analiza tu cadencia de carrera, descubre tu eficiencia de zancada y entrena con metrónomo integrado.',
       category: 'calculadoras',
       icon: 'rotate-cw',
       status: 'available',
       accent: '#FF5722',
       url: '/tools/cadence-analyzer/',
-      features: ['Test 30s', 'Zancada', 'Eficiencia', 'Objetivo']
+      features: ['SPM actual', 'Zancada', 'Eficiencia', 'Metrónomo']
     },
     {
       id: 'progression-calculator',
@@ -152,7 +152,7 @@ const JPZCH_App = (() => {
     all: { label: 'Todas', icon: 'grid' },
     calculadoras: { label: 'Calculadoras', icon: 'calculator' },
     planificadores: { label: 'Planificadores', icon: 'calendar' },
-    analizadores: { label: 'Analizadores GPX', icon: 'map' }
+    analizadores: { label: 'Analizadores', icon: 'map' }
   };
 
   let currentFilter = 'all';
@@ -195,7 +195,7 @@ const JPZCH_App = (() => {
     const stats = [
       { value: '12', label: 'Herramientas', suffix: '' },
       { value: '12', label: 'Disponible', suffix: '' },
-      { value: '6', label: 'Categorías', suffix: '' },
+      { value: '3', label: 'Categorías', suffix: '' },
       { value: '100', label: 'Gratuito', suffix: '%' }
     ];
     const container = document.getElementById('heroStats');
@@ -291,8 +291,7 @@ const JPZCH_App = (() => {
           </span>
         </div>
         ${isAvailable ? `
-          <div class="mt-4 pt-3 border-t border-white/5 flex items-center justify-between">
-            <span class="text-xs text-[#475569]">Incluye ${tool.features.length} módulos</span>
+          <div class="mt-4 pt-3 border-t border-white/5 flex items-center justify-end">
             <span class="text-xs font-medium text-[${tool.accent}] flex items-center gap-1">
               Abrir
               <svg class="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>

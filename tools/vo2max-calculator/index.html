@@ -1,11 +1,35 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>VO₂Max Calculator — JPZCH Running Labs</title>
   <meta name="description" content="Estima tu VO₂max usando 3 métodos validados: Test de Cooper, Frecuencia Cardíaca en Reposo, o Rendimiento en Carrera. Conoce tu capacidad aeróbica máxima.">
   <meta name="theme-color" content="#0B0F19">
+  <link rel="manifest" href="/running-labs/manifest.json">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="apple-touch-icon" href="/assets/icons/icon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://cdn.tailwindcss.com">
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+  <link rel="preconnect" href="https://unpkg.com">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <meta name="author" content="JPZCH Running Labs">
+  <meta property="og:title" content="Calculadora VO₂Max — JPZCH Running Labs">
+  <meta property="og:description" content="Estima tu VO₂max usando 3 métodos validados: Test Cooper, FC Reposo y Rendimiento en Carrera.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://jpzch.github.io/running-labs/tools/vo2max-calculator/">
+  <meta property="og:image" content="https://jpzch.github.io/running-labs/assets/icons/og-image.svg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Calculadora VO₂Max — JPZCH Running Labs">
+  <meta name="twitter:description" content="Estima tu VO₂max usando 3 métodos validados: Test Cooper, FC Reposo y Rendimiento en Carrera.">
+  <meta name="twitter:image" content="https://jpzch.github.io/running-labs/assets/icons/og-image.svg">
+  <link rel="canonical" href="https://jpzch.github.io/running-labs/tools/vo2max-calculator/">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23CCFF00'/%3E%3Ctext x='16' y='22' font-family='Inter,system-ui,sans-serif' font-size='18' font-weight='900' fill='%230B0F19' text-anchor='middle'%3EJP%3C/text%3E%3C/svg%3E">
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="/assets/css/styles.css">
@@ -17,6 +41,10 @@
     .method-btn { flex: 1; padding: 0.75rem 0.5rem; text-align: center; font-size: 0.75rem; font-weight: 700; border-radius: 0.75rem; border: 1px solid rgba(255,255,255,0.06); cursor: pointer; transition: all 0.3s ease; background: rgba(255,255,255,0.02); color: #64748B; line-height: 1.2; }
     .method-btn:hover { border-color: rgba(34,211,238,0.2); color: #94A3B8; }
     .method-btn.active { background: rgba(34,211,238,0.08); border-color: #22D3EE; color: #22D3EE; box-shadow: 0 0 20px rgba(34,211,238,0.08); }
+    .dist-btn { padding: 0.5rem 1.5rem; font-size: 0.8125rem; font-weight: 700; border-radius: 0.625rem; border: 1px solid rgba(255,255,255,0.06); cursor: pointer; transition: all 0.3s ease; background: rgba(255,255,255,0.02); color: #64748B; }
+    .dist-btn:hover { border-color: rgba(34,211,238,0.2); color: #94A3B8; }
+    .dist-btn.active { background: rgba(34,211,238,0.08); border-color: #22D3EE; color: #22D3EE; box-shadow: 0 0 20px rgba(34,211,238,0.08); }
+    .error-msg { display: none; padding: 0.625rem 0.875rem; border-radius: 0.75rem; font-size: 0.75rem; font-weight: 500; line-height: 1.4; color: #FCA5A5; background: rgba(220,38,38,0.1); border: 1px solid rgba(220,38,38,0.2); }
     .method-panel { display: none; }
     .method-panel.active { display: block; animation: fadePanel 0.3s ease; }
     @keyframes fadePanel { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
@@ -82,6 +110,7 @@
       <div class="method-panel active" id="panel-cooper">
         <label class="form-label">Distancia recorrida en 12 minutos (metros)</label>
         <input type="number" id="cooperDist" class="form-input" placeholder="Ej: 3200" value="3200" min="200" max="6000" step="10">
+        <div id="cooperError" class="error-msg mt-2"></div>
         <p class="text-[#475569] text-[11px] mt-1.5">Corre todo lo que puedas durante 12 min sobre superficie plana. Mide la distancia total en metros.</p>
       </div>
 
@@ -90,6 +119,7 @@
         <input type="number" id="hrAge" class="form-input" placeholder="Ej: 30" value="30" min="10" max="100">
         <label class="form-label mt-4">Frecuencia cardíaca en reposo (lpm)</label>
         <input type="number" id="hrRest" class="form-input" placeholder="Ej: 55" value="55" min="30" max="100">
+        <div id="hrError" class="error-msg mt-2"></div>
         <p class="text-[#475569] text-[11px] mt-1.5">Mide tu pulso al despertar, antes de levantarte. 3 días seguidos y usa el promedio.</p>
       </div>
 
@@ -101,6 +131,7 @@
         </div>
         <label class="form-label">Tu tiempo</label>
         <input type="text" id="raceTime" class="form-input" placeholder="mm:ss" value="25:00" inputmode="numeric">
+        <div id="raceError" class="error-msg mt-2"></div>
         <p class="text-[#475569] text-[11px] mt-1.5">Ingresa tu mejor tiempo reciente en la distancia seleccionada.</p>
       </div>
 
@@ -263,42 +294,63 @@
       return 'muyBajo';
     }
 
+    function showError(msg) {
+      const id = activeMethod === 'cooper' ? 'cooperError' : activeMethod === 'hr' ? 'hrError' : 'raceError';
+      const el = document.getElementById(id);
+      if (el) { el.textContent = msg; el.style.display = 'block'; }
+    }
+    function hideError() {
+      ['cooperError','hrError','raceError'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) { el.textContent = ''; el.style.display = 'none'; }
+      });
+    }
+
     function calcVO2() {
       let vo2 = null;
       let methodName = '';
       let age = 30;
+      hideError();
 
       if (activeMethod === 'cooper') {
         const dist = parseFloat(document.getElementById('cooperDist').value);
-        if (dist && dist > 0) {
-          vo2 = (dist - 504.9) / 44.73;
-          methodName = 'Test de Cooper';
-          if (vo2 < 10 || vo2 > 90) vo2 = null;
+        if (!dist || dist <= 0) { showError('Ingresa una distancia válida en metros'); return; }
+        vo2 = (dist - 504.9) / 44.73;
+        methodName = 'Test de Cooper';
+        if (vo2 < 10 || vo2 > 90) {
+          showError('Esa distancia no es realista para el Test de Cooper (rango típico: 1000–4500 m).');
+          return;
         }
       } else if (activeMethod === 'hr') {
         age = parseInt(document.getElementById('hrAge').value) || 30;
         const hrRest = parseFloat(document.getElementById('hrRest').value);
-        if (hrRest && hrRest > 0 && age >= 10) {
-          const hrMax = 208 - 0.7 * age;
-          vo2 = 15.3 * hrMax / hrRest;
-          methodName = 'FC en Reposo';
-          if (vo2 < 10 || vo2 > 90) vo2 = null;
+        if (!hrRest || hrRest <= 0) { showError('Ingresa una frecuencia cardíaca válida'); return; }
+        if (age < 10 || age > 120) { showError('Ingresa una edad válida (10–120 años)'); return; }
+        const hrMax = 208 - 0.7 * age;
+        vo2 = 15.3 * hrMax / hrRest;
+        methodName = 'FC en Reposo';
+        if (vo2 < 10 || vo2 > 90) {
+          showError('Esa combinación de edad y FC en reposo no es realista. Revisa los valores ingresados.');
+          return;
         }
       } else if (activeMethod === 'race') {
         const tStr = document.getElementById('raceTime').value.trim();
-        const parts = tStr.split(':').map(s => parseFloat(s) || 0);
-        let tMin = 0;
-        if (parts.length === 2) tMin = parts[0] + parts[1] / 60;
-        else if (parts.length === 1) tMin = parts[0];
-        else return null;
-        if (tMin > 0) {
-          const distM = raceDist * 1000;
-          const v = distM / tMin;
-          const vo2race = 0.2 * v + 3.5;
-          const pct = raceDist === 5 ? 0.97 : 0.94;
-          vo2 = vo2race / pct;
-          methodName = `Rendimiento en ${raceDist}K`;
-          if (vo2 < 10 || vo2 > 90) vo2 = null;
+        if (!tStr || !/^\d{1,2}:\d{2}$/.test(tStr)) {
+          showError('Formato inválido. Usa mm:ss (ej: 25:00)');
+          return;
+        }
+        const parts = tStr.split(':').map(s => parseInt(s) || 0);
+        let tMin = parts[0] + parts[1] / 60;
+        if (tMin <= 0) { showError('Ingresa un tiempo válido'); return; }
+        const distM = raceDist * 1000;
+        const v = distM / tMin;
+        const vo2race = 0.2 * v + 3.5;
+        const pct = raceDist === 5 ? 0.97 : 0.94;
+        vo2 = vo2race / pct;
+        methodName = `Rendimiento en ${raceDist}K`;
+        if (vo2 < 10 || vo2 > 90) {
+          showError('Ese tiempo no es realista para la distancia seleccionada. Ingresa un tiempo válido (ej: 5K en 15:00–45:00, 10K en 30:00–1:30:00).');
+          return;
         }
       }
 

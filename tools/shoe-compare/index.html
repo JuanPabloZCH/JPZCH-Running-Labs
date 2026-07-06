@@ -1,11 +1,36 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Comparador de Zapatillas — JPZCH Running Labs</title>
   <meta name="theme-color" content="#0B0F19">
-  <meta name="description" content="Compara drop, peso, amortiguación y precio de zapatillas. Encuentra tu par ideal.">
+  <link rel="manifest" href="/running-labs/manifest.json">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="apple-touch-icon" href="/assets/icons/icon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://cdn.tailwindcss.com">
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+  <link rel="preconnect" href="https://unpkg.com">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <meta name="description" content="Compara drop, peso, amortiguación y precio de tus zapatillas. Encuentra tu par ideal.">
+  <meta name="author" content="JPZCH Running Labs">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23CCFF00'/%3E%3Ctext x='16' y='22' font-family='Inter,system-ui,sans-serif' font-size='18' font-weight='900' fill='%230B0F19' text-anchor='middle'%3EJP%3C/text%3E%3C/svg%3E">
+  <meta property="og:title" content="Comparador de Zapatillas — JPZCH Running Labs">
+  <meta property="og:description" content="Compara drop, peso, amortiguación y precio de tus zapatillas. Encuentra tu par ideal.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://jpzch.github.io/running-labs/tools/shoe-compare/">
+  <meta property="og:image" content="https://jpzch.github.io/running-labs/assets/icons/og-image.svg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Comparador de Zapatillas — JPZCH Running Labs">
+  <meta name="twitter:description" content="Compara drop, peso, amortiguación y precio de tus zapatillas. Encuentra tu par ideal.">
+  <meta name="twitter:image" content="https://jpzch.github.io/running-labs/assets/icons/og-image.svg">
+  <link rel="canonical" href="https://jpzch.github.io/running-labs/tools/shoe-compare/">
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="/assets/css/styles.css">
   <style>
@@ -88,6 +113,9 @@
               <button class="pill-btn" data-brand="ASICS">ASICS</button>
               <button class="pill-btn" data-brand="Saucony">Saucony</button>
               <button class="pill-btn" data-brand="New Balance">New Balance</button>
+              <button class="pill-btn" data-brand="Hoka">Hoka</button>
+              <button class="pill-btn" data-brand="Brooks">Brooks</button>
+              <button class="pill-btn" data-brand="Puma">Puma</button>
             </div>
           </div>
           <div class="flex flex-wrap items-center gap-3">
@@ -189,7 +217,7 @@
     const BRAND_COLORS = {
       'Nike': '#DC2626', 'Adidas': '#1D9A4A', 'ASICS': '#005C9E',
       'Saucony': '#F97316', 'New Balance': '#3B82F6', 'Hoka': '#1E3A5F',
-      'Brooks': '#1B5E20', 'Puma': '#000', 'Mizuno': '#1A1A2E',
+      'Brooks': '#1B5E20', 'Puma': '#E91E63', 'Mizuno': '#1A1A2E',
       'Under Armour': '#F77F00'
     };
 
@@ -216,6 +244,13 @@
       { brand:'Hoka', model:'Mach 6', drop:5, weight:230, cushion:'media', type:'tempo', price:499, id:'hoka_mach6' },
       { brand:'Brooks', model:'Ghost 16', drop:12, weight:275, cushion:'media', type:'daily', price:399, id:'brooks_ghost16' },
       { brand:'Brooks', model:'Hyperion Elite 4', drop:8, weight:215, cushion:'max', type:'racing', price:749, id:'brooks_hyperion_elite4' },
+      // New additions
+      { brand:'Puma', model:'Deviate Nitro 2', drop:8, weight:261, cushion:'max', type:'tempo', price:590, id:'puma_deviate_nitro2' },
+      { brand:'Nike', model:'Streakfly 2', drop:4, weight:145, cushion:'minimalista', type:'racing', price:665, id:'nike_streakfly2' },
+      { brand:'Adidas', model:'Boston 12', drop:7, weight:269, cushion:'media', type:'tempo', price:590, id:'adidas_boston12' },
+      { brand:'Hoka', model:'Rocket X 2', drop:5, weight:218, cushion:'max', type:'racing', price:925, id:'hoka_rocketx2' },
+      { brand:'Brooks', model:'Glycerin 21', drop:10, weight:278, cushion:'max', type:'daily', price:590, id:'brooks_glycerin21' },
+      { brand:'Nike', model:'Zoom Fly 5', drop:10, weight:314, cushion:'max', type:'tempo', price:590, id:'nike_zoomfly5' },
     ];
 
     // ── State ──

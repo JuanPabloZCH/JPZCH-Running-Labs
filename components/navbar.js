@@ -70,12 +70,12 @@ const JPZCH_NAVBAR = `
                 <span class="ml-auto text-[10px] font-semibold text-[#22C55E] bg-[#22C55E]/10 px-2 py-0.5 rounded-full">Disponible</span>
               </a>
               <a href="/tools/training-planner/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-white hover:bg-white/5 transition-colors">
-                <span class="w-2 h-2 rounded-full bg-[#FF5722] shrink-0"></span>
+                <span class="w-2 h-2 rounded-full bg-[#CCFF00] shrink-0"></span>
                 <span class="font-medium">Planificador de Entrenos</span>
                 <span class="ml-auto text-[10px] font-semibold text-[#22C55E] bg-[#22C55E]/10 px-2 py-0.5 rounded-full">Disponible</span>
               </a>
               <a href="/tools/sleep-analyzer/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-white hover:bg-white/5 transition-colors">
-                <span class="w-2 h-2 rounded-full bg-[#8B5CF6] shrink-0"></span>
+                <span class="w-2 h-2 rounded-full bg-[#CCFF00] shrink-0"></span>
                 <span class="font-medium">Analizador de Sueño</span>
                 <span class="ml-auto text-[10px] font-semibold text-[#22C55E] bg-[#22C55E]/10 px-2 py-0.5 rounded-full">Disponible</span>
               </a>
@@ -113,7 +113,7 @@ const JPZCH_NAVBAR = `
               <div class="px-3 py-2 text-[11px] font-medium text-[#475569] uppercase tracking-wider">Cultura &amp; Análisis</div>
               <a href="/recursos/laboratorio-de-elite/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#94A3B8] hover:text-white hover:bg-white/5 transition-colors">
                 <svg class="w-4 h-4 text-[#FBBF24] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-                Laboratorio de Élite
+                El Mural
               </a>
               <a href="/recursos/playlists-bpm/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#94A3B8] hover:text-white hover:bg-white/5 transition-colors">
                 <svg class="w-4 h-4 text-[#8B5CF6] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/></svg>
@@ -225,12 +225,12 @@ const JPZCH_NAVBAR = `
             <span class="ml-auto text-[10px] font-semibold text-[#22C55E] bg-[#22C55E]/10 px-2 py-0.5 rounded-full">Disponible</span>
           </a>
           <a href="/tools/training-planner/" class="flex items-center gap-3 px-8 py-3 text-white hover:bg-white/5 transition-colors">
-            <span class="w-2 h-2 rounded-full bg-[#FF5722] shrink-0"></span>
+            <span class="w-2 h-2 rounded-full bg-[#CCFF00] shrink-0"></span>
             <span class="text-sm">Planificador de Entrenos</span>
             <span class="ml-auto text-[10px] font-semibold text-[#22C55E] bg-[#22C55E]/10 px-2 py-0.5 rounded-full">Disponible</span>
           </a>
           <a href="/tools/sleep-analyzer/" class="flex items-center gap-3 px-8 py-3 text-white hover:bg-white/5 transition-colors">
-            <span class="w-2 h-2 rounded-full bg-[#8B5CF6] shrink-0"></span>
+            <span class="w-2 h-2 rounded-full bg-[#CCFF00] shrink-0"></span>
             <span class="text-sm">Analizador de Sueño</span>
             <span class="ml-auto text-[10px] font-semibold text-[#22C55E] bg-[#22C55E]/10 px-2 py-0.5 rounded-full">Disponible</span>
           </a>
@@ -256,7 +256,7 @@ const JPZCH_NAVBAR = `
           <a href="/recursos/glosario/" class="flex items-center gap-3 px-8 py-2.5 text-sm text-[#94A3B8] hover:text-white hover:bg-white/5 transition-colors">Glosario Runner</a>
           <div class="border-t border-white/5 my-1.5 mx-6"></div>
           <div class="px-8 pt-1 pb-1 text-[10px] font-medium text-[#475569] uppercase tracking-wider">Cultura &amp; Análisis</div>
-          <a href="/recursos/laboratorio-de-elite/" class="flex items-center gap-3 px-8 py-2.5 text-sm text-[#94A3B8] hover:text-white hover:bg-white/5 transition-colors">Laboratorio de Élite</a>
+          <a href="/recursos/laboratorio-de-elite/" class="flex items-center gap-3 px-8 py-2.5 text-sm text-[#94A3B8] hover:text-white hover:bg-white/5 transition-colors">El Mural</a>
           <a href="/recursos/playlists-bpm/" class="flex items-center gap-3 px-8 py-2.5 text-sm text-[#94A3B8] hover:text-white hover:bg-white/5 transition-colors">Playlists BPM</a>
         </div>
       </div>

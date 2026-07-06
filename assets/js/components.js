@@ -87,7 +87,15 @@ const JPZCH_Components = (() => {
     });
   }
 
+  function registerSW() {
+    if ('serviceWorker' in navigator) {
+      const swUrl = JPZCH_Config.url('sw.js');
+      navigator.serviceWorker.register(swUrl).catch(() => {});
+    }
+  }
+
   function init() {
+    registerSW();
     injectNavbar();
     injectFooter();
   }
