@@ -1,2 +1,272 @@
-<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Hidratación  JPZCH Running Labs</title><meta name="theme-color" content="#0B0F19"><script src="https://cdn.tailwindcss.com"></script><link rel="stylesheet" href="/assets/css/styles.css"></head><body><div id="navbar-placeholder"></div><main class="min-h-screen pt-24 pb-12"><div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8"><div class="text-center mb-10"><h1 class="text-3xl md:text-4xl font-black text-white mb-3">Hidratación</h1></div><div class="glass rounded-2xl p-6 md:p-8 text-center"><p class="text-[#94A3B8]">Próximamente.</p><a href="/" class="btn-secondary mt-6 inline-flex">Volver</a></div></div></main><div id="footer-placeholder"></div><script src="/assets/js/config.js"></script><script src="/assets/js/store.js"></script><script src="/components/navbar.js"></script><script src="/components/footer.js"></script><script src="/assets/js/profile-modal.js"></script>
-  <script src="/assets/js/components.js"></script></body></html>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculadora de Hidratación — JPZCH Running Labs</title>
+  <meta name="description" content="Calcula tu tasa de sudoración, pérdida de líquidos y necesidades de hidratación para corredores. Basado en cambio de peso y condiciones climáticas.">
+  <meta name="theme-color" content="#0B0F19">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23CCFF00'/%3E%3Ctext x='16' y='22' font-family='Inter,system-ui,sans-serif' font-size='18' font-weight='900' fill='%230B0F19' text-anchor='middle'%3EJP%3C/text%3E%3C/svg%3E">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/assets/css/styles.css">
+  <style>
+    .hero-hydration { min-height: 35vh; display: flex; align-items: center; position: relative; overflow: hidden; }
+    .hero-hydration::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 30% 30%, rgba(14,165,233,0.04) 0%, transparent 50%), radial-gradient(circle at 70% 70%, rgba(56,189,248,0.03) 0%, transparent 50%); pointer-events: none; }
+    .card-glass { background: linear-gradient(145deg, rgba(19,26,43,0.8), rgba(26,35,50,0.6)); border: 1px solid rgba(255,255,255,0.06); border-radius: 1.25rem; padding: 1.25rem; backdrop-filter: blur(12px); }
+    @media (min-width: 768px) { .card-glass { padding: 1.5rem; } }
+    .text-gradient-blue { background: linear-gradient(135deg, #0EA5E9, #38BDF8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .form-input { background: rgba(11,15,25,0.6); border: 1px solid rgba(255,255,255,0.08); border-radius: 0.75rem; padding: 0.75rem 1rem; color: #F1F5F9; font-size: 1rem; font-weight: 600; width: 100%; transition: all 0.3s ease; outline: none; }
+    .form-input:focus { border-color: #0EA5E9; box-shadow: 0 0 0 3px rgba(14,165,233,0.1); }
+    .form-input::placeholder { color: #475569; font-weight: 400; }
+    .form-label { font-size: 0.75rem; font-weight: 600; color: #64748B; margin-bottom: 0.375rem; display: block; }
+    .result-ring { width: 140px; height: 140px; border-radius: 50%; border: 5px solid rgba(14,165,233,0.15); display: flex; align-items: center; justify-content: center; flex-direction: column; margin: 0 auto; position: relative; }
+    .result-ring .number { font-size: 2rem; font-weight: 900; color: #0EA5E9; line-height: 1; }
+    .result-ring .unit { font-size: 0.65rem; font-weight: 600; color: #64748B; margin-top: 0.2rem; }
+    .badge-status { display: inline-flex; align-items: center; gap: 0.375rem; padding: 0.375rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 700; }
+    .stat-box { background: rgba(11,15,25,0.5); border: 1px solid rgba(255,255,255,0.04); border-radius: 1rem; padding: 1rem; text-align: center; }
+    .stat-value { font-size: 1.35rem; font-weight: 900; font-variant-numeric: tabular-nums; }
+    .stat-label { font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.03em; color: #64748B; margin-top: 0.2rem; }
+    .fade-up { animation: fadeUp 0.5s ease forwards; opacity: 0; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+    .urine-dot { width: 1rem; height: 1rem; border-radius: 50%; display: inline-block; margin-right: 0.5rem; flex-shrink: 0; }
+    @media (max-width: 639px) { .result-ring { width: 110px; height: 110px; } .result-ring .number { font-size: 1.5rem; } .stat-value { font-size: 1.1rem; } }
+  </style>
+</head>
+<body class="antialiased">
+  <div id="navbar-placeholder"></div>
+
+  <section class="hero-hydration pt-24 md:pt-28">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full py-14 md:py-20 relative z-10">
+      <div class="max-w-3xl mx-auto text-center">
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#0EA5E9]/10 border border-[#0EA5E9]/20 text-[#0EA5E9] text-xs font-semibold mb-5">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 21.5c-4.5 0-7.5-3.5-7.5-8 0-4.5 4.5-10 7.5-10s7.5 5.5 7.5 10c0 4.5-3 8-7.5 8z"/></svg>
+          <span>Calculadoras</span>
+        </div>
+        <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black leading-[1.1] tracking-tight mb-4">
+          <span class="text-white">Calculadora de</span>
+          <span class="text-gradient-blue"> Hidratación</span>
+        </h1>
+        <p class="text-[#94A3B8] text-sm sm:text-base md:text-lg leading-relaxed max-w-2xl mx-auto">
+          Mide tu tasa de sudoración y descubre cuánto necesitas beber antes, durante y después de correr.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
+    <div class="card-glass p-6 md:p-8 mb-6 fade-up" style="animation-delay:0.1s">
+      <h2 class="text-white font-bold text-sm mb-5">Datos de tu entrenamiento</h2>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <div>
+          <label class="form-label">Peso antes de correr (kg)</label>
+          <input type="number" id="preWeight" class="form-input" placeholder="Ej: 70" value="70" min="30" max="200" step="0.1">
+        </div>
+        <div>
+          <label class="form-label">Peso después de correr (kg)</label>
+          <input type="number" id="postWeight" class="form-input" placeholder="Ej: 69.2" value="69.2" min="20" max="200" step="0.1">
+        </div>
+        <div>
+          <label class="form-label">Líquido consumido (ml)</label>
+          <input type="number" id="fluidIntake" class="form-input" placeholder="Ej: 500" value="500" min="0" max="5000" step="50">
+        </div>
+        <div>
+          <label class="form-label">Duración (minutos)</label>
+          <input type="number" id="duration" class="form-input" placeholder="Ej: 60" value="60" min="5" max="600">
+        </div>
+      </div>
+
+      <div class="grid sm:grid-cols-2 gap-4 mb-6">
+        <div>
+          <label class="form-label">Temperatura ambiente (°C)</label>
+          <select id="temperature" class="form-input">
+            <option value="10">Frío (&lt; 15°C)</option>
+            <option value="20" selected>Templado (15-25°C)</option>
+            <option value="30">Cálido (25-35°C)</option>
+            <option value="38">Caluroso (&gt; 35°C)</option>
+          </select>
+        </div>
+        <div>
+          <label class="form-label">Intensidad del esfuerzo</label>
+          <select id="intensity" class="form-input">
+            <option value="0.8">Suave (trote)</option>
+            <option value="1" selected>Moderada (rodaje)</option>
+            <option value="1.15">Fuerte (ritmo carrera)</option>
+            <option value="1.3">Muy intensa (series / competición)</option>
+          </select>
+        </div>
+      </div>
+
+      <button id="calcBtn" class="w-full py-3 px-6 rounded-xl font-bold text-sm text-white bg-[#0EA5E9] hover:bg-[#0EA5E9]/90 transition-all duration-300" style="box-shadow: 0 4px 20px rgba(14,165,233,0.25);">
+        Calcular Hidratación
+      </button>
+    </div>
+
+    <div id="resultSection" class="space-y-4 fade-up" style="animation-delay:0.15s;display:none">
+      <div class="card-glass p-6 md:p-8">
+        <h2 class="text-white font-bold text-sm mb-5">Resultados</h2>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+          <div class="stat-box">
+            <div class="stat-value text-[#0EA5E9]" id="sweatRate">—</div>
+            <div class="stat-label">Sudoración (L/h)</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-value text-[#FBBF24]" id="weightLoss">—</div>
+            <div class="stat-label">Pérdida de peso (%)</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-value text-[#34D399]" id="recLow">—</div>
+            <div class="stat-label">Reponer mínimo (ml/h)</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-value text-[#22D3EE]" id="recHigh">—</div>
+            <div class="stat-label">Reponer óptimo (ml/h)</div>
+          </div>
+        </div>
+        <div class="text-center" id="statusArea"></div>
+      </div>
+
+      <div class="card-glass p-6 md:p-8">
+        <h2 class="text-white font-bold text-sm mb-4">Guía rápida de hidratación</h2>
+        <div class="grid md:grid-cols-2 gap-6">
+          <div>
+            <h3 class="text-[#0EA5E9] font-semibold text-xs mb-3">Antes de correr</h3>
+            <ul class="text-[#94A3B8] text-xs space-y-1.5 leading-relaxed">
+              <li>• 500-600 ml de agua 2-3 horas antes</li>
+              <li>• 200-300 ml 20-30 minutos antes</li>
+              <li>• Si es sesión larga (&gt; 90 min), incluir electrolitos</li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="text-[#0EA5E9] font-semibold text-xs mb-3">Después de correr</h3>
+            <ul class="text-[#94A3B8] text-xs space-y-1.5 leading-relaxed">
+              <li>• Recupera 150% del peso perdido en las 2 horas siguientes</li>
+              <li>• Ej: perdiste 1 kg → bebe 1.5 L en las próximas 2 h</li>
+              <li>• Incluye sodio y carbohidratos si la sesión fue intensa</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-glass p-6 md:p-8">
+        <h2 class="text-white font-bold text-sm mb-4">Color de orina como referencia</h2>
+        <div class="grid grid-cols-2 sm:grid-cols-5 gap-3">
+          <div class="text-center">
+            <div class="urine-dot" style="background:#FFF9C4"></div>
+            <span class="text-[#94A3B8] text-[10px] block leading-tight">Bien hidratado</span>
+          </div>
+          <div class="text-center">
+            <div class="urine-dot" style="background:#FFEE58"></div>
+            <span class="text-[#94A3B8] text-[10px] block leading-tight">Hidratado</span>
+          </div>
+          <div class="text-center">
+            <div class="urine-dot" style="background:#FFC107"></div>
+            <span class="text-[#94A3B8] text-[10px] block leading-tight">Levemente bajo</span>
+          </div>
+          <div class="text-center">
+            <div class="urine-dot" style="background:#FF9800"></div>
+            <span class="text-[#94A3B8] text-[10px] block leading-tight">Deshidratado</span>
+          </div>
+          <div class="text-center">
+            <div class="urine-dot" style="background:#A1887F"></div>
+            <span class="text-[#94A3B8] text-[10px] block leading-tight">Muy deshidratado</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-glass p-6 md:p-8 mt-8 fade-up" style="animation-delay:0.25s">
+      <h2 class="text-white font-bold text-lg mb-4">Cómo funciona</h2>
+      <div class="grid md:grid-cols-3 gap-6">
+        <div>
+          <h3 class="text-[#0EA5E9] font-semibold text-sm mb-2">Tasa de sudoración</h3>
+          <p class="text-[#94A3B8] text-xs leading-relaxed">Se calcula como: ((peso_pre - peso_post) × 1000 + líquido_ml) ÷ duración_min × 60 ÷ 1000. La diferencia de peso antes y después, más lo que bebiste, dividido por el tiempo de ejercicio.</p>
+        </div>
+        <div>
+          <h3 class="text-[#0EA5E9] font-semibold text-sm mb-2">Nivel de deshidratación</h3>
+          <p class="text-[#94A3B8] text-xs leading-relaxed">El porcentaje de pérdida de peso determina el estado de hidratación. Pérdidas &gt; 2% afectan el rendimiento; &gt; 5% representan riesgo serio para la salud.</p>
+        </div>
+        <div>
+          <h3 class="text-[#0EA5E9] font-semibold text-sm mb-2">Recomendación personalizada</h3>
+          <p class="text-[#94A3B8] text-xs leading-relaxed">Se ajusta según la temperatura ambiente y la intensidad del esfuerzo. Climas cálidos y esfuerzos intensos aumentan la pérdida de líquidos hasta un 30%.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div id="footer-placeholder"></div>
+  <script src="/assets/js/config.js"></script>
+  <script src="/assets/js/store.js"></script>
+  <script src="/components/navbar.js"></script>
+  <script src="/components/footer.js"></script>
+  <script src="/assets/js/profile-modal.js"></script>
+  <script src="/assets/js/components.js"></script>
+  <script>
+  (() => {
+    const STATUS = [
+      { max: 0.5, label: 'Excelente hidratación', color: '#0EA5E9', bg: 'rgba(14,165,233,0.1)', icon: '💧', tip: 'Sigue así. Estás reponiendo líquidos de manera efectiva.' },
+      { max: 1.0, label: 'Bien hidratado', color: '#34D399', bg: 'rgba(52,211,153,0.1)', icon: '✅', tip: 'Pérdida mínima. Tu estrategia de hidratación funciona bien.' },
+      { max: 2.0, label: 'Levemente deshidratado', color: '#FBBF24', bg: 'rgba(251,191,36,0.1)', icon: '⚠️', tip: 'Comienza a afectar el rendimiento. Bebe más durante el ejercicio.' },
+      { max: 3.0, label: 'Deshidratación moderada', color: '#FF9800', bg: 'rgba(255,152,0,0.1)', icon: '🔶', tip: 'Aumenta la ingesta de líquidos y electrolitos en tu próxima sesión.' },
+      { max: 5.0, label: 'Deshidratación severa', color: '#FF5722', bg: 'rgba(255,87,34,0.1)', icon: '🔴', tip: 'Rendimiento comprometido. Revisa tu plan de hidratación urgentemente.' },
+      { max: 999, label: 'Riesgo de golpe de calor', color: '#DC2626', bg: 'rgba(220,38,38,0.1)', icon: '🚨', tip: 'Detente, hidrátate y busca sombra. Pérdidas &gt; 5% requieren atención médica.' }
+    ];
+
+    const inputs = {
+      pre: () => parseFloat(document.getElementById('preWeight').value) || 0,
+      post: () => parseFloat(document.getElementById('postWeight').value) || 0,
+      fluid: () => parseFloat(document.getElementById('fluidIntake').value) || 0,
+      duration: () => parseFloat(document.getElementById('duration').value) || 0,
+      temp: () => parseFloat(document.getElementById('temperature').value) || 20,
+      intensity: () => parseFloat(document.getElementById('intensity').value) || 1
+    };
+
+    function calc(scroll) {
+      const pre = inputs.pre(), post = inputs.post();
+      const fluid = inputs.fluid(), dur = inputs.duration();
+      const temp = inputs.temp(), intensity = inputs.intensity();
+
+      if (pre <= 0 || post <= 0 || dur <= 0) {
+        document.getElementById('resultSection').style.display = 'none';
+        return;
+      }
+
+      const weightLossKg = pre - post;
+      const weightLossPct = (weightLossKg / pre) * 100;
+      const netFluidLoss = weightLossKg * 1000 + fluid;
+      const sweatRateLh = dur > 0 ? (netFluidLoss / dur * 60) / 1000 : 0;
+
+      const tempFactor = temp > 30 ? 1.25 : temp > 25 ? 1.15 : temp > 15 ? 1.0 : 0.9;
+      const adjFactor = tempFactor * intensity;
+      const recLow = Math.round(sweatRateLh * 0.8 * adjFactor * 100) / 100;
+      const recHigh = Math.round(sweatRateLh * 1.0 * adjFactor * 100) / 100;
+
+      document.getElementById('sweatRate').textContent = sweatRateLh.toFixed(2);
+      document.getElementById('weightLoss').textContent = weightLossPct.toFixed(1) + '%';
+      document.getElementById('recLow').textContent = (recLow * 1000).toFixed(0);
+      document.getElementById('recHigh').textContent = (recHigh * 1000).toFixed(0);
+
+      const status = STATUS.find(s => weightLossPct <= s.max) || STATUS[STATUS.length - 1];
+      document.getElementById('statusArea').innerHTML = `
+        <span class="badge-status" style="background:${status.bg};color:${status.color};border:1px solid ${status.color}20">
+          <span>${status.icon}</span>
+          <span>${status.label}</span>
+        </span>
+        <p class="text-[#94A3B8] text-xs mt-3 max-w-lg mx-auto">${status.tip}</p>
+      `;
+
+      document.getElementById('resultSection').style.display = 'block';
+      if (scroll) document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function calcWithScroll() { calc(true); }
+
+    document.getElementById('calcBtn').addEventListener('click', calcWithScroll);
+    document.querySelectorAll('.form-input').forEach(el => {
+      el.addEventListener('keydown', e => { if (e.key === 'Enter') calcWithScroll(); });
+    });
+
+    calc();
+  })();
+  </script>
+</body>
+</html>

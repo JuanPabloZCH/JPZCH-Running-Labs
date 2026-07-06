@@ -1,2 +1,672 @@
-<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Planificador  JPZCH Running Labs</title><meta name="theme-color" content="#0B0F19"><script src="https://cdn.tailwindcss.com"></script><link rel="stylesheet" href="/assets/css/styles.css"></head><body><div id="navbar-placeholder"></div><main class="min-h-screen pt-24 pb-12"><div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8"><div class="text-center mb-10"><h1 class="text-3xl md:text-4xl font-black text-white mb-3">Planificador de Entrenos</h1></div><div class="glass rounded-2xl p-6 md:p-8 text-center"><p class="text-[#94A3B8]">Próximamente.</p><a href="/" class="btn-secondary mt-6 inline-flex">Volver</a></div></div></main><div id="footer-placeholder"></div><script src="/assets/js/config.js"></script><script src="/assets/js/store.js"></script><script src="/components/navbar.js"></script><script src="/components/footer.js"></script><script src="/assets/js/profile-modal.js"></script>
-  <script src="/assets/js/components.js"></script></body></html>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Planificador de Entrenos — JPZCH Running Labs</title>
+  <meta name="theme-color" content="#0B0F19">
+  <meta name="description" content="Genera planes de entrenamiento personalizados para 5K, 10K, Media Maratón y Maratón.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/assets/css/styles.css">
+  <style>
+    .hr-input{width:100%;padding:0.625rem 0.75rem;background:rgba(11,15,25,0.6);border:1px solid rgba(255,255,255,0.06);border-radius:0.75rem;color:#F1F5F9;font-size:1rem;font-weight:600;text-align:center;outline:none;transition:all 0.3s ease}
+    .hr-input:focus{border-color:rgba(204,255,0,0.3);box-shadow:0 0 0 3px rgba(204,255,0,0.06)}
+    .hr-input::placeholder{color:#475569;font-weight:400}
+    .hr-select{width:100%;padding:0.625rem 0.75rem;background:rgba(11,15,25,0.6);border:1px solid rgba(255,255,255,0.06);border-radius:0.75rem;color:#F1F5F9;font-size:0.9rem;font-weight:500;outline:none;transition:all 0.3s ease;cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%2394A3B8' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 0.75rem center;padding-right:2rem}
+    .hr-select:focus{border-color:rgba(204,255,0,0.3);box-shadow:0 0 0 3px rgba(204,255,0,0.06)}
+    .hr-select option{background:#0B0F19;color:#F1F5F9}
+    .pill-btn{padding:0.5rem 1rem;border-radius:0.75rem;font-size:0.8rem;font-weight:600;border:1px solid rgba(255,255,255,0.06);background:rgba(11,15,25,0.5);color:#94A3B8;cursor:pointer;transition:all 0.3s ease}
+    .pill-btn:hover{border-color:rgba(204,255,0,0.2);color:#F1F5F9}
+    .pill-btn.active{background:rgba(204,255,0,0.12);border-color:rgba(204,255,0,0.3);color:#CCFF00}
+    .day-card{background:rgba(11,15,25,0.4);border:1px solid rgba(255,255,255,0.04);border-radius:0.75rem;padding:0.75rem;transition:all 0.2s ease}
+    .day-card.rest{opacity:0.5}
+    .day-card .day-name{font-size:0.7rem;font-weight:700;text-transform:uppercase;color:#64748B;letter-spacing:0.05em}
+    .day-card .workout-type{font-size:0.8rem;font-weight:600;color:#F1F5F9}
+    .day-card .workout-detail{font-size:0.7rem;color:#94A3B8;margin-top:0.15rem}
+    .day-card .pace-target{font-size:0.65rem;color:#64748B;margin-top:0.1rem}
+    .week-header{cursor:pointer;user-select:none}
+    .week-header:hover{background:rgba(255,255,255,0.02)}
+    .week-content{max-height:0;overflow:hidden;transition:max-height 0.4s ease}
+    .week-content.open{max-height:3000px}
+    .check-label{display:flex;align-items:center;gap:0.5rem;color:#94A3B8;font-size:0.8rem;cursor:pointer;padding:0.4rem 0;transition:color 0.2s}
+    .check-label:hover{color:#F1F5F9}
+    .check-label input[type="checkbox"]{accent-color:#CCFF00;width:1rem;height:1rem;cursor:pointer}
+    .planned-day{background:rgba(204,255,0,0.06);border-color:rgba(204,255,0,0.12)}
+    @media(max-width:640px){.day-card{padding:0.5rem}.day-card .workout-type{font-size:0.7rem}.day-card .workout-detail{font-size:0.65rem}}
+    .week-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:0.5rem}
+    @media(max-width:640px){.week-grid{grid-template-columns:repeat(4,1fr);gap:0.35rem}}
+    .summary-stat{text-align:center;padding:1rem;background:rgba(11,15,25,0.4);border:1px solid rgba(255,255,255,0.04);border-radius:0.875rem}
+    .summary-stat .value{font-size:1.4rem;font-weight:800;color:#F1F5F9}
+    .summary-stat .label{font-size:0.65rem;color:#64748B;text-transform:uppercase;letter-spacing:0.05em;margin-top:0.2rem}
+    .fade-up{opacity:0;transform:translateY(12px);animation:fadeUp 0.4s ease forwards}
+    @keyframes fadeUp{to{opacity:1;transform:translateY(0)}}
+  </style>
+</head>
+<body class="antialiased">
+  <div id="navbar-placeholder"></div>
+
+  <main class="min-h-screen pt-24 pb-16">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+
+      <!-- Hero -->
+      <section class="text-center mb-8">
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#FF5722]/10 border border-[#FF5722]/20 text-[#FF5722] text-xs font-semibold mb-5">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+          Planificadores
+        </div>
+        <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black leading-[1.1] tracking-tight mb-4">
+          <span class="text-white">Planificador de</span><br>
+          <span class="text-gradient-orange">Entrenos</span>
+        </h1>
+        <p class="text-[#94A3B8] text-sm sm:text-base md:text-lg max-w-xl mx-auto leading-relaxed">
+          Genera un plan de entrenamiento personalizado según tu objetivo, nivel actual y disponibilidad.
+        </p>
+      </section>
+
+      <!-- Configuration -->
+      <section class="mb-6 fade-up" style="animation-delay:0.05s">
+        <div class="glass rounded-2xl p-5 md:p-7">
+          <h2 class="text-white font-bold text-sm uppercase tracking-wider mb-5">Configura tu plan</h2>
+          <div class="grid md:grid-cols-2 gap-5">
+            <!-- Goal distance -->
+            <div>
+              <label class="text-xs font-semibold text-[#64748B] uppercase tracking-wider mb-2 block">Distancia Objetivo</label>
+              <div class="flex flex-wrap gap-2" id="goalPills">
+                <button class="pill-btn active" data-goal="5k">5K</button>
+                <button class="pill-btn" data-goal="10k">10K</button>
+                <button class="pill-btn" data-goal="half">Media Maratón</button>
+                <button class="pill-btn" data-goal="full">Maratón</button>
+              </div>
+            </div>
+            <!-- Experience -->
+            <div>
+              <label class="text-xs font-semibold text-[#64748B] uppercase tracking-wider mb-2 block">Nivel</label>
+              <div class="flex flex-wrap gap-2" id="levelPills">
+                <button class="pill-btn" data-level="beginner">Principiante</button>
+                <button class="pill-btn active" data-level="intermediate">Intermedio</button>
+                <button class="pill-btn" data-level="advanced">Avanzado</button>
+              </div>
+            </div>
+            <!-- Recent race distance -->
+            <div>
+              <label class="text-xs font-semibold text-[#64748B] uppercase tracking-wider mb-2 block">Tu mejor carrera reciente</label>
+              <div class="flex flex-wrap gap-2 mb-3" id="raceDistPills">
+                <button class="pill-btn active" data-race-dist="5k">5K</button>
+                <button class="pill-btn" data-race-dist="10k">10K</button>
+                <button class="pill-btn" data-race-dist="half">21.1K</button>
+                <button class="pill-btn" data-race-dist="full">42.2K</button>
+              </div>
+              <div class="flex items-center gap-2">
+                <input type="number" id="raceHours" class="hr-input" placeholder="hh" min="0" max="9" style="max-width:4rem">
+                <span class="text-[#64748B] text-sm">:</span>
+                <input type="number" id="raceMins" class="hr-input" placeholder="mm" min="0" max="59" style="max-width:4rem">
+                <span class="text-[#64748B] text-sm">:</span>
+                <input type="number" id="raceSecs" class="hr-input" placeholder="ss" min="0" max="59" style="max-width:4rem">
+              </div>
+            </div>
+            <!-- Weeks + Days per week -->
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="text-xs font-semibold text-[#64748B] uppercase tracking-wider mb-2 block">Semanas</label>
+                <select id="weeksSelect" class="hr-select">
+                  <option value="4">4 semanas</option>
+                  <option value="8">8 semanas</option>
+                  <option value="12" selected>12 semanas</option>
+                  <option value="16">16 semanas</option>
+                  <option value="20">20 semanas</option>
+                  <option value="24">24 semanas</option>
+                </select>
+              </div>
+              <div>
+                <label class="text-xs font-semibold text-[#64748B] uppercase tracking-wider mb-2 block">Días por semana</label>
+                <select id="daysSelect" class="hr-select">
+                  <option value="3">3 días</option>
+                  <option value="4" selected>4 días</option>
+                  <option value="5">5 días</option>
+                  <option value="6">6 días</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="flex items-center gap-4 mt-5 flex-wrap">
+            <label class="text-xs font-semibold text-[#64748B] uppercase tracking-wider">Día de carrera larga:</label>
+            <div class="flex gap-2" id="longRunDayPills">
+              <button class="pill-btn active" data-lr="6">Sábado</button>
+              <button class="pill-btn" data-lr="0">Domingo</button>
+            </div>
+          </div>
+          <button id="generateBtn" class="mt-6 w-full inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#CCFF00] text-[#0B0F19] font-bold text-sm rounded-xl hover:bg-[#D9FF33] transition-all hover:translate-y-[-2px] hover:shadow-[0_8px_25px_rgba(204,255,0,0.25)] active:translate-y-0">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+            Generar Plan
+          </button>
+        </div>
+      </section>
+
+      <!-- Loading -->
+      <div id="loadingArea" class="glass rounded-2xl p-10 text-center fade-up" style="display:none">
+        <div class="w-10 h-10 border-2 border-[#CCFF00] border-t-transparent rounded-full animate-spin mx-auto mb-3"></div>
+        <p class="text-[#94A3B8] text-sm">Generando tu plan personalizado...</p>
+      </div>
+
+      <!-- Plan Result -->
+      <div id="planArea" style="display:none">
+
+        <!-- Summary Stats -->
+        <section class="mb-6 fade-up" style="animation-delay:0.1s">
+          <div class="glass rounded-2xl p-5 md:p-7">
+            <h2 class="text-white font-bold text-sm uppercase tracking-wider mb-4">Resumen del Plan</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+              <div class="summary-stat"><div class="value" id="planGoal">—</div><div class="label">Objetivo</div></div>
+              <div class="summary-stat"><div class="value" id="planWeeks">—</div><div class="label">Semanas</div></div>
+              <div class="summary-stat"><div class="value" id="planTotalKm">—</div><div class="label">Total km</div></div>
+              <div class="summary-stat"><div class="value" id="planLongestRun">—</div><div class="label">Carrera + larga</div></div>
+              <div class="summary-stat"><div class="value" id="planAvgWeekly">—</div><div class="label">Promedio semanal</div></div>
+              <div class="summary-stat"><div class="value" id="planPaces">—</div><div class="label">Ritmo fácil</div></div>
+              <div class="summary-stat"><div class="value" id="planTempoPace">—</div><div class="label">Ritmo tempo</div></div>
+              <div class="summary-stat"><div class="value" id="planLongPace">—</div><div class="label">Ritmo largo</div></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Weekly breakdown -->
+        <section class="mb-6 fade-up" style="animation-delay:0.15s">
+          <div class="glass rounded-2xl p-5 md:p-7">
+            <div class="flex items-center justify-between mb-4">
+              <h2 class="text-white font-bold text-sm uppercase tracking-wider">Plan Semanal</h2>
+              <span class="text-[#64748B] text-xs">Clic en cada semana para ver detalles</span>
+            </div>
+            <div id="weeksContainer"></div>
+          </div>
+        </section>
+
+        <div class="text-center pb-4">
+          <button id="savePlanBtn" class="inline-flex items-center gap-2 px-5 py-2.5 bg-white/[0.06] hover:bg-white/[0.1] text-[#94A3B8] hover:text-white text-sm font-semibold rounded-xl border border-white/[0.06] transition-all">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"/></svg>
+            Guardar Plan
+          </button>
+        </div>
+      </div>
+
+      <!-- Saved plans -->
+      <div id="savedPlansArea" class="mt-4 fade-up" style="animation-delay:0.2s"></div>
+
+    </div>
+  </main>
+
+  <div id="footer-placeholder"></div>
+
+  <script src="/assets/js/config.js"></script>
+  <script src="/assets/js/store.js"></script>
+  <script src="/components/navbar.js"></script>
+  <script src="/components/footer.js"></script>
+  <script src="/assets/js/profile-modal.js"></script>
+  <script src="/assets/js/components.js"></script>
+
+  <script>
+  (() => {
+    'use strict';
+
+    const DAY_NAMES = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+    const COLORS = {
+      descanso: '#64748B',
+      facil: '#34D399',
+      tempo: '#FBBF24',
+      intervalos: '#EF4444',
+      repeticiones: '#A855F7',
+      largo: '#3B82F6',
+      competencia: '#CCFF00'
+    };
+
+    const WORKOUT_LABELS = {
+      descanso: 'Descanso',
+      facil: 'Carrera Fácil',
+      tempo: 'Ritmo Tempo',
+      intervalos: 'Intervalos',
+      repeticiones: 'Repeticiones',
+      largo: 'Carrera Larga',
+      competencia: 'Ritmo de Competencia'
+    };
+
+    let state = {
+      goal: '5k',
+      level: 'intermediate',
+      raceDist: '5k',
+      raceHours: 0,
+      raceMins: 25,
+      raceSecs: 0,
+      weeks: 12,
+      daysPerWeek: 4,
+      longRunDay: 6,
+      plan: null
+    };
+
+    // ── Pill button handler ──
+    document.querySelectorAll('.pill-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const group = btn.closest('[id$="Pills"], #longRunDayPills, #levelPills, #goalPills, #raceDistPills');
+        if (group) {
+          group.querySelectorAll('.pill-btn').forEach(b => b.classList.remove('active'));
+        }
+        btn.classList.add('active');
+
+        if (btn.dataset.goal) state.goal = btn.dataset.goal;
+        if (btn.dataset.level) state.level = btn.dataset.level;
+        if (btn.dataset.raceDist) state.raceDist = btn.dataset.raceDist;
+        if (btn.dataset.lr !== undefined) state.longRunDay = parseInt(btn.dataset.lr);
+      });
+    });
+
+    // ── Input handlers ──
+    document.getElementById('raceHours').addEventListener('input', e => { state.raceHours = parseInt(e.target.value) || 0; });
+    document.getElementById('raceMins').addEventListener('input', e => { state.raceMins = parseInt(e.target.value) || 0; });
+    document.getElementById('raceSecs').addEventListener('input', e => { state.raceSecs = parseInt(e.target.value) || 0; });
+    document.getElementById('weeksSelect').addEventListener('change', e => { state.weeks = parseInt(e.target.value); });
+    document.getElementById('daysSelect').addEventListener('change', e => { state.daysPerWeek = parseInt(e.target.value); });
+
+    // ── Pace helpers ──
+    function timeToSeconds(h, m, s) { return h * 3600 + m * 60 + s; }
+
+    function secondsToPace(secPerKm) {
+      if (!secPerKm || secPerKm <= 0) return '—';
+      const m = Math.floor(secPerKm / 60);
+      const s = Math.round(secPerKm % 60);
+      return `${m}:${String(s).padStart(2,'0')} /km`;
+    }
+
+    function formatPaceRange(min, max) {
+      if (!min || !max) return '—';
+      return `${secondsToPace(min)} – ${secondsToPace(max)}`;
+    }
+
+    function formatDistance(km) {
+      if (!km || km <= 0) return '—';
+      if (km < 1) return `${Math.round(km * 1000)} m`;
+      return `${km.toFixed(1)} km`;
+    }
+
+    // ── Race distance lookup ──
+    function getRaceDistanceKm(key) {
+      const map = { '5k': 5, '10k': 10, 'half': 21.0975, 'full': 42.195 };
+      return map[key] || 5;
+    }
+
+    // ── Calculate training paces from recent race ──
+    function calculatePaces(raceDistKey, hours, mins, secs) {
+      const distKm = getRaceDistanceKm(raceDistKey);
+      const totalSecs = timeToSeconds(hours, mins, secs);
+      if (totalSecs <= 0) return null;
+      const racePace = totalSecs / distKm;
+
+      // VDOT-inspired multipliers
+      return {
+        race: racePace,
+        facil: racePace * 1.25,           // ~25% slower
+        facilMin: racePace * 1.15,
+        facilMax: racePace * 1.35,
+        tempo: racePace * 1.08,            // ~8% slower
+        tempoMin: racePace * 1.05,
+        tempoMax: racePace * 1.12,
+        intervalos: racePace * 0.95,        // ~5% faster
+        intervalosMin: racePace * 0.93,
+        intervalosMax: racePace * 0.97,
+        repeticiones: racePace * 0.88,      // ~12% faster
+        repeticionesMin: racePace * 0.85,
+        repeticionesMax: racePace * 0.90,
+        largo: racePace * 1.18,             // ~18% slower
+        largoMin: racePace * 1.12,
+        largoMax: racePace * 1.25
+      };
+    }
+
+    // ── Workout types by day ──
+    function getDayType(dayOfWeek, weekIndex, totalWeeks, daysPerWeek, goalKm, level, longRunDay) {
+      // Week classification
+      const isFirstWeek = weekIndex === 0;
+      const isLastWeek = weekIndex >= totalWeeks - 1;
+      const isTaper = weekIndex >= totalWeeks - 2 && totalWeeks > 4;
+      const weekProg = weekIndex / (totalWeeks - 1);
+      const isLongRun = dayOfWeek === longRunDay;
+
+      // Count training days assigned so far this week
+      // We'll determine rest days vs running days
+
+      if (isLongRun) return 'largo';
+
+      // Determine workout based on day and week
+      const dayVal = (dayOfWeek + 2) % 7; // shift so Monday=0
+
+      // Rest days pattern based on daysPerWeek
+      const restDays = [];
+      const allDays = [0,1,2,3,4,5,6].filter(d => d !== longRunDay);
+      const runDays = daysPerWeek - 1; // minus long run day
+      const restCount = 6 - runDays;
+
+      // Distribute rest days (Wednesday, Friday typically)
+      const typicalRest = [2, 4, 1, 5]; // Wed, Fri, Tue, Sat
+      for (let i = 0; i < restCount && i < typicalRest.length; i++) {
+        if (typicalRest[i] !== longRunDay) restDays.push(typicalRest[i]);
+      }
+
+      if (restDays.includes(dayOfWeek)) return 'descanso';
+      if (isTaper && dayOfWeek === longRunDay) return 'facil';
+      if (isLastWeek && dayOfWeek === longRunDay) return 'competencia';
+
+      // Progressive intensity
+      if (level === 'beginner') {
+        // Beginners: mostly easy runs, tempo in middle weeks
+        if (weekProg > 0.25 && weekProg < 0.75 && (dayVal % 4 === 0)) return 'tempo';
+        if (weekProg > 0.4 && weekProg < 0.6 && (dayVal % 5 === 0)) return 'intervalos';
+        return 'facil';
+      } else if (level === 'advanced') {
+        if (weekProg > 0.15 && (dayVal % 3 === 0)) return 'intervalos';
+        if (weekProg > 0.3 && (dayVal % 4 === 0)) return 'tempo';
+        if (weekProg > 0.5 && (dayVal % 6 === 0)) return 'repeticiones';
+        return 'facil';
+      } else {
+        // Intermediate
+        if (weekProg > 0.2 && (dayVal % 3 === 0)) return 'intervalos';
+        if (weekProg > 0.35 && (dayVal % 4 === 0)) return 'tempo';
+        if (weekProg > 0.55 && (dayVal % 6 === 0) && level === 'advanced') return 'repeticiones';
+        return 'facil';
+      }
+    }
+
+    // ── Training distance for a workout ──
+    function getWorkoutDistance(type, weekIndex, totalWeeks, goalKm, level, daysPerWeek) {
+      const prog = weekIndex / (totalWeeks - 1);
+      const base = goalKm <= 10 ? 5 : 8; // base weekly volume for shorter goals
+
+      // Weekly volume progression
+      let weeklyKm;
+      if (goalKm <= 5) {
+        weeklyKm = 15 + prog * 25;
+      } else if (goalKm <= 10) {
+        weeklyKm = 20 + prog * 35;
+      } else if (goalKm <= 21.1) {
+        weeklyKm = 25 + prog * 50;
+      } else {
+        weeklyKm = 30 + prog * 70;
+      }
+
+      // Level multiplier
+      const levelMult = level === 'beginner' ? 0.8 : level === 'advanced' ? 1.2 : 1;
+      weeklyKm *= levelMult;
+
+      // Taper
+      if (weekIndex >= totalWeeks - 2) weeklyKm *= 0.6;
+      if (weekIndex >= totalWeeks - 1) weeklyKm *= 0.7;
+
+      const runDaysPerWeek = Math.max(1, daysPerWeek - 1);
+
+      if (type === 'largo') {
+        // Long run: 25-35% of weekly volume
+        const lrPct = 0.25 + prog * 0.1;
+        return Math.max(3, weeklyKm * lrPct);
+      }
+      if (type === 'tempo') return Math.max(3, weeklyKm * 0.2);
+      if (type === 'intervalos') return Math.max(2, weeklyKm * 0.15);
+      if (type === 'repeticiones') return Math.max(1.5, weeklyKm * 0.12);
+      if (type === 'competencia') return Math.min(goalKm, weeklyKm * 0.15);
+      if (type === 'descanso') return 0;
+      // Easy run
+      const easyKm = Math.max(2, (weeklyKm * 0.55) / runDaysPerWeek);
+      return easyKm;
+    }
+
+    // ── Generate plan ──
+    function generatePlan() {
+      const goalKmMap = { '5k': 5, '10k': 10, 'half': 21.0975, 'full': 42.195 };
+      const goalKm = goalKmMap[state.goal] || 5;
+      const weeks = state.weeks;
+      const daysPerWeek = state.daysPerWeek;
+      const level = state.level;
+      const longRunDay = state.longRunDay;
+
+      const paces = calculatePaces(state.raceDist, state.raceHours, state.raceMins, state.raceSecs);
+      if (!paces) return null;
+
+      // Determine training days (non-rest)
+      const allDays = [0,1,2,3,4,5,6];
+      const restDays = [];
+      // Always rest the day after long run (unless we have many days)
+      const dayAfterLongRun = (longRunDay + 1) % 7;
+      if (daysPerWeek <= 4) restDays.push(dayAfterLongRun);
+      // Rest mid-week for lower volume
+      if (daysPerWeek <= 4) restDays.push(2); // Wednesday
+      if (daysPerWeek <= 3) restDays.push(5); // Friday
+      // Add remaining rest days
+      const runDaysNeeded = daysPerWeek;
+      const currentRunDays = allDays.filter(d => !restDays.includes(d) && d !== longRunDay).length;
+      let extraRest = allDays.filter(d => !restDays.includes(d) && d !== longRunDay).length - Math.max(0, runDaysNeeded - 1);
+      if (extraRest > 0) {
+        const candidates = allDays.filter(d => !restDays.includes(d) && d !== longRunDay);
+        for (let i = 0; i < extraRest && i < candidates.length; i++) {
+          restDays.push(candidates[i]);
+        }
+      }
+
+      const weeksPlan = [];
+      let totalKm = 0;
+      let longestRun = 0;
+
+      for (let w = 0; w < weeks; w++) {
+        const days = [];
+        let weekKm = 0;
+        for (let d = 0; d < 7; d++) {
+          const type = restDays.includes(d) ? 'descanso' : getDayType(d, w, weeks, daysPerWeek, goalKm, level, longRunDay);
+          const dist = getWorkoutDistance(type, w, weeks, goalKm, level, daysPerWeek);
+          const roundedDist = Math.round(dist * 10) / 10;
+          days.push({ dayOfWeek: d, type, dist: roundedDist });
+          if (type !== 'descanso') {
+            weekKm += roundedDist;
+            totalKm += roundedDist;
+          }
+        }
+        // Set long run specifically
+        days.forEach(d => {
+          if (d.dayOfWeek === longRunDay) {
+            d.type = 'largo';
+            const lrDist = getWorkoutDistance('largo', w, weeks, goalKm, level, daysPerWeek);
+            d.dist = Math.round(lrDist * 10) / 10;
+            if (d.dist > longestRun) longestRun = d.dist;
+          }
+          if (w >= weeks - 2 && d.dayOfWeek === longRunDay) {
+            d.type = w >= weeks - 1 ? 'competencia' : 'facil';
+            if (w >= weeks - 1) {
+              d.dist = Math.round(goalKm * 0.3 * 10) / 10;
+            } else {
+              d.dist = Math.round(getWorkoutDistance('facil', w, weeks, goalKm, level, daysPerWeek) * 10) / 10;
+            }
+          }
+        });
+        weeksPlan.push({ week: w + 1, days, weekKm: Math.round(weekKm * 10) / 10 });
+      }
+
+      // Determine pace display
+      const paceDisplay = {
+        facil: paces ? formatPaceRange(paces.facilMin, paces.facilMax) : '—',
+        tempo: paces ? formatPaceRange(paces.tempoMin, paces.tempoMax) : '—',
+        largo: paces ? formatPaceRange(paces.largoMin, paces.largoMax) : '—'
+      };
+
+      const goalLabels = { '5k': '5K', '10k': '10K', 'half': 'Media Maratón', 'full': 'Maratón' };
+      const levelLabels = { 'beginner': 'Principiante', 'intermediate': 'Intermedio', 'advanced': 'Avanzado' };
+
+      return {
+        goal: goalLabels[state.goal],
+        goalKm,
+        weeks,
+        daysPerWeek,
+        level: levelLabels[state.level],
+        totalKm: Math.round(totalKm * 10) / 10,
+        longestRun: Math.round(longestRun * 10) / 10,
+        avgWeekly: Math.round((totalKm / weeks) * 10) / 10,
+        paces: paceDisplay,
+        paceSeconds: paces,
+        weeksPlan,
+        created: new Date().toISOString()
+      };
+    }
+
+    // ── Render plan ──
+    function renderPlan(plan) {
+      if (!plan) return;
+
+      // Summary
+      document.getElementById('planGoal').textContent = plan.goal;
+      document.getElementById('planWeeks').textContent = `${plan.weeks} semanas`;
+      document.getElementById('planTotalKm').textContent = formatDistance(plan.totalKm);
+      document.getElementById('planLongestRun').textContent = formatDistance(plan.longestRun);
+      document.getElementById('planAvgWeekly').textContent = formatDistance(plan.avgWeekly);
+      document.getElementById('planPaces').textContent = plan.paces.facil;
+      document.getElementById('planTempoPace').textContent = plan.paces.tempo;
+      document.getElementById('planLongPace').textContent = plan.paces.largo;
+
+      document.getElementById('planArea').style.display = 'block';
+      document.getElementById('planArea').scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+      // Weekly breakdown
+      const container = document.getElementById('weeksContainer');
+      container.innerHTML = plan.weeksPlan.map((wp, wi) => {
+        const isOpen = wi === 0 ? 'open' : '';
+        return `
+          <div class="border border-white/[0.06] rounded-xl mb-2 overflow-hidden">
+            <div class="week-header flex items-center justify-between p-3 md:p-4 transition ${isOpen ? 'bg-white/[0.03]' : ''}" data-week="${wi}">
+              <div class="flex items-center gap-3">
+                <span class="w-7 h-7 rounded-full bg-[#CCFF00]/10 border border-[#CCFF00]/20 text-[#CCFF00] text-xs font-bold flex items-center justify-center">${wp.week}</span>
+                <div>
+                  <span class="text-white text-sm font-semibold">Semana ${wp.week}</span>
+                  <span class="text-[#64748B] text-xs ml-2">${wp.weekKm.toFixed(1)} km</span>
+                </div>
+              </div>
+              <svg class="w-4 h-4 text-[#64748B] transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </div>
+            <div class="week-content ${isOpen}">
+              <div class="p-3 md:p-4 pt-0">
+                <div class="week-grid">
+                  ${wp.days.map(d => {
+                    const color = COLORS[d.type] || '#64748B';
+                    const label = WORKOUT_LABELS[d.type] || d.type;
+                    const distStr = d.dist > 0 ? formatDistance(d.dist) : '—';
+                    const paceStr = d.type !== 'descanso' && d.dist > 0 && plan.paceSeconds ? getWorkoutPaceStr(d.type, plan.paceSeconds) : '';
+                    const isRest = d.type === 'descanso';
+                    return `<div class="day-card ${isRest ? 'rest' : ''}">
+                      <div class="day-name">${DAY_NAMES[d.dayOfWeek].substring(0, 3)}</div>
+                      <div class="workout-type" style="color:${color}">${label}</div>
+                      <div class="workout-detail">${distStr}</div>
+                      ${paceStr ? `<div class="pace-target">${paceStr}</div>` : ''}
+                    </div>`;
+                  }).join('')}
+                </div>
+              </div>
+            </div>
+          </div>`;
+      }).join('');
+
+      // Week accordion toggle
+      container.querySelectorAll('.week-header').forEach(h => {
+        h.addEventListener('click', () => {
+          const content = h.nextElementSibling;
+          const chevron = h.querySelector('svg:last-child');
+          const wasOpen = content.classList.contains('open');
+          content.classList.toggle('open');
+          h.classList.toggle('bg-white/[0.03]');
+          if (chevron) chevron.classList.toggle('rotate-180');
+        });
+      });
+    }
+
+    function getWorkoutPaceStr(type, paces) {
+      if (!paces) return '';
+      const map = {
+        facil: () => formatPaceRange(paces.facilMin, paces.facilMax),
+        tempo: () => formatPaceRange(paces.tempoMin, paces.tempoMax),
+        intervalos: () => formatPaceRange(paces.intervalosMin, paces.intervalosMax),
+        repeticiones: () => formatPaceRange(paces.repeticionesMin, paces.repeticionesMax),
+        largo: () => formatPaceRange(paces.largoMin, paces.largoMax),
+        competencia: () => secondsToPace(paces.race)
+      };
+      return map[type] ? map[type]() : '';
+    }
+
+    // ── Generate action ──
+    document.getElementById('generateBtn').addEventListener('click', (e) => {
+      e.preventDefault();
+      const loading = document.getElementById('loadingArea');
+      loading.style.display = 'block';
+      document.getElementById('planArea').style.display = 'none';
+
+      setTimeout(() => {
+        const plan = generatePlan();
+        loading.style.display = 'none';
+        if (plan) {
+          state.plan = plan;
+          renderPlan(plan);
+        }
+      }, 400);
+    });
+
+    // ── Save plan ──
+    document.getElementById('savePlanBtn').addEventListener('click', () => {
+      if (!state.plan) return;
+      const saved = JPZCH_Store.getToolData('training-planner') || [];
+      saved.push(state.plan);
+      JPZCH_Store.saveToolData('training-planner', saved);
+      renderSavedPlans();
+    });
+
+    // ── Render saved plans ──
+    function renderSavedPlans() {
+      const area = document.getElementById('savedPlansArea');
+      const saved = JPZCH_Store.getToolData('training-planner') || [];
+      if (saved.length === 0) {
+        area.style.display = 'none';
+        return;
+      }
+      area.style.display = 'block';
+      area.innerHTML = `
+        <div class="glass rounded-2xl p-5 md:p-7">
+          <h2 class="text-white font-bold text-sm uppercase tracking-wider mb-4">Planes Guardados</h2>
+          ${saved.map((p, i) => `
+            <div class="flex items-center justify-between py-3 border-b border-white/[0.04] last:border-0">
+              <div>
+                <span class="text-white text-sm font-semibold">${p.goal}</span>
+                <span class="text-[#64748B] text-xs ml-2">${p.weeks} sem · ${p.daysPerWeek} d/sem · ${p.totalKm.toFixed(0)} km total</span>
+              </div>
+              <button class="load-plan-btn text-[#CCFF00] text-xs font-semibold hover:underline bg-transparent border-none cursor-pointer" data-plan-index="${i}">Cargar</button>
+            </div>
+          `).join('')}
+        </div>`;
+
+      area.querySelectorAll('.load-plan-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const idx = parseInt(btn.dataset.planIndex);
+          const saved = JPZCH_Store.getToolData('training-planner') || [];
+          if (saved[idx]) {
+            renderPlan(saved[idx]);
+          }
+        });
+      });
+    }
+
+    // ── Fill default race time from profile ──
+    function fillFromProfile() {
+      try {
+        const profile = JPZCH_Store.getProfile();
+        // Could auto-fill based on profile preferences, but for now keep defaults
+      } catch (e) { /* ignore */ }
+    }
+
+    // ── Init ──
+    fillFromProfile();
+    renderSavedPlans();
+
+    // Auto-generate on page load
+    setTimeout(() => {
+      document.getElementById('generateBtn').click();
+    }, 350);
+
+  })();
+  </script>
+</body>
+</html>

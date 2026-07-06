@@ -1,2 +1,404 @@
-<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Running Cost  JPZCH Running Labs</title><meta name="theme-color" content="#0B0F19"><script src="https://cdn.tailwindcss.com"></script><link rel="stylesheet" href="/assets/css/styles.css"></head><body><div id="navbar-placeholder"></div><main class="min-h-screen pt-24 pb-12"><div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8"><div class="text-center mb-10"><h1 class="text-3xl md:text-4xl font-black text-white mb-3">Running Cost</h1></div><div class="glass rounded-2xl p-6 md:p-8 text-center"><p class="text-[#94A3B8]">Próximamente.</p><a href="/" class="btn-secondary mt-6 inline-flex">Volver</a></div></div></main><div id="footer-placeholder"></div><script src="/assets/js/config.js"></script><script src="/assets/js/store.js"></script><script src="/components/navbar.js"></script><script src="/components/footer.js"></script><script src="/assets/js/profile-modal.js"></script>
-  <script src="/assets/js/components.js"></script></body></html>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculadora de Costos — JPZCH Running Labs</title>
+  <meta name="description" content="Calcula cuánto gastas al año corriendo: zapatillas, inscripciones, viajes, nutrición, equipo y salud. Con selector de moneda y período.">
+  <meta name="theme-color" content="#0B0F19">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23CCFF00'/%3E%3Ctext x='16' y='22' font-family='Inter,system-ui,sans-serif' font-size='18' font-weight='900' fill='%230B0F19' text-anchor='middle'%3EJP%3C/text%3E%3C/svg%3E">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/assets/css/styles.css">
+  <style>
+    .hero-cost { min-height: 35vh; display: flex; align-items: center; position: relative; overflow: hidden; }
+    .hero-cost::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 30% 30%, rgba(16,185,129,0.04) 0%, transparent 50%), radial-gradient(circle at 70% 70%, rgba(16,185,129,0.03) 0%, transparent 50%); pointer-events: none; }
+    .card-glass { background: linear-gradient(145deg, rgba(19,26,43,0.8), rgba(26,35,50,0.6)); border: 1px solid rgba(255,255,255,0.06); border-radius: 1.25rem; padding: 1.25rem; backdrop-filter: blur(12px); }
+    @media (min-width: 768px) { .card-glass { padding: 1.5rem; } }
+    .text-gradient-emerald { background: linear-gradient(135deg, #10B981, #34D399); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .form-input { background: rgba(11,15,25,0.6); border: 1px solid rgba(255,255,255,0.08); border-radius: 0.75rem; padding: 0.6rem 0.65rem; color: #F1F5F9; font-size: 0.85rem; font-weight: 600; width: 100%; transition: all 0.3s ease; outline: none; }
+    .form-input:focus { border-color: #10B981; box-shadow: 0 0 0 3px rgba(16,185,129,0.1); }
+    .form-input::placeholder { color: #475569; font-weight: 400; }
+    .form-label { font-size: 0.7rem; font-weight: 600; color: #64748B; margin-bottom: 0.25rem; display: block; }
+    .stat-box { background: rgba(11,15,25,0.5); border: 1px solid rgba(255,255,255,0.04); border-radius: 1rem; padding: 1rem; text-align: center; }
+    .stat-value { font-size: 1.5rem; font-weight: 900; font-variant-numeric: tabular-nums; }
+    .stat-label { font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.03em; color: #64748B; margin-top: 0.2rem; }
+    .fade-up { animation: fadeUp 0.5s ease forwards; opacity: 0; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+    .cat-icon { width: 1.75rem; height: 1.75rem; border-radius: 0.5rem; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; flex-shrink: 0; }
+    .cost-row { display: grid; grid-template-columns: auto 1fr; gap: 0.75rem; align-items: center; padding: 0.8rem 0; border-bottom: 1px solid rgba(255,255,255,0.03); }
+    .cost-row:last-child { border-bottom: none; }
+    .subtotal-inline { font-size: 0.8rem; font-weight: 700; color: #10B981; white-space: nowrap; }
+    .period-btn { padding: 0.4rem 1rem; font-size: 0.8rem; font-weight: 700; border-radius: 0.5rem; border: 1px solid rgba(255,255,255,0.06); cursor: pointer; transition: all 0.3s ease; background: rgba(255,255,255,0.02); color: #64748B; }
+    .period-btn:hover { border-color: rgba(16,185,129,0.2); color: #94A3B8; }
+    .period-btn.active { background: rgba(16,185,129,0.1); border-color: #10B981; color: #10B981; }
+    select.form-input { cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748B' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 0.65rem center; padding-right: 2rem; }
+    .tooltip-cost { font-size: 0.65rem; color: #475569; margin-top: 0.15rem; }
+    .donut-container { width: 180px; height: 180px; margin: 0 auto; position: relative; }
+    .donut-container svg { transform: rotate(-90deg); }
+    .donut-label { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    .donut-label .total { font-size: 1.3rem; font-weight: 900; color: #F1F5F9; line-height: 1; }
+    .donut-label .period { font-size: 0.6rem; color: #64748B; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 0.2rem; }
+    .legend-dot { width: 0.6rem; height: 0.6rem; border-radius: 50%; display: inline-block; flex-shrink: 0; }
+    @media (max-width: 639px) { .stat-value { font-size: 1.15rem; } .donut-container { width: 150px; height: 150px; } .donut-label .total { font-size: 1.1rem; } .cost-row { gap: 0.5rem; } }
+  </style>
+</head>
+<body class="antialiased">
+  <div id="navbar-placeholder"></div>
+
+  <section class="hero-cost pt-24 md:pt-28">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full py-14 md:py-20 relative z-10">
+      <div class="max-w-3xl mx-auto text-center">
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#10B981]/10 border border-[#10B981]/20 text-[#10B981] text-xs font-semibold mb-5">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          <span>Calculadoras</span>
+        </div>
+        <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black leading-[1.1] tracking-tight mb-4">
+          <span class="text-white">Calculadora de</span>
+          <span class="text-gradient-emerald"> Costos</span>
+        </h1>
+        <p class="text-[#94A3B8] text-sm sm:text-base md:text-lg leading-relaxed max-w-2xl mx-auto">
+          Descubre cuánto inviertes al año corriendo. Elige tu moneda y el período a calcular.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
+    <div class="card-glass p-6 md:p-8 mb-6 fade-up" style="animation-delay:0.1s">
+      <div class="flex flex-col sm:flex-row sm:items-center gap-4 mb-6 pb-5 border-b border-white/5">
+        <div class="flex items-center gap-3">
+          <label class="form-label mb-0">Moneda</label>
+          <select id="currency" class="form-input w-28">
+            <option value="PEN">PEN S/</option>
+            <option value="MXN">MXN $</option>
+            <option value="USD">USD $</option>
+            <option value="EUR">EUR €</option>
+            <option value="COP">COP $</option>
+            <option value="ARS">ARS $</option>
+            <option value="CLP">CLP $</option>
+            <option value="BRL">BRL R$</option>
+          </select>
+        </div>
+        <div class="flex items-center gap-3">
+          <label class="form-label mb-0">Período</label>
+          <div class="flex gap-1.5" id="periodSelector">
+            <button class="period-btn" data-period="3">3 meses</button>
+            <button class="period-btn active" data-period="12">12 meses</button>
+            <button class="period-btn" data-period="24">24 meses</button>
+          </div>
+        </div>
+      </div>
+
+      <h2 class="text-white font-bold text-sm mb-2">Tus gastos</h2>
+      <div class="space-y-0" id="categoriesContainer">
+        <div class="cost-row" data-cat="zapatillas">
+          <div class="cat-icon bg-[#10B981]/15 text-[#10B981]">👟</div>
+          <div>
+            <div class="flex flex-wrap items-center gap-x-3 gap-y-1.5">
+              <span class="text-white text-sm font-semibold">Zapatillas</span>
+              <div class="flex items-center gap-1.5">
+                <input type="number" id="shoePairs" class="form-input w-14 text-center" value="2" min="0" max="20">
+                <span class="text-[#475569] text-xs">×</span>
+                <input type="number" id="shoeCost" class="form-input w-22 text-center" value="1200" min="0" max="99999" step="50">
+              </div>
+              <span class="subtotal-inline" id="shoeSubtotal">= $0</span>
+            </div>
+            <div class="tooltip-cost">Pares que compras al año × costo por par</div>
+          </div>
+        </div>
+        <div class="cost-row" data-cat="inscripciones">
+          <div class="cat-icon bg-[#FBBF24]/15 text-[#FBBF24]">🏅</div>
+          <div>
+            <div class="flex flex-wrap items-center gap-x-3 gap-y-1.5">
+              <span class="text-white text-sm font-semibold">Inscripciones</span>
+              <div class="flex items-center gap-1.5">
+                <input type="number" id="raceCount" class="form-input w-14 text-center" value="4" min="0" max="100">
+                <span class="text-[#475569] text-xs">×</span>
+                <input type="number" id="raceCost" class="form-input w-22 text-center" value="600" min="0" max="99999" step="50">
+              </div>
+              <span class="subtotal-inline" id="raceSubtotal">= $0</span>
+            </div>
+            <div class="tooltip-cost">Carreras al año × costo de inscripción promedio</div>
+          </div>
+        </div>
+        <div class="cost-row" data-cat="viajes">
+          <div class="cat-icon bg-[#8B5CF6]/15 text-[#8B5CF6]">✈️</div>
+          <div>
+            <div class="flex flex-wrap items-center gap-x-3 gap-y-1.5">
+              <span class="text-white text-sm font-semibold">Viajes</span>
+              <div class="flex items-center gap-1.5">
+                <input type="number" id="travelCount" class="form-input w-14 text-center" value="2" min="0" max="50">
+                <span class="text-[#475569] text-xs">×</span>
+                <input type="number" id="travelCost" class="form-input w-22 text-center" value="3000" min="0" max="99999" step="100">
+              </div>
+              <span class="subtotal-inline" id="travelSubtotal">= $0</span>
+            </div>
+            <div class="tooltip-cost">Viajes al año (transporte + alojamiento + alimentos)</div>
+          </div>
+        </div>
+        <div class="cost-row" data-cat="nutricion">
+          <div class="cat-icon bg-[#FF5722]/15 text-[#FF5722]">🥤</div>
+          <div>
+            <div class="flex flex-wrap items-center gap-x-3 gap-y-1.5">
+              <span class="text-white text-sm font-semibold">Nutrición</span>
+              <div class="flex items-center gap-1.5">
+                <input type="number" id="nutritionMonthly" class="form-input w-22 text-center" value="400" min="0" max="99999" step="50">
+                <span class="text-[#475569] text-[10px]">/mes</span>
+              </div>
+              <span class="subtotal-inline" id="nutritionSubtotal">= $0</span>
+            </div>
+            <div class="tooltip-cost">Geles, barras, electrolitos, suplementos al mes</div>
+          </div>
+        </div>
+        <div class="cost-row" data-cat="equipo">
+          <div class="cat-icon bg-[#22D3EE]/15 text-[#22D3EE]">🧦</div>
+          <div>
+            <div class="flex flex-wrap items-center gap-x-3 gap-y-1.5">
+              <span class="text-white text-sm font-semibold">Equipo</span>
+              <div class="flex items-center gap-1.5">
+                <input type="number" id="gearAnnual" class="form-input w-22 text-center" value="2000" min="0" max="99999" step="100">
+                <span class="text-[#475569] text-[10px]">/año</span>
+              </div>
+              <span class="subtotal-inline" id="gearSubtotal">= $0</span>
+            </div>
+            <div class="tooltip-cost">Ropa técnica, GPS, calcetines, accesorios al año</div>
+          </div>
+        </div>
+        <div class="cost-row" data-cat="salud">
+          <div class="cat-icon bg-[#EF4444]/15 text-[#EF4444]">💆</div>
+          <div>
+            <div class="flex flex-wrap items-center gap-x-3 gap-y-1.5">
+              <span class="text-white text-sm font-semibold">Salud</span>
+              <div class="flex items-center gap-1.5">
+                <input type="number" id="healthMonthly" class="form-input w-22 text-center" value="600" min="0" max="99999" step="50">
+                <span class="text-[#475569] text-[10px]">/mes</span>
+              </div>
+              <span class="subtotal-inline" id="healthSubtotal">= $0</span>
+            </div>
+            <div class="tooltip-cost">Fisioterapia, masajes, entrenador personal, gimnasio</div>
+          </div>
+        </div>
+        <div class="cost-row" data-cat="otros">
+          <div class="cat-icon bg-[#64748B]/15 text-[#64748B]">📦</div>
+          <div>
+            <div class="flex flex-wrap items-center gap-x-3 gap-y-1.5">
+              <span class="text-white text-sm font-semibold">Otros</span>
+              <div class="flex items-center gap-1.5">
+                <input type="number" id="otherAnnual" class="form-input w-22 text-center" value="300" min="0" max="99999" step="50">
+                <span class="text-[#475569] text-[10px]">/año</span>
+              </div>
+              <span class="subtotal-inline" id="otherSubtotal">= $0</span>
+            </div>
+            <div class="tooltip-cost">Suscripciones, apps, estacionamiento, lockers, etc.</div>
+          </div>
+        </div>
+      </div>
+
+      <hr class="border-white/5 my-4">
+
+      <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+        <div class="flex-1 max-w-[200px]">
+          <label class="form-label">KM por semana (opcional)</label>
+          <input type="number" id="weeklyKm" class="form-input text-center" value="40" min="0" max="500" step="5">
+        </div>
+        <button id="calcBtn" class="px-8 py-3 rounded-xl font-bold text-sm text-[#0B0F19] bg-[#10B981] hover:bg-[#10B981]/90 transition-all duration-300" style="box-shadow: 0 4px 20px rgba(16,185,129,0.25);">
+          Calcular
+        </button>
+      </div>
+    </div>
+
+    <div id="resultSection" class="space-y-4 fade-up" style="animation-delay:0.15s;display:none">
+      <div class="card-glass p-6 md:p-8">
+        <h2 class="text-white font-bold text-sm mb-5">Resultados</h2>
+
+        <div class="grid md:grid-cols-2 gap-6 mb-6">
+          <div class="donut-container">
+            <svg width="180" height="180" viewBox="0 0 180 180" id="donutChart">
+              <circle cx="90" cy="90" r="75" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="22"/>
+            </svg>
+            <div class="donut-label">
+              <span class="total" id="donutTotal">$0</span>
+              <span class="period" id="donutPeriod">en 12 meses</span>
+            </div>
+          </div>
+          <div class="flex flex-col justify-center gap-2" id="donutLegend"></div>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+          <div class="stat-box">
+            <div class="stat-value text-[#10B981]" id="totalPeriod">—</div>
+            <div class="stat-label" id="totalPeriodLabel">Total en 12 meses</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-value text-[#34D399]" id="monthlyAvg">—</div>
+            <div class="stat-label">Promedio mensual</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-value text-[#FBBF24]" id="costPerKm">—</div>
+            <div class="stat-label">Costo por km</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-value text-[#22D3EE]" id="totalKmPeriod">—</div>
+            <div class="stat-label" id="kmPeriodLabel">KM en 12 meses</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-glass p-6 md:p-8">
+        <h2 class="text-white font-bold text-sm mb-3">Consejos para optimizar</h2>
+        <div class="grid md:grid-cols-2 gap-4">
+          <div class="text-[#94A3B8] text-xs leading-relaxed">
+            <p class="text-[#10B981] font-semibold text-[11px] mb-1">👟 Zapatillas</p>
+            <p>Rota 2-3 pares para alargar su vida útil. Aprovecha descuentos de temporada. Un par dura ~500-800 km.</p>
+          </div>
+          <div class="text-[#94A3B8] text-xs leading-relaxed">
+            <p class="text-[#FBBF24] font-semibold text-[11px] mb-1">🏅 Inscripciones</p>
+            <p>Inscríbete en preventa (early bird). Las carreras locales son más económicas que las internacionales.</p>
+          </div>
+          <div class="text-[#94A3B8] text-xs leading-relaxed">
+            <p class="text-[#8B5CF6] font-semibold text-[11px] mb-1">✈️ Viajes</p>
+            <p>Comparte alojamiento con otros corredores. Reserva con anticipación para mejores tarifas.</p>
+          </div>
+          <div class="text-[#94A3B8] text-xs leading-relaxed">
+            <p class="text-[#FF5722] font-semibold text-[11px] mb-1">🥤 Nutrición</p>
+            <p>Compra geles y barras al por mayor. Prepara tu propia hidratación con electrolitos caseros.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-glass p-6 md:p-8 mt-8 fade-up" style="animation-delay:0.2s">
+      <h2 class="text-white font-bold text-lg mb-4">Cómo usar esta calculadora</h2>
+      <p class="text-[#94A3B8] text-xs leading-relaxed">Ingresa tus gastos estimados en cada categoría. Los gastos marcados como <strong class="text-white">/mes</strong> se multiplican por el período seleccionado. Los que usan <strong class="text-white">×</strong> multiplican cantidad por costo unitario. El costo por km se calcula dividiendo el total entre los kilómetros recorridos en el período.</p>
+    </div>
+  </section>
+
+  <div id="footer-placeholder"></div>
+  <script src="/assets/js/config.js"></script>
+  <script src="/assets/js/store.js"></script>
+  <script src="/components/navbar.js"></script>
+  <script src="/components/footer.js"></script>
+  <script src="/assets/js/profile-modal.js"></script>
+  <script src="/assets/js/components.js"></script>
+  <script>
+  (() => {
+    const CURRENCY_LABELS = { PEN: 'S/', MXN: '$', USD: '$', EUR: '€', COP: '$', ARS: '$', CLP: '$', BRL: 'R$' };
+    const CATS = [
+      { id: 'zapatillas', label: 'Zapatillas', color: '#10B981', icon: '👟', type: 'mult' },
+      { id: 'inscripciones', label: 'Inscripciones', color: '#FBBF24', icon: '🏅', type: 'mult' },
+      { id: 'viajes', label: 'Viajes', color: '#8B5CF6', icon: '✈️', type: 'mult' },
+      { id: 'nutricion', label: 'Nutrición', color: '#FF5722', icon: '🥤', type: 'monthly' },
+      { id: 'equipo', label: 'Equipo', color: '#22D3EE', icon: '🧦', type: 'annual' },
+      { id: 'salud', label: 'Salud', color: '#EF4444', icon: '💆', type: 'monthly' },
+      { id: 'otros', label: 'Otros', color: '#64748B', icon: '📦', type: 'annual' }
+    ];
+    let period = 12;
+
+    document.querySelectorAll('#periodSelector .period-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('#periodSelector .period-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        period = parseInt(btn.dataset.period);
+        liveUpdate();
+      });
+    });
+
+    document.getElementById('currency').addEventListener('change', liveUpdate);
+
+    function getSym() { return CURRENCY_LABELS[document.getElementById('currency').value] || '$'; }
+
+    function getCatValues() {
+      return {
+        zapatillas: (parseFloat(document.getElementById('shoePairs').value) || 0) * (parseFloat(document.getElementById('shoeCost').value) || 0),
+        inscripciones: (parseFloat(document.getElementById('raceCount').value) || 0) * (parseFloat(document.getElementById('raceCost').value) || 0),
+        viajes: (parseFloat(document.getElementById('travelCount').value) || 0) * (parseFloat(document.getElementById('travelCost').value) || 0),
+        nutricion: (parseFloat(document.getElementById('nutritionMonthly').value) || 0) * period,
+        equipo: (parseFloat(document.getElementById('gearAnnual').value) || 0),
+        salud: (parseFloat(document.getElementById('healthMonthly').value) || 0) * period,
+        otros: (parseFloat(document.getElementById('otherAnnual').value) || 0)
+      };
+    }
+
+    function updateSubtotals() {
+      const sym = getSym();
+      const vals = getCatValues();
+      document.getElementById('shoeSubtotal').textContent = `= ${sym}${Math.round(vals.zapatillas).toLocaleString('es-MX')}`;
+      document.getElementById('raceSubtotal').textContent = `= ${sym}${Math.round(vals.inscripciones).toLocaleString('es-MX')}`;
+      document.getElementById('travelSubtotal').textContent = `= ${sym}${Math.round(vals.viajes).toLocaleString('es-MX')}`;
+      document.getElementById('nutritionSubtotal').textContent = `= ${sym}${Math.round(vals.nutricion).toLocaleString('es-MX')}`;
+      document.getElementById('gearSubtotal').textContent = `= ${sym}${Math.round(vals.equipo).toLocaleString('es-MX')}`;
+      document.getElementById('healthSubtotal').textContent = `= ${sym}${Math.round(vals.salud).toLocaleString('es-MX')}`;
+      document.getElementById('otherSubtotal').textContent = `= ${sym}${Math.round(vals.otros).toLocaleString('es-MX')}`;
+    }
+
+    function calc(scroll) {
+      updateSubtotals();
+      const sym = getSym();
+      const vals = getCatValues();
+      const amounts = CATS.map(c => vals[c.id]);
+      const total = amounts.reduce((a, b) => a + b, 0);
+      const monthly = total / period;
+      const weeklyKm = parseFloat(document.getElementById('weeklyKm').value) || 0;
+      const totalKm = weeklyKm * 52 / 12 * period;
+      const costPerKm = totalKm > 0 ? total / totalKm : 0;
+
+      document.getElementById('totalPeriod').textContent = sym + Math.round(total).toLocaleString('es-MX');
+      document.getElementById('totalPeriodLabel').textContent = `Total en ${period} meses`;
+      document.getElementById('monthlyAvg').textContent = sym + Math.round(monthly).toLocaleString('es-MX');
+      document.getElementById('costPerKm').textContent = totalKm > 0 ? sym + costPerKm.toFixed(2) : '—';
+      document.getElementById('totalKmPeriod').textContent = totalKm > 0 ? Math.round(totalKm).toLocaleString('es-MX') : '—';
+      document.getElementById('kmPeriodLabel').textContent = `KM en ${period} meses`;
+      document.getElementById('donutTotal').textContent = sym + Math.round(total).toLocaleString('es-MX');
+      document.getElementById('donutPeriod').textContent = `en ${period} meses`;
+
+      const maxAmt = Math.max(...amounts, 1);
+      const totalForPct = total || 1;
+      let cumulative = 0;
+      const segments = CATS.map((cat, i) => {
+        const amt = amounts[i];
+        const pct = total > 0 ? (amt / totalForPct * 100) : 0;
+        const startAngle = cumulative;
+        cumulative += pct;
+        return { ...cat, amt, pct, startAngle, endAngle: cumulative };
+      });
+
+      const r = 75, cx = 90, cy = 90, sw = 22;
+      const circ = 2 * Math.PI * r;
+      let svgPaths = '';
+      segments.forEach((seg, i) => {
+        if (seg.pct <= 0) return;
+        const offset = circ * (1 - seg.startAngle / 100);
+        const len = circ * seg.pct / 100;
+        svgPaths += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${seg.color}" stroke-width="${sw}" stroke-dasharray="${len} ${circ - len}" stroke-dashoffset="${offset}" opacity="0.85" style="transition: stroke-dasharray 0.6s ease, stroke-dashoffset 0.6s ease"/>`;
+      });
+      document.getElementById('donutChart').innerHTML =
+        `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="${sw}"/>` + svgPaths;
+
+      const legendEl = document.getElementById('donutLegend');
+      legendEl.innerHTML = segments.filter(s => s.amt > 0).map(s => `
+        <div class="flex items-center gap-2 text-xs">
+          <span class="legend-dot" style="background:${s.color}"></span>
+          <span class="text-[#94A3B8]">${s.icon} ${s.label}</span>
+          <span class="ml-auto font-semibold text-white">${sym}${Math.round(s.amt).toLocaleString('es-MX')}</span>
+          <span class="text-[#475569] w-8 text-right">${s.pct.toFixed(1)}%</span>
+        </div>
+      `).join('');
+
+      document.getElementById('resultSection').style.display = 'block';
+      if (scroll) document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function liveUpdate() { calc(false); }
+
+    document.getElementById('calcBtn').addEventListener('click', () => calc(true));
+
+    document.querySelectorAll('.form-input').forEach(el => {
+      el.addEventListener('input', liveUpdate);
+      el.addEventListener('keydown', e => { if (e.key === 'Enter') calc(true); });
+    });
+
+    calc();
+  })();
+  </script>
+</body>
+</html>

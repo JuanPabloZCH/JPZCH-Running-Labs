@@ -330,7 +330,7 @@
       badge.innerHTML = `<span class="badge-level" style="background:${desc.bg};color:${desc.color};border:1px solid ${desc.color}20">${desc.label}</span>`;
     }
 
-    function calculate() {
+    function calculate(scroll) {
       const result = calcVO2();
       if (!result) {
         document.getElementById('resultSection').style.display = 'none';
@@ -351,10 +351,10 @@
       updateBadge();
       renderTable();
       document.getElementById('resultSection').style.display = 'block';
-      document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      if (scroll) document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
-    document.getElementById('calcBtn').addEventListener('click', calculate);
+    document.getElementById('calcBtn').addEventListener('click', () => calculate(true));
 
     document.querySelectorAll('#panel-cooper input, #panel-hr input, #panel-race input').forEach(inp => {
       inp.addEventListener('keydown', e => { if (e.key === 'Enter') calculate(); });

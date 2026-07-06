@@ -49,12 +49,23 @@ const JPZCH_NAVBAR = `
                 <span class="font-medium">Calculadora VO₂Max</span>
                 <span class="ml-auto text-[10px] font-semibold text-[#22C55E] bg-[#22C55E]/10 px-2 py-0.5 rounded-full">Disponible</span>
               </a>
+              <a href="/tools/hydration-calculator/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-white hover:bg-white/5 transition-colors">
+                <span class="w-2 h-2 rounded-full bg-[#CCFF00] shrink-0"></span>
+                <span class="font-medium">Calculadora de Hidratación</span>
+                <span class="ml-auto text-[10px] font-semibold text-[#22C55E] bg-[#22C55E]/10 px-2 py-0.5 rounded-full">Disponible</span>
+              </a>
+              <a href="/tools/running-cost/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-white hover:bg-white/5 transition-colors">
+                <span class="w-2 h-2 rounded-full bg-[#CCFF00] shrink-0"></span>
+                <span class="font-medium">Calculadora de Costos</span>
+                <span class="ml-auto text-[10px] font-semibold text-[#22C55E] bg-[#22C55E]/10 px-2 py-0.5 rounded-full">Disponible</span>
+              </a>
+              <a href="/tools/gpx-dashboard/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-white hover:bg-white/5 transition-colors">
+                <span class="w-2 h-2 rounded-full bg-[#CCFF00] shrink-0"></span>
+                <span class="font-medium">Analizador GPX</span>
+                <span class="ml-auto text-[10px] font-semibold text-[#22C55E] bg-[#22C55E]/10 px-2 py-0.5 rounded-full">Disponible</span>
+              </a>
               <div class="border-t border-white/5 my-1.5 mx-2"></div>
               <div class="px-3 py-2 text-[11px] font-medium text-[#475569] uppercase tracking-wider">Próximas herramientas</div>
-              <div class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-[#475569]">
-                <span class="w-2 h-2 rounded-full bg-[#475569] shrink-0"></span>
-                <span>Y más...</span>
-              </div>
             </div>
           </div>
         </div>
@@ -175,10 +186,22 @@ const JPZCH_NAVBAR = `
             <span class="text-sm">Calculadora VO₂Max</span>
             <span class="ml-auto text-[10px] font-semibold text-[#22C55E] bg-[#22C55E]/10 px-2 py-0.5 rounded-full">Disponible</span>
           </a>
+          <a href="/tools/hydration-calculator/" class="flex items-center gap-3 px-8 py-3 text-white hover:bg-white/5 transition-colors">
+            <span class="w-2 h-2 rounded-full bg-[#CCFF00] shrink-0"></span>
+            <span class="text-sm">Calculadora de Hidratación</span>
+            <span class="ml-auto text-[10px] font-semibold text-[#22C55E] bg-[#22C55E]/10 px-2 py-0.5 rounded-full">Disponible</span>
+          </a>
+          <a href="/tools/running-cost/" class="flex items-center gap-3 px-8 py-3 text-white hover:bg-white/5 transition-colors">
+            <span class="w-2 h-2 rounded-full bg-[#CCFF00] shrink-0"></span>
+            <span class="text-sm">Calculadora de Costos</span>
+            <span class="ml-auto text-[10px] font-semibold text-[#22C55E] bg-[#22C55E]/10 px-2 py-0.5 rounded-full">Disponible</span>
+          </a>
+          <a href="/tools/gpx-dashboard/" class="flex items-center gap-3 px-8 py-3 text-white hover:bg-white/5 transition-colors">
+            <span class="w-2 h-2 rounded-full bg-[#CCFF00] shrink-0"></span>
+            <span class="text-sm">Analizador GPX</span>
+            <span class="ml-auto text-[10px] font-semibold text-[#22C55E] bg-[#22C55E]/10 px-2 py-0.5 rounded-full">Disponible</span>
+          </a>
           <div class="px-8 py-2 text-[10px] font-medium text-[#475569] uppercase tracking-wider">Próximas herramientas</div>
-          <div class="flex items-center gap-3 px-8 py-2 text-sm text-[#475569]">
-            <span class="w-2 h-2 rounded-full bg-[#475569] shrink-0"></span>
-            Y más...
           </div>
         </div>
       </div>

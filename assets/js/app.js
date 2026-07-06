@@ -47,35 +47,35 @@ const JPZCH_App = (() => {
     {
       id: 'gpx-dashboard',
       name: 'Analizador GPX',
-      description: 'Sube archivos GPX y visualiza tus rutas en mapa interactivo con perfil de elevación y métricas.',
+      description: 'Sube archivos GPX con mapa interactivo, perfil de elevación sincronizado, desniveles, parciales y métricas avanzadas.',
       category: 'analizadores',
       icon: 'map',
-      status: 'coming-soon',
-      accent: '#CCFF00',
+      status: 'available',
+      accent: '#8B5CF6',
       url: '/tools/gpx-dashboard/',
-      features: ['Mapa 3D', 'Elevación', 'Ritmo GPS', 'Segmentos']
+      features: ['Mapa interactivo', 'Perfil elevación', 'Parciales', 'Pendientes']
     },
     {
       id: 'hydration-calculator',
       name: 'Calculadora de Hidratación',
-      description: 'Calcula tus necesidades de hidratación según clima, distancia, peso y tasa de sudoración.',
+      description: 'Calcula tu tasa de sudoración y necesidades de hidratación según peso, esfuerzo y clima.',
       category: 'calculadoras',
       icon: 'droplet',
-      status: 'coming-soon',
-      accent: '#3B82F6',
+      status: 'available',
+      accent: '#0EA5E9',
       url: '/tools/hydration-calculator/',
-      features: ['Pérdida agua', 'Electrolitos', 'Clima cálido', 'Plan']
+      features: ['Tasa sudoración', 'Pérdida peso', 'Clima cálido', 'Guía']
     },
     {
       id: 'running-cost',
-      name: 'Running Cost Calculator',
-      description: 'Calcula el costo real por kilómetro de tus zapatillas y equipo. Toma decisiones inteligentes.',
+      name: 'Calculadora de Costos',
+      description: 'Calcula cuánto gastas al año corriendo: zapatillas, inscripciones, viajes, nutrición, equipo y salud.',
       category: 'calculadoras',
       icon: 'dollar-sign',
-      status: 'coming-soon',
-      accent: '#CCFF00',
+      status: 'available',
+      accent: '#10B981',
       url: '/tools/running-cost/',
-      features: ['$/km', 'Vida útil', 'Comparativa', 'Ahorro anual']
+      features: ['Total anual', 'Costo por km', 'Distribución', 'Consejos']
     },
     {
       id: 'cadence-analyzer',
@@ -105,7 +105,7 @@ const JPZCH_App = (() => {
       description: 'Genera planes de entrenamiento personalizados para 5K, 10K, Media Maratón y Maratón.',
       category: 'planificadores',
       icon: 'calendar',
-      status: 'coming-soon',
+      status: 'available',
       accent: '#FF5722',
       url: '/tools/training-planner/',
       features: ['5K', '10K', 'Media', 'Maratón']
@@ -194,7 +194,7 @@ const JPZCH_App = (() => {
   function renderStats() {
     const stats = [
       { value: '12', label: 'Herramientas', suffix: '' },
-      { value: '5', label: 'Disponible', suffix: '' },
+      { value: '9', label: 'Disponible', suffix: '' },
       { value: '6', label: 'Categorías', suffix: '' },
       { value: '100', label: 'Gratuito', suffix: '%' }
     ];
