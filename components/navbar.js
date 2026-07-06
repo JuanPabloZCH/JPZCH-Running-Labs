@@ -149,6 +149,10 @@ const JPZCH_NAVBAR = `
                 Sugerir Herramienta
               </a>
               <div class="border-t border-white/5 my-1.5 mx-2"></div>
+              <a href="/JPZCH-Running-Labs/sponsor/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-white hover:bg-white/5 transition-colors">
+                <svg class="w-4 h-4 text-[#CCFF00] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+                <span class="font-medium">Apoya el Proyecto</span>
+              </a>
               <a href="/JPZCH-Running-Labs/privacidad/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#94A3B8] hover:text-white hover:bg-white/5 transition-colors">
                 <svg class="w-4 h-4 text-[#475569] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
                 Privacidad
@@ -282,6 +286,7 @@ const JPZCH_NAVBAR = `
           <a href="/JPZCH-Running-Labs/reportar-error/" class="flex items-center gap-3 px-8 py-3 text-sm text-[#94A3B8] hover:text-white hover:bg-white/5 transition-colors">Reportar Error</a>
           <a href="/JPZCH-Running-Labs/sugerir-herramienta/" class="flex items-center gap-3 px-8 py-3 text-sm text-[#94A3B8] hover:text-white hover:bg-white/5 transition-colors">Sugerir Herramienta</a>
           <div class="border-t border-white/5 mx-4 my-1"></div>
+          <a href="/JPZCH-Running-Labs/sponsor/" class="flex items-center gap-3 px-8 py-3 text-sm text-white hover:bg-white/5 transition-colors font-medium">Apoya el Proyecto</a>
           <a href="/JPZCH-Running-Labs/privacidad/" class="flex items-center gap-3 px-8 py-3 text-sm text-[#94A3B8] hover:text-white hover:bg-white/5 transition-colors">Privacidad</a>
         </div>
       </div>
