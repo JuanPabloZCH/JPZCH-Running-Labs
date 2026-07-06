@@ -5,13 +5,9 @@ const JPZCH_Config = {
   REPO_URL: 'https://github.com/JuanPabloZCH/JPZCH-Running-Labs',
 
   init() {
-    // Detección automática de base path (GitHub Pages project site)
     const path = window.location.pathname;
     if (path.startsWith('/JPZCH-Running-Labs/')) {
-      const match = path.match(/^(\/[^\/]+\/[^\/]+)\//);
-      if (match) {
-        this.BASE_URL = match[1] + '/';
-      }
+      this.BASE_URL = '/JPZCH-Running-Labs/';
     }
     return this;
   },

@@ -4,7 +4,7 @@ const JPZCH_Components = (() => {
     temp.innerHTML = html;
     temp.querySelectorAll('a[href]').forEach(a => {
       const href = a.getAttribute('href');
-      if (href && !href.startsWith('http') && !href.startsWith('#') && !href.startsWith('mailto:')) {
+      if (href && !href.startsWith('http') && !href.startsWith('#') && !href.startsWith('mailto:') && !href.startsWith('/')) {
         a.setAttribute('href', JPZCH_Config.url(href));
       }
     });
