@@ -116,7 +116,7 @@ const JPZCH_App = (() => {
       description: 'Compara drop, peso, amortiguación y precio de tus zapatillas. Encuentra tu par ideal.',
       category: 'analizadores',
       icon: 'shoe',
-      status: 'coming-soon',
+      status: 'available',
       accent: '#CCFF00',
       url: '/tools/shoe-compare/',
       features: ['Drop', 'Peso', 'Amortiguación', 'Precio']
@@ -194,7 +194,7 @@ const JPZCH_App = (() => {
   function renderStats() {
     const stats = [
       { value: '12', label: 'Herramientas', suffix: '' },
-      { value: '11', label: 'Disponible', suffix: '' },
+      { value: '12', label: 'Disponible', suffix: '' },
       { value: '6', label: 'Categorías', suffix: '' },
       { value: '100', label: 'Gratuito', suffix: '%' }
     ];

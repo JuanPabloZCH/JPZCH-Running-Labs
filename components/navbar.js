@@ -79,6 +79,11 @@ const JPZCH_NAVBAR = `
                 <span class="font-medium">Analizador de Sueño</span>
                 <span class="ml-auto text-[10px] font-semibold text-[#22C55E] bg-[#22C55E]/10 px-2 py-0.5 rounded-full">Disponible</span>
               </a>
+              <a href="/tools/shoe-compare/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-white hover:bg-white/5 transition-colors">
+                <span class="w-2 h-2 rounded-full bg-[#CCFF00] shrink-0"></span>
+                <span class="font-medium">Comparador de Zapatillas</span>
+                <span class="ml-auto text-[10px] font-semibold text-[#22C55E] bg-[#22C55E]/10 px-2 py-0.5 rounded-full">Disponible</span>
+              </a>
             </div>
           </div>
         </div>
@@ -227,6 +232,11 @@ const JPZCH_NAVBAR = `
           <a href="/tools/sleep-analyzer/" class="flex items-center gap-3 px-8 py-3 text-white hover:bg-white/5 transition-colors">
             <span class="w-2 h-2 rounded-full bg-[#8B5CF6] shrink-0"></span>
             <span class="text-sm">Analizador de Sueño</span>
+            <span class="ml-auto text-[10px] font-semibold text-[#22C55E] bg-[#22C55E]/10 px-2 py-0.5 rounded-full">Disponible</span>
+          </a>
+          <a href="/tools/shoe-compare/" class="flex items-center gap-3 px-8 py-3 text-white hover:bg-white/5 transition-colors">
+            <span class="w-2 h-2 rounded-full bg-[#CCFF00] shrink-0"></span>
+            <span class="text-sm">Comparador de Zapatillas</span>
             <span class="ml-auto text-[10px] font-semibold text-[#22C55E] bg-[#22C55E]/10 px-2 py-0.5 rounded-full">Disponible</span>
           </a>
           </div>

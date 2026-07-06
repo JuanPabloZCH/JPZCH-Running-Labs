@@ -1,2 +1,615 @@
-<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Comparador Zapatillas  JPZCH Running Labs</title><meta name="theme-color" content="#0B0F19"><script src="https://cdn.tailwindcss.com"></script><link rel="stylesheet" href="/assets/css/styles.css"></head><body><div id="navbar-placeholder"></div><main class="min-h-screen pt-24 pb-12"><div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8"><div class="text-center mb-10"><h1 class="text-3xl md:text-4xl font-black text-white mb-3">Comparador de Zapatillas</h1></div><div class="glass rounded-2xl p-6 md:p-8 text-center"><p class="text-[#94A3B8]">Próximamente.</p><a href="/" class="btn-secondary mt-6 inline-flex">Volver</a></div></div></main><div id="footer-placeholder"></div><script src="/assets/js/config.js"></script><script src="/assets/js/store.js"></script><script src="/components/navbar.js"></script><script src="/components/footer.js"></script><script src="/assets/js/profile-modal.js"></script>
-  <script src="/assets/js/components.js"></script></body></html>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Comparador de Zapatillas — JPZCH Running Labs</title>
+  <meta name="theme-color" content="#0B0F19">
+  <meta name="description" content="Compara drop, peso, amortiguación y precio de zapatillas. Encuentra tu par ideal.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/assets/css/styles.css">
+  <style>
+    .hr-input{width:100%;padding:0.625rem 0.75rem;background:rgba(11,15,25,0.6);border:1px solid rgba(255,255,255,0.06);border-radius:0.75rem;color:#F1F5F9;font-size:0.9rem;font-weight:500;outline:none;transition:all 0.3s ease}
+    .hr-input:focus{border-color:rgba(204,255,0,0.3);box-shadow:0 0 0 3px rgba(204,255,0,0.06)}
+    .hr-input::placeholder{color:#475569;font-weight:400}
+    .hr-select{width:100%;padding:0.625rem 0.75rem;background:rgba(11,15,25,0.6);border:1px solid rgba(255,255,255,0.06);border-radius:0.75rem;color:#F1F5F9;font-size:0.8rem;font-weight:500;outline:none;transition:all 0.3s ease;cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%2394A3B8' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 0.75rem center;padding-right:2rem}
+    .hr-select:focus{border-color:rgba(204,255,0,0.3);box-shadow:0 0 0 3px rgba(204,255,0,0.06)}
+    .hr-select option{background:#0B0F19;color:#F1F5F9}
+    .pill-btn{padding:0.4rem 0.9rem;border-radius:0.75rem;font-size:0.75rem;font-weight:600;border:1px solid rgba(255,255,255,0.06);background:rgba(11,15,25,0.5);color:#94A3B8;cursor:pointer;transition:all 0.3s ease}
+    .pill-btn:hover{border-color:rgba(204,255,0,0.2);color:#F1F5F9}
+    .pill-btn.active{background:rgba(204,255,0,0.12);border-color:rgba(204,255,0,0.3);color:#CCFF00}
+    .shoe-table{width:100%;border-collapse:separate;border-spacing:0;font-size:0.8rem}
+    .shoe-table th{position:sticky;top:0;background:#131A2B;color:#64748B;font-weight:700;font-size:0.65rem;text-transform:uppercase;letter-spacing:0.05em;padding:0.75rem 0.5rem;border-bottom:1px solid rgba(255,255,255,0.08);text-align:center;z-index:2}
+    .shoe-table td{padding:0.6rem 0.5rem;text-align:center;border-bottom:1px solid rgba(255,255,255,0.03);vertical-align:middle;transition:background 0.15s}
+    .shoe-table tr:hover td{background:rgba(255,255,255,0.015)}
+    .shoe-table .shoe-name-cell{text-align:left;position:sticky;left:0;background:#0B0F19;z-index:1;min-width:160px}
+    .shoe-table .shoe-name-cell .brand-tag{font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:0.03em;padding:0.1rem 0.4rem;border-radius:0.2rem}
+    .shoe-card{background:rgba(11,15,25,0.5);border:1px solid rgba(255,255,255,0.04);border-radius:0.75rem;padding:0.75rem;transition:all 0.2s;cursor:pointer}
+    .shoe-card:hover{border-color:rgba(204,255,0,0.15);background:rgba(11,15,25,0.7)}
+    .shoe-card.selected{border-color:rgba(204,255,0,0.4);background:rgba(204,255,0,0.04)}
+    .shoe-card .shoe-name{font-size:0.8rem;font-weight:600;color:#F1F5F9}
+    .shoe-card .shoe-spec{font-size:0.65rem;color:#64748B}
+    .spec-bar{height:6px;border-radius:3px;background:rgba(255,255,255,0.06);overflow:hidden;max-width:120px;margin:0 auto}
+    .spec-bar-fill{height:100%;border-radius:3px;transition:width 0.4s ease}
+    .fade-up{opacity:0;transform:translateY(12px);animation:fadeUp 0.4s ease forwards}
+    @keyframes fadeUp{to{opacity:1;transform:translateY(0)}}
+    .checkbox-label{display:flex;align-items:center;gap:0.4rem;color:#94A3B8;font-size:0.75rem;cursor:pointer;padding:0.25rem 0}
+    .checkbox-label input[type="checkbox"]{accent-color:#CCFF00;width:0.85rem;height:0.85rem;cursor:pointer}
+    .stat-chip{display:inline-flex;align-items:center;gap:0.25rem;padding:0.15rem 0.5rem;border-radius:999px;font-size:0.65rem;font-weight:600}
+    .scroll-hint{overflow-x:auto;overflow-y:visible;padding-bottom:0.5rem}
+    .shoe-check{width:1.1rem;height:1.1rem;accent-color:#CCFF00;cursor:pointer}
+    .shoe-table tr.selected{box-shadow:inset 3px 0 0 #CCFF00;background:rgba(204,255,0,0.02)}
+    #actionCompareBtn{background:rgba(204,255,0,0.1);color:#CCFF00;border:1px solid rgba(204,255,0,0.2)}
+    #actionCompareBtn:not(:disabled){background:#CCFF00;color:#0B0F19;border-color:#CCFF00}
+    #actionCompareBtn:not(:disabled):hover{background:#D9FF33}
+    #actionCompareBtn svg{flex-shrink:0}
+    .scrollbar-none{-ms-overflow-style:none;scrollbar-width:none}
+    .scrollbar-none::-webkit-scrollbar{display:none}
+    @media(max-width:640px){.shoe-table{font-size:0.7rem}.shoe-table th,.shoe-table td{padding:0.4rem 0.3rem}.shoe-table .shoe-name-cell{min-width:120px}}
+  </style>
+</head>
+<body class="antialiased">
+  <div id="navbar-placeholder"></div>
+
+  <main class="min-h-screen pt-24 pb-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+      <!-- Hero -->
+      <section class="text-center mb-8">
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#CCFF00]/10 border border-[#CCFF00]/20 text-[#CCFF00] text-xs font-semibold mb-5">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+          Analizadores
+        </div>
+        <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black leading-[1.1] tracking-tight mb-4">
+          <span class="text-white">Comparador de</span><br>
+          <span class="text-gradient-green">Zapatillas</span>
+        </h1>
+        <p class="text-[#94A3B8] text-sm sm:text-base md:text-lg max-w-xl mx-auto leading-relaxed">
+          Compara drop, peso, amortiguación y precio de tus zapatillas favoritas lado a lado.
+        </p>
+      </section>
+
+      <!-- Controls -->
+      <section class="mb-6 fade-up" style="animation-delay:0.05s">
+        <div class="glass rounded-2xl p-5 md:p-7">
+          <div class="flex flex-wrap items-center gap-3 mb-4">
+            <span class="text-xs font-semibold text-[#64748B] uppercase tracking-wider">Filtros:</span>
+            <div class="flex flex-wrap gap-1.5" id="typePills">
+              <button class="pill-btn active" data-type="all">Todas</button>
+              <button class="pill-btn" data-type="daily">Diario</button>
+              <button class="pill-btn" data-type="tempo">Ritmo</button>
+              <button class="pill-btn" data-type="racing">Competencia</button>
+              <button class="pill-btn" data-type="trail">Trail</button>
+            </div>
+            <div class="flex flex-wrap gap-1.5 ml-auto" id="brandPills">
+              <button class="pill-btn active" data-brand="all">Todas marcas</button>
+              <button class="pill-btn" data-brand="Nike">Nike</button>
+              <button class="pill-btn" data-brand="Adidas">Adidas</button>
+              <button class="pill-btn" data-brand="ASICS">ASICS</button>
+              <button class="pill-btn" data-brand="Saucony">Saucony</button>
+              <button class="pill-btn" data-brand="New Balance">New Balance</button>
+            </div>
+          </div>
+          <div class="flex flex-wrap items-center gap-3">
+            <span class="text-xs font-semibold text-[#64748B] uppercase tracking-wider">Ordenar:</span>
+            <select id="sortSelect" class="hr-select" style="max-width:14rem">
+              <option value="name">Nombre A-Z</option>
+              <option value="drop">Drop (menor a mayor)</option>
+              <option value="weight">Peso (menor a mayor)</option>
+              <option value="price">Precio (menor a mayor)</option>
+              <option value="cushion">Amortiguación (baja a alta)</option>
+            </select>
+            <button id="addShoeBtn" class="inline-flex items-center gap-1.5 px-4 py-2 bg-white/[0.06] hover:bg-white/[0.1] text-[#94A3B8] hover:text-white text-xs font-semibold rounded-xl border border-white/[0.06] transition-all">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              Agregar
+            </button>
+            <button id="exitCompareBtn" class="hidden inline-flex items-center gap-1.5 px-4 py-2 bg-white/[0.06] hover:bg-white/[0.1] text-[#94A3B8] text-xs font-semibold rounded-xl border border-white/[0.06] transition-all" style="display:none">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+              Salir Comparación
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Action bar -->
+      <div id="actionBar" class="mb-4 fade-up" style="display:none;animation-delay:0.08s">
+        <div class="glass rounded-2xl p-3 sm:p-4">
+          <div class="flex items-center justify-between gap-3">
+            <div class="flex items-center gap-2 min-w-0 flex-1">
+              <span id="actionCount" class="text-[#CCFF00] font-bold text-sm whitespace-nowrap"></span>
+              <span id="actionHint" class="text-[#64748B] text-xs hidden sm:inline"></span>
+              <div class="flex items-center gap-1.5 overflow-x-auto scrollbar-none" id="actionChips"></div>
+            </div>
+            <button id="actionCompareBtn" disabled class="inline-flex items-center gap-2 px-4 py-2.5 text-sm rounded-xl transition-all flex-shrink-0 font-bold">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+              Comparar
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Comparison table -->
+      <section class="fade-up" style="animation-delay:0.1s">
+        <div class="glass rounded-2xl p-0 md:p-1 overflow-hidden">
+          <div class="scroll-hint">
+            <table class="shoe-table" id="shoeTable">
+              <thead id="tableHead"></thead>
+              <tbody id="tableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Shoe database count -->
+      <p class="text-center text-[#475569] text-xs mt-4" id="shoeCount"></p>
+
+    </div>
+  </main>
+
+  <!-- Add shoe modal -->
+  <div id="addModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 hidden" style="backdrop-filter:blur(4px)">
+    <div class="bg-[#0B0F19] border border-white/10 rounded-2xl p-6 max-w-md mx-4 w-full">
+      <h3 class="text-white font-bold text-sm mb-4">Agregar Zapatilla</h3>
+      <div class="space-y-3">
+        <div class="grid grid-cols-2 gap-3">
+          <div><label class="text-xs font-semibold text-[#64748B] mb-1 block">Marca</label><input type="text" id="newBrand" class="hr-input" placeholder="Nike" style="text-align:left;font-weight:400"></div>
+          <div><label class="text-xs font-semibold text-[#64748B] mb-1 block">Modelo</label><input type="text" id="newModel" class="hr-input" placeholder="Pegasus 40" style="text-align:left;font-weight:400"></div>
+        </div>
+        <div class="grid grid-cols-3 gap-3">
+          <div><label class="text-xs font-semibold text-[#64748B] mb-1 block">Drop (mm)</label><input type="number" id="newDrop" class="hr-input" placeholder="8" min="0" max="20" step="0.5"></div>
+          <div><label class="text-xs font-semibold text-[#64748B] mb-1 block">Peso (g)</label><input type="number" id="newWeight" class="hr-input" placeholder="280" min="100" max="500"></div>
+          <div><label class="text-xs font-semibold text-[#64748B] mb-1 block">Precio (S/)</label><input type="number" id="newPrice" class="hr-input" placeholder="399" min="0"></div>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div><label class="text-xs font-semibold text-[#64748B] mb-1 block">Amortiguación</label><select id="newCushion" class="hr-select"><option value="minimalista">Minimalista</option><option value="media" selected>Media</option><option value="max">Máxima</option></select></div>
+          <div><label class="text-xs font-semibold text-[#64748B] mb-1 block">Uso</label><select id="newType" class="hr-select"><option value="daily">Diario</option><option value="tempo">Ritmo</option><option value="racing">Competencia</option><option value="trail">Trail</option></select></div>
+        </div>
+      </div>
+      <div class="flex gap-3 mt-5">
+        <button id="saveShoeBtn" class="flex-1 py-2.5 bg-[#CCFF00] text-[#0B0F19] font-bold text-sm rounded-xl hover:bg-[#D9FF33] transition-all">Guardar</button>
+        <button id="closeModalBtn" class="flex-1 py-2.5 text-sm text-[#64748B] font-semibold hover:text-white transition bg-transparent border border-white/10 rounded-xl">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="footer-placeholder"></div>
+
+  <script src="/assets/js/config.js"></script>
+  <script src="/assets/js/store.js"></script>
+  <script src="/components/navbar.js"></script>
+  <script src="/components/footer.js"></script>
+  <script src="/assets/js/profile-modal.js"></script>
+  <script src="/assets/js/components.js"></script>
+
+  <script>
+  (() => {
+    'use strict';
+
+    const CUSHION_ORDER = { 'minimalista': 0, 'media': 1, 'max': 2 };
+    const BRAND_COLORS = {
+      'Nike': '#DC2626', 'Adidas': '#1D9A4A', 'ASICS': '#005C9E',
+      'Saucony': '#F97316', 'New Balance': '#3B82F6', 'Hoka': '#1E3A5F',
+      'Brooks': '#1B5E20', 'Puma': '#000', 'Mizuno': '#1A1A2E',
+      'Under Armour': '#F77F00'
+    };
+
+    // ── Shoe database ──
+    const DEFAULT_SHOES = [
+      { brand:'Nike', model:'Pegasus 40', drop:10, weight:290, cushion:'media', type:'daily', price:399, id:'nike_pegasus40' },
+      { brand:'Nike', model:'Vaporfly 3', drop:8, weight:200, cushion:'max', type:'racing', price:799, id:'nike_vaporfly3' },
+      { brand:'Nike', model:'Alphafly 3', drop:8, weight:215, cushion:'max', type:'racing', price:899, id:'nike_alphafly3' },
+      { brand:'Nike', model:'Invincible 3', drop:9, weight:300, cushion:'max', type:'daily', price:569, id:'nike_invincible3' },
+      { brand:'Adidas', model:'Adizero SL', drop:10, weight:245, cushion:'media', type:'daily', price:299, id:'adidas_adizero_sl' },
+      { brand:'Adidas', model:'Adios Pro 3', drop:6, weight:210, cushion:'max', type:'racing', price:799, id:'adidas_adios_pro3' },
+      { brand:'Adidas', model:'Takumi Sen 10', drop:6, weight:200, cushion:'media', type:'tempo', price:599, id:'adidas_takumi_sen10' },
+      { brand:'Adidas', model:'Ultraboost Light', drop:10, weight:310, cushion:'max', type:'daily', price:499, id:'adidas_ultraboost' },
+      { brand:'ASICS', model:'Gel-Nimbus 26', drop:8, weight:305, cushion:'max', type:'daily', price:529, id:'asics_nimbus26' },
+      { brand:'ASICS', model:'Magic Speed 3', drop:7, weight:240, cushion:'media', type:'tempo', price:429, id:'asics_magicspeed3' },
+      { brand:'ASICS', model:'Metaspeed Sky+', drop:5, weight:200, cushion:'max', type:'racing', price:799, id:'asics_metaspeed' },
+      { brand:'Saucony', model:'Ride 17', drop:8, weight:280, cushion:'media', type:'daily', price:399, id:'saucony_ride17' },
+      { brand:'Saucony', model:'Endorphin Speed 4', drop:8, weight:230, cushion:'max', type:'tempo', price:599, id:'saucony_endorphin_speed4' },
+      { brand:'Saucony', model:'Endorphin Pro 4', drop:8, weight:205, cushion:'max', type:'racing', price:799, id:'saucony_endorphin_pro4' },
+      { brand:'New Balance', model:'Fresh Foam 1080v13', drop:8, weight:290, cushion:'max', type:'daily', price:499, id:'nb_1080v13' },
+      { brand:'New Balance', model:'FuelCell SuperComp Elite v4', drop:4, weight:210, cushion:'max', type:'racing', price:799, id:'nb_sc_elite_v4' },
+      { brand:'New Balance', model:'FuelCell Rebel v4', drop:6, weight:220, cushion:'media', type:'tempo', price:449, id:'nb_rebel_v4' },
+      { brand:'Hoka', model:'Clifton 9', drop:5, weight:250, cushion:'max', type:'daily', price:449, id:'hoka_clifton9' },
+      { brand:'Hoka', model:'Mach 6', drop:5, weight:230, cushion:'media', type:'tempo', price:499, id:'hoka_mach6' },
+      { brand:'Brooks', model:'Ghost 16', drop:12, weight:275, cushion:'media', type:'daily', price:399, id:'brooks_ghost16' },
+      { brand:'Brooks', model:'Hyperion Elite 4', drop:8, weight:215, cushion:'max', type:'racing', price:749, id:'brooks_hyperion_elite4' },
+    ];
+
+    // ── State ──
+    let shoes = [];
+    let selected = [];
+    let compareMode = false;
+    let filterType = 'all';
+    let filterBrand = 'all';
+    let sortKey = 'name';
+
+    // ── Load shoes ──
+    function loadShoes() {
+      const saved = JPZCH_Store.getToolData('shoe-compare');
+      const customShoes = (saved && saved.customShoes) ? saved.customShoes : [];
+      const existingIds = new Set(DEFAULT_SHOES.map(s => s.id));
+      // Deduplicate custom shoes that might match default IDs
+      const cleanCustom = customShoes.filter(s => !existingIds.has(s.id));
+      shoes = [...DEFAULT_SHOES, ...cleanCustom];
+    }
+
+    function saveCustomShoes() {
+      const saved = JPZCH_Store.getToolData('shoe-compare') || {};
+      saved.customShoes = shoes.filter(s => s.id.startsWith('custom_'));
+      JPZCH_Store.saveToolData('shoe-compare', saved);
+    }
+
+    // ── Filter & sort ──
+    function getFilteredShoes() {
+      let result = [...shoes];
+      if (filterType !== 'all') result = result.filter(s => s.type === filterType);
+      if (filterBrand !== 'all') result = result.filter(s => s.brand === filterBrand);
+      if (compareMode) result = result.filter(s => selected.includes(s.id));
+      result.sort((a, b) => {
+        if (sortKey === 'name') return a.brand.localeCompare(b.brand) || a.model.localeCompare(b.model);
+        if (sortKey === 'drop') return a.drop - b.drop;
+        if (sortKey === 'weight') return a.weight - b.weight;
+        if (sortKey === 'price') return a.price - b.price;
+        if (sortKey === 'cushion') return CUSHION_ORDER[a.cushion] - CUSHION_ORDER[b.cushion];
+        return 0;
+      });
+      return result;
+    }
+
+    // ── Render ──
+    function render() {
+      const allShoes = getFilteredShoes();
+      const countEl = document.getElementById('shoeCount');
+      if (compareMode) {
+        countEl.textContent = `Modo comparación: ${allShoes.length} zapatillas seleccionadas`;
+      } else {
+        countEl.textContent = `${allShoes.length} zapatillas · ${selected.length} seleccionadas`;
+      }
+
+      // Toggle buttons
+      const addBtn = document.getElementById('addShoeBtn');
+      const exitBtn = document.getElementById('exitCompareBtn');
+      const filterSection = document.getElementById('typePills').parentElement;
+      const brandSection = document.getElementById('brandPills').parentElement;
+      const sortLabel = document.querySelector('#sortSelect');
+
+      if (compareMode) {
+        addBtn.style.display = 'none';
+        exitBtn.style.display = 'inline-flex';
+        filterSection.style.opacity = '0.3';
+        filterSection.style.pointerEvents = 'none';
+        brandSection.style.opacity = '0.3';
+        brandSection.style.pointerEvents = 'none';
+        sortLabel.style.opacity = '0.3';
+        sortLabel.style.pointerEvents = 'none';
+      } else {
+        addBtn.style.display = 'inline-flex';
+        exitBtn.style.display = 'none';
+        filterSection.style.opacity = '1';
+        filterSection.style.pointerEvents = '';
+        brandSection.style.opacity = '1';
+        brandSection.style.pointerEvents = '';
+        sortLabel.style.opacity = '1';
+        sortLabel.style.pointerEvents = '';
+      }
+
+      // Action bar
+      const actionBar = document.getElementById('actionBar');
+      const actionCount = document.getElementById('actionCount');
+      const actionHint = document.getElementById('actionHint');
+      const actionChips = document.getElementById('actionChips');
+      const actionBtn = document.getElementById('actionCompareBtn');
+
+      if (selected.length === 0 || compareMode) {
+        actionBar.style.display = 'none';
+      } else {
+        actionBar.style.display = 'block';
+        const isReady = selected.length >= 2;
+        actionCount.textContent = selected.length + ' seleccionada' + (selected.length === 1 ? '' : 's');
+        actionHint.textContent = isReady ? 'Listo para comparar' : 'Selecciona ' + (2 - selected.length) + ' más';
+        actionBtn.disabled = !isReady;
+        actionChips.innerHTML = selected.map(id => {
+          const s = shoes.find(x => x.id === id);
+          if (!s) return '';
+          const bc = BRAND_COLORS[s.brand] || '#64748B';
+          return `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold whitespace-nowrap" style="background:${bc}15;border:1px solid ${bc}25;color:#F1F5F9">
+            ${s.model}
+            <button class="remove-chip bg-transparent border-none cursor-pointer text-[#64748B] hover:text-white text-xs font-bold leading-none" data-id="${s.id}">✕</button>
+          </span>`;
+        }).join('');
+        actionChips.querySelectorAll('.remove-chip').forEach(btn => {
+          btn.addEventListener('click', () => {
+            selected = selected.filter(id => id !== btn.dataset.id);
+            render();
+          });
+        });
+      }
+
+      // ── Compare mode: show interactive winner cards ──
+      const tableSection = document.querySelector('.glass.rounded-2xl');
+      const head = document.getElementById('tableHead');
+      const body = document.getElementById('tableBody');
+
+      if (compareMode) {
+        head.innerHTML = '';
+        // Find best values among selected shoes
+        const bestDrop = Math.min(...allShoes.map(s => s.drop));
+        const bestWeight = Math.min(...allShoes.map(s => s.weight));
+        const bestPrice = Math.min(...allShoes.map(s => s.price));
+        const bestCushion = Math.max(...allShoes.map(s => CUSHION_ORDER[s.cushion]));
+        const maxDrop = Math.max(...allShoes.map(s => s.drop));
+        const maxWeight = Math.max(...allShoes.map(s => s.weight));
+        const maxPrice = Math.max(...allShoes.map(s => s.price));
+
+        // Calculate score: lower drop/weight/price = better, higher cushion = better
+        const scored = allShoes.map(s => {
+          const dropScore = maxDrop > 0 ? (1 - (s.drop - bestDrop) / (maxDrop - bestDrop || 1)) * 25 : 25;
+          const weightScore = maxWeight > 0 ? (1 - (s.weight - bestWeight) / (maxWeight - bestWeight || 1)) * 25 : 25;
+          const priceScore = maxPrice > 0 ? (1 - (s.price - bestPrice) / (maxPrice - bestPrice || 1)) * 25 : 25;
+          const cushionScore = (CUSHION_ORDER[s.cushion] - 1) * 10 + 15; // min=5, max=25
+          const total = Math.round((dropScore + weightScore + priceScore + cushionScore));
+          return { ...s, total };
+        });
+        scored.sort((a, b) => b.total - a.total);
+        const winner = scored[0];
+
+        body.innerHTML = `<tr><td colspan="7" class="p-0" style="border:none">
+          <div class="p-4 md:p-6">
+
+            <!-- Winner banner -->
+            <div class="bg-gradient-to-r from-[#CCFF00]/10 to-transparent border border-[#CCFF00]/20 rounded-xl p-4 mb-6 flex items-center gap-3">
+              <span class="text-2xl">🏆</span>
+              <div>
+                <span class="text-[#CCFF00] font-bold text-sm">Ganador: ${winner.brand} ${winner.model}</span>
+                <p class="text-[#94A3B8] text-xs mt-0.5">Puntaje global: ${winner.total}/100 — Mejor equilibrio entre drop, peso, precio y amortiguación</p>
+              </div>
+            </div>
+
+            <!-- Comparison cards -->
+            <div class="grid gap-4" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr))">
+            ${scored.map(s => {
+              const bc = BRAND_COLORS[s.brand] || '#64748B';
+              const cushionLabel = { minimalista:'Baja', media:'Media', max:'Alta' }[s.cushion] || s.cushion;
+              const typeLabel = { daily:'Diario', tempo:'Ritmo', racing:'Compet.', trail:'Trail' }[s.type] || s.type;
+
+              const isWinnerDrop = s.drop === bestDrop;
+              const isWinnerWeight = s.weight === bestWeight;
+              const isWinnerPrice = s.price === bestPrice;
+              const isWinnerCushion = CUSHION_ORDER[s.cushion] === bestCushion;
+              const wins = [isWinnerDrop, isWinnerWeight, isWinnerPrice, isWinnerCushion].filter(Boolean).length;
+
+              const barDrop = maxDrop > 0 ? (s.drop / maxDrop * 100).toFixed(0) : 0;
+              const barWeight = maxWeight > 0 ? (s.weight / maxWeight * 100).toFixed(0) : 0;
+              const barPrice = maxPrice > 0 ? (s.price / maxPrice * 100).toFixed(0) : 0;
+
+              return `<div class="rounded-xl border ${s.id === winner.id ? 'border-[#CCFF00]/30' : 'border-white/5'} p-4" style="background:${s.id === winner.id ? 'rgba(204,255,0,0.03)' : 'rgba(11,15,25,0.5)'}">
+                <div class="flex items-center justify-between mb-3">
+                  <div>
+                    <span class="brand-tag rounded" style="background:${bc}15;color:${bc};padding:0.1rem 0.4rem;font-size:0.6rem;font-weight:700">${s.brand}</span>
+                    <div class="text-white font-bold text-sm mt-1">${s.model}</div>
+                  </div>
+                  <div class="text-right">
+                    <div class="text-[#CCFF00] font-black text-lg">${s.total}</div>
+                    <div class="text-[#475569] text-[10px] font-semibold">PTS</div>
+                  </div>
+                </div>
+
+                <div class="space-y-2 text-xs">
+                  <div>
+                    <div class="flex justify-between text-[#94A3B8] mb-0.5">
+                      <span>Drop ${isWinnerDrop ? '<span class="text-[#CCFF00]">🏆 Menor</span>' : ''}</span>
+                      <span class="text-white font-semibold">${s.drop} mm</span>
+                    </div>
+                    <div class="spec-bar"><div class="spec-bar-fill" style="width:${barDrop}%;background:${isWinnerDrop ? '#CCFF00' : '#8B5CF6'}"></div></div>
+                  </div>
+                  <div>
+                    <div class="flex justify-between text-[#94A3B8] mb-0.5">
+                      <span>Peso ${isWinnerWeight ? '<span class="text-[#CCFF00]">🏆 Más ligera</span>' : ''}</span>
+                      <span class="text-white font-semibold">${s.weight} g</span>
+                    </div>
+                    <div class="spec-bar"><div class="spec-bar-fill" style="width:${barWeight}%;background:${isWinnerWeight ? '#CCFF00' : '#3B82F6'}"></div></div>
+                  </div>
+                  <div>
+                    <div class="flex justify-between text-[#94A3B8] mb-0.5">
+                      <span>Amort. ${isWinnerCushion ? '<span class="text-[#CCFF00]">🏆 Máxima</span>' : ''}</span>
+                      <span class="text-white font-semibold">${cushionLabel}</span>
+                    </div>
+                    <div class="spec-bar"><div class="spec-bar-fill" style="width:${CUSHION_ORDER[s.cushion] * 50}%;background:${isWinnerCushion ? '#CCFF00' : CUSHION_ORDER[s.cushion] > 1 ? '#34D399' : CUSHION_ORDER[s.cushion] > 0 ? '#FBBF24' : '#EF4444'}"></div></div>
+                  </div>
+                  <div>
+                    <div class="flex justify-between text-[#94A3B8] mb-0.5">
+                      <span>Precio ${isWinnerPrice ? '<span class="text-[#CCFF00]">🏆 Mejor</span>' : ''}</span>
+                      <span class="text-white font-semibold">S/${s.price}</span>
+                    </div>
+                    <div class="spec-bar"><div class="spec-bar-fill" style="width:${barPrice}%;background:${isWinnerPrice ? '#CCFF00' : '#FBBF24'}"></div></div>
+                  </div>
+                  <div class="flex items-center gap-1 pt-1">
+                    <span class="text-[#475569]">Uso:</span>
+                    <span class="stat-chip" style="background:rgba(255,255,255,0.06);color:#94A3B8">${typeLabel}</span>
+                  </div>
+                </div>
+
+                <div class="mt-3 pt-2 border-t border-white/5 flex items-center gap-1 text-xs text-[#64748B]">
+                  <span class="text-[#CCFF00] font-semibold">${wins}</span> categorías ganadas
+                </div>
+              </div>`;
+            }).join('')}
+            </div>
+
+            <!-- Summary row -->
+            <div class="mt-5 pt-4 border-t border-white/5">
+              <p class="text-xs font-semibold text-[#64748B] uppercase tracking-wider mb-2">Resumen por categoría</p>
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                <div class="bg-white/5 rounded-lg p-2.5 text-center">
+                  <div class="text-[#8B5CF6] text-[10px] font-semibold">Menos Drop</div>
+                  <div class="text-white font-bold text-sm">${scored.filter(s => s.drop === bestDrop).map(s => s.model).join(' / ')}</div>
+                  <div class="text-[#475569] text-[10px]">${bestDrop} mm</div>
+                </div>
+                <div class="bg-white/5 rounded-lg p-2.5 text-center">
+                  <div class="text-[#3B82F6] text-[10px] font-semibold">Más Ligera</div>
+                  <div class="text-white font-bold text-sm">${scored.filter(s => s.weight === bestWeight).map(s => s.model).join(' / ')}</div>
+                  <div class="text-[#475569] text-[10px]">${bestWeight} g</div>
+                </div>
+                <div class="bg-white/5 rounded-lg p-2.5 text-center">
+                  <div class="text-[#34D399] text-[10px] font-semibold">Más Amort.</div>
+                  <div class="text-white font-bold text-sm">${scored.filter(s => CUSHION_ORDER[s.cushion] === bestCushion).map(s => s.model).join(' / ')}</div>
+                  <div class="text-[#475569] text-[10px]">${bestCushion > 1 ? 'Alta' : bestCushion > 0 ? 'Media' : 'Baja'}</div>
+                </div>
+                <div class="bg-white/5 rounded-lg p-2.5 text-center">
+                  <div class="text-[#FBBF24] text-[10px] font-semibold">Mejor Precio</div>
+                  <div class="text-white font-bold text-sm">${scored.filter(s => s.price === bestPrice).map(s => s.model).join(' / ')}</div>
+                  <div class="text-[#475569] text-[10px]">S/${bestPrice}</div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </td></tr>`;
+        return;
+      }
+
+      // ── Regular table mode ──
+      if (allShoes.length === 0) {
+        head.innerHTML = '';
+        body.innerHTML = '<tr><td colspan="7" class="text-center text-[#475569] py-8">No se encontraron zapatillas con estos filtros.</td></tr>';
+        return;
+      }
+
+      head.innerHTML = `<tr>
+        <th style="width:2.5rem;min-width:2rem;padding:0.75rem 0.25rem">Sel.</th>
+        <th class="shoe-name-cell">Modelo</th>
+        <th>Drop</th>
+        <th>Peso</th>
+        <th>Amort.</th>
+        <th>Uso</th>
+        <th>Precio</th>
+      </tr>`;
+
+      const maxDrop = Math.max(...allShoes.map(s => s.drop), 12);
+      const maxWeight = Math.max(...allShoes.map(s => s.weight), 400);
+      const maxPrice = Math.max(...allShoes.map(s => s.price), 1000);
+
+      body.innerHTML = allShoes.map(s => {
+        const bc = BRAND_COLORS[s.brand] || '#64748B';
+        const isSelected = selected.includes(s.id);
+        const cushionLabel = { minimalista:'Baja', media:'Media', max:'Alta' }[s.cushion] || s.cushion;
+        const typeLabel = { daily:'Diario', tempo:'Ritmo', racing:'Compet.', trail:'Trail' }[s.type] || s.type;
+        const fillDrop = (s.drop / maxDrop * 100).toFixed(0);
+        const fillWeight = (s.weight / maxWeight * 100).toFixed(0);
+        const fillPrice = (s.price / maxPrice * 100).toFixed(0);
+        return `<tr class="${isSelected ? 'selected' : ''}">
+          <td style="padding:0.4rem 0.25rem">
+            <input type="checkbox" class="shoe-check" data-id="${s.id}" ${isSelected ? 'checked' : ''}>
+          </td>
+          <td class="shoe-name-cell">
+            <div class="flex items-center gap-2">
+              <span class="brand-tag rounded" style="background:${bc}15;color:${bc}">${s.brand}</span>
+              <span class="text-white font-medium">${s.model}</span>
+            </div>
+          </td>
+          <td>
+            <div class="text-white font-semibold">${s.drop} mm</div>
+            <div class="spec-bar"><div class="spec-bar-fill" style="width:${fillDrop}%;background:#8B5CF6"></div></div>
+          </td>
+          <td>
+            <div class="text-white font-semibold">${s.weight} g</div>
+            <div class="spec-bar"><div class="spec-bar-fill" style="width:${fillWeight}%;background:#3B82F6"></div></div>
+          </td>
+          <td><span class="stat-chip" style="background:${CUSHION_ORDER[s.cushion] > 1 ? 'rgba(52,211,153,0.12)' : CUSHION_ORDER[s.cushion] > 0 ? 'rgba(251,191,36,0.12)' : 'rgba(239,68,68,0.12)'};color:${CUSHION_ORDER[s.cushion] > 1 ? '#34D399' : CUSHION_ORDER[s.cushion] > 0 ? '#FBBF24' : '#EF4444'}">${cushionLabel}</span></td>
+          <td class="text-[#94A3B8]">${typeLabel}</td>
+          <td>
+            <div class="text-white font-semibold">S/${s.price}</div>
+            <div class="spec-bar"><div class="spec-bar-fill" style="width:${fillPrice}%;background:#FBBF24"></div></div>
+          </td>
+        </tr>`;
+      }).join('');
+
+      body.querySelectorAll('.shoe-check').forEach(cb => {
+        cb.addEventListener('change', () => {
+          const id = cb.dataset.id;
+          if (cb.checked) {
+            if (!selected.includes(id)) selected.push(id);
+          } else {
+            selected = selected.filter(x => x !== id);
+          }
+          render();
+        });
+      });
+
+    }
+
+    // ── Compare mode ──
+    document.getElementById('actionCompareBtn').addEventListener('click', () => {
+      if (selected.length < 2) return;
+      compareMode = true;
+      render();
+    });
+    document.getElementById('exitCompareBtn').addEventListener('click', () => {
+      compareMode = false;
+      render();
+    });
+
+    // ── Add shoe modal ──
+    document.getElementById('addShoeBtn').addEventListener('click', () => {
+      document.getElementById('addModal').classList.remove('hidden');
+    });
+    document.getElementById('closeModalBtn').addEventListener('click', () => {
+      document.getElementById('addModal').classList.add('hidden');
+    });
+    document.getElementById('saveShoeBtn').addEventListener('click', () => {
+      const brand = document.getElementById('newBrand').value.trim();
+      const model = document.getElementById('newModel').value.trim();
+      const drop = parseFloat(document.getElementById('newDrop').value);
+      const weight = parseFloat(document.getElementById('newWeight').value);
+      const price = parseFloat(document.getElementById('newPrice').value);
+      const cushion = document.getElementById('newCushion').value;
+      const type = document.getElementById('newType').value;
+
+      if (!brand || !model) { alert('Marca y modelo son obligatorios.'); return; }
+      if (!drop || !weight || !price) { alert('Drop, peso y precio son obligatorios.'); return; }
+
+      const id = 'custom_' + Date.now();
+      shoes.push({ brand, model, drop, weight, cushion, type, price, id });
+      saveCustomShoes();
+
+      // Clear & close
+      ['newBrand','newModel','newDrop','newWeight','newPrice'].forEach(id => document.getElementById(id).value = '');
+      document.getElementById('addModal').classList.add('hidden');
+      render();
+    });
+
+    // ── Filter pills ──
+    document.querySelectorAll('#typePills .pill-btn').forEach(b => {
+      b.addEventListener('click', () => {
+        document.querySelectorAll('#typePills .pill-btn').forEach(x => x.classList.remove('active'));
+        b.classList.add('active');
+        filterType = b.dataset.type;
+        render();
+      });
+    });
+    document.querySelectorAll('#brandPills .pill-btn').forEach(b => {
+      b.addEventListener('click', () => {
+        document.querySelectorAll('#brandPills .pill-btn').forEach(x => x.classList.remove('active'));
+        b.classList.add('active');
+        filterBrand = b.dataset.brand;
+        render();
+      });
+    });
+
+    // ── Sort ──
+    document.getElementById('sortSelect').addEventListener('change', e => {
+      sortKey = e.target.value;
+      render();
+    });
+
+    // ── Init ──
+    loadShoes();
+    render();
+
+  })();
+  </script>
+</body>
+</html>
