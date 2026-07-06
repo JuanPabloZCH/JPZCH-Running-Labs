@@ -178,7 +178,7 @@ const JPZCH_NAVBAR = `
           <span class="font-medium flex-1 text-left">Herramientas</span>
           <svg class="mobile-dd-chevron w-4 h-4 text-[#475569] transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
         </button>
-        <div class="mobile-dd-content hidden bg-white/5">
+        <div class="mobile-dd-content hidden">
           <a href="/JPZCH-Running-Labs/tools/cadence-analyzer/" class="flex items-center gap-3 px-8 py-3 text-white hover:bg-white/5 transition-colors">
             <span class="w-2 h-2 rounded-full bg-[#CCFF00] shrink-0"></span>
             <span class="text-sm">Analizador de Cadencia</span>
@@ -249,7 +249,7 @@ const JPZCH_NAVBAR = `
           <span class="font-medium flex-1 text-left">Recursos</span>
           <svg class="mobile-dd-chevron w-4 h-4 text-[#475569] transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
         </button>
-        <div class="mobile-dd-content hidden bg-white/5">
+        <div class="mobile-dd-content hidden">
           <div class="px-8 pt-3 pb-1 text-[10px] font-medium text-[#475569] uppercase tracking-wider">Información</div>
           <a href="/JPZCH-Running-Labs/recursos/tabla-de-ritmos/" class="flex items-center gap-3 px-8 py-2.5 text-sm text-[#94A3B8] hover:text-white hover:bg-white/5 transition-colors">Tabla de Ritmos</a>
           <a href="/JPZCH-Running-Labs/recursos/zonas-cardiacas/" class="flex items-center gap-3 px-8 py-2.5 text-sm text-[#94A3B8] hover:text-white hover:bg-white/5 transition-colors">Zonas Cardíacas</a>
@@ -267,7 +267,7 @@ const JPZCH_NAVBAR = `
           <span class="font-medium flex-1 text-left">Proyecto</span>
           <svg class="mobile-dd-chevron w-4 h-4 text-[#475569] transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
         </button>
-        <div class="mobile-dd-content hidden bg-white/5">
+        <div class="mobile-dd-content hidden">
           <a href="/JPZCH-Running-Labs/acerca/" class="flex items-center gap-3 px-8 py-3 text-sm text-[#94A3B8] hover:text-white hover:bg-white/5 transition-colors">Acerca de</a>
           <a href="/JPZCH-Running-Labs/reportar-error/" class="flex items-center gap-3 px-8 py-3 text-sm text-[#94A3B8] hover:text-white hover:bg-white/5 transition-colors">Reportar Error</a>
           <a href="/JPZCH-Running-Labs/sugerir-herramienta/" class="flex items-center gap-3 px-8 py-3 text-sm text-[#94A3B8] hover:text-white hover:bg-white/5 transition-colors">Sugerir Herramienta</a>
