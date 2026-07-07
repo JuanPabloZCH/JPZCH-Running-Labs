@@ -1,15 +1,16 @@
 # JPZCH Running Labs
 
-Ecosistema digital gratuito para corredores. Suite de 12 herramientas web progresivas (PWA) para calcular, predecir y analizar rendimiento running.
+Ecosistema digital gratuito para corredores. Suite de 13 herramientas web progresivas (PWA) para calcular, predecir y analizar rendimiento running.
 
 ## Stack Tecnico
 
-| Recurso | CDN |
-|---------|-----|
+| Recurso | CDN / Servicio |
+|---------|----------------|
 | Estilos | Tailwind CSS |
 | Animaciones | GSAP + ScrollTrigger |
 | Graficos | Chart.js |
 | Mapas | Leaflet.js |
+| IA | Groq (Llama 3.3 70B via Cloudflare Worker proxy) |
 | Persistencia | LocalStorage API |
 | Service Worker | Cache-first + Stale-while-revalidate |
 
@@ -40,7 +41,8 @@ Ecosistema digital gratuito para corredores. Suite de 12 herramientas web progre
 │   ├── playlists-bpm/
 │   ├── tabla-de-ritmos/
 │   └── zonas-cardiacas/
-└── tools/                      12 herramientas independientes
+    └── tools/                      13 herramientas independientes
+    ├── ai-coach/               AI Coach (analisis con IA via Groq)
     ├── cadence-analyzer/       Analizador de Cadencia
     ├── gpx-dashboard/          Analizador GPX (mapa + elevacion)
     ├── hydration-calculator/   Calculadora de Hidratacion

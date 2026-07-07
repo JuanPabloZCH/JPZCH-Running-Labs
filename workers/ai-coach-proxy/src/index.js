@@ -1,4 +1,4 @@
-const GEMINI_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
+const GROQ_URL = 'https://api.groq.com/openai/v1/chat/completions';
 
 const ALLOWED_ORIGINS = [
   'https://juanpablozch.github.io',
@@ -43,35 +43,35 @@ export default {
         });
       }
 
-      const apiKey = env.GEMINI_API_KEY;
+      const apiKey = env.GROQ_API_KEY || env.GEMINI_API_KEY;
       if (!apiKey) {
         return new Response(JSON.stringify({ error: 'Server config error' }), {
           status: 500, headers: { ...headers, 'Content-Type': 'application/json' }
         });
       }
 
-      const geminiRes = await fetch(`${GEMINI_URL}?key=${apiKey}`, {
+      const groqRes = await fetch(GROQ_URL, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${apiKey}`
+        },
         body: JSON.stringify({
-          contents: [{ parts: [{ text: prompt }] }],
-          generationConfig: {
-            temperature: 0.3,
-            maxOutputTokens: 4096,
-            topK: 1,
-            topP: 1
-          }
+          model: 'llama-3.3-70b-versatile',
+          messages: [{ role: 'user', content: prompt }],
+          temperature: 0.3,
+          max_tokens: 4096
         })
       });
 
-      const text = await geminiRes.text();
+      const text = await groqRes.text();
 
-      if (!geminiRes.ok) {
+      if (!groqRes.ok) {
         return new Response(JSON.stringify({
-          error: 'Gemini API error',
+          error: 'Groq API error',
           detail: text.slice(0, 500)
         }), {
-          status: geminiRes.status,
+          status: groqRes.status,
           headers: { ...headers, 'Content-Type': 'application/json' }
         });
       }

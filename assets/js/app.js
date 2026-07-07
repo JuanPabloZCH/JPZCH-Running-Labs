@@ -6,8 +6,7 @@ const JPZCH_App = (() => {
       description: 'Analiza tus carreras con inteligencia artificial. Sube un GPX o ingresa datos manualmente y recibe un análisis detallado con recomendaciones personalizadas.',
       category: 'analizadores',
       icon: 'sparkles',
-      status: 'development',
-      statusBadge: 'En desarrollo',
+      status: 'available',
       accent: '#CCFF00',
       url: '/tools/ai-coach/',
       features: ['GPX', 'Manual', 'IA', 'Dashboard']

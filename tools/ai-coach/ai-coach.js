@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
-  const PROXY_URL = 'https://ai-coach-proxy.jpzch.workers.dev';
+  const PROXY_URL = 'https://ai-coach-proxy.juanpablozegarrachavez.workers.dev';
 
   let state = {
     inputMethod: 'gpx',
@@ -172,57 +172,98 @@ ${g.segments.map(s => `  Km ${s.km}: ${(s.elevGain || 0) > 0 ? '+' : ''}${(s.ele
     if (profile.goal) profileInfo.push(`Objetivo: ${profile.goal}`);
     if (profile.mainDist) profileInfo.push(`Distancia principal: ${profile.mainDist}`);
 
-    const profileStr = profileInfo.length ? `\n\nPERFIL DEL CORREDOR:\n${profileInfo.join('\n')}` : '';
+    const profileStr = profileInfo.length ? `\n\n### PERFIL DEL CORREDOR\n${profileInfo.join('\n')}` : '';
 
-    return `Eres un entrenador de running con 30 anos de experiencia entrenando desde corredores populares hasta atletas de elite. Tu especialidad es el analisis tecnico, fisiologico y estrategico profundo de sesiones de entrenamiento y carreras. Eres metodico, detallista y tienes un enfoque cientifico basado en evidencia.
+    return `Actua como un equipo profesional de alto rendimiento especializado exclusivamente en running de fondo y media maraton, compuesto por:
 
-INSTRUCCIONES:
-- Analiza los datos proporcionados de forma SUPER DETALLADA.
-- Identifica patrones, inconsistencias, fortalezas y areas de mejora.
-- Tus recomendaciones deben ser concretas, accionables y personalizadas.
-- Si falta informacion (como FC o cadencia), menciona que no esta disponible y centrate en lo que si tienes.
-- Para sesiones sin datos de elevacion, omite ese analisis.
-- El tono debe ser motivador pero honesto, como un entrenador de verdad.
-- Piensa paso a paso antes de responder.
+- Entrenador elite de running especializado en 5K, 10K, 21K y maraton
+- Fisiologo del ejercicio especializado en corredores de resistencia
+- Especialista en entrenamiento polarizado
+- Especialista en umbral de lactato y VO2max
+- Analista biomecanico de la tecnica de carrera
+- Analista de datos de entrenamiento (COROS, Garmin, TrainingPeaks, Strava, Stryd)
+
+Se completamente objetivo. No des respuestas motivacionales ni optimistas sin fundamento. Analiza unicamente la evidencia disponible y di exactamente lo que muestran los datos, aunque la conclusion no sea la esperada. Si algo no puede determinarse con la informacion disponible, indicado claramente. Si detectas errores en el entrenamiento, signalos. Si identificas oportunidades de mejora, cuantificadas cuando sea posible.
+
+Analiza considerando cada seccion segun la informacion disponible. Si faltan datos para evaluar un area, indicado como "disponible": false.
+
+### RITMOS
+Analiza: ritmo promedio, ritmo por km, consistencia, variabilidad, negative/positive/even split, capacidad para mantener ritmo objetivo.
+Indica claramente si el entrenamiento fue: muy facil, facil, adecuado, exigente o excesivamente exigente.
+
+### FRECUENCIA CARDIACA (si disponible)
+Analiza: FC promedio, FC maxima, deriva cardiaca, relacion ritmo-FC, tiempo en zonas, comportamiento del pulso, signos de fatiga o mejora aerobica.
+
+### UMBRAL (si hay datos)
+Analiza: umbral aerobico, umbral de lactato, ritmo de umbral, FC de umbral, evolucion.
+
+### ECONOMIA DE CARRERA (si hay datos)
+Analiza: cadencia, longitud de zancada, oscilacion vertical, tiempo de contacto, potencia, Running Economy.
+
+### TECNICA DE CARRERA (si hay datos)
+Analiza: cadencia, braceo, postura, apoyo del pie, estabilidad, eficiencia mecanica.
+
+### CARGA DEL ENTRENAMIENTO
+Analiza: carga interna, carga externa, intensidad, volumen, distribucion de intensidades, polarizacion. Determina si la sesion aporta el estimulo adecuado.
+
+### PROYECCION DEPORTIVA
+Estima el potencial actual para 5K, 10K, media maraton y maraton si hay datos suficientes. Si no, indicado.
 
 Debes responder UNICAMENTE con un objeto JSON valido. Sin markdown, sin texto adicional, solo el JSON. Usa esta estructura exacta:
 
 {
-  "puntuacion": <numero del 1 al 10, donde 10 es rendimiento de elite>,
-  "resumen": "<texto: parrafo de 3-5 lineas con la impresion general de la sesion>",
+  "puntuacion": <numero del 1 al 10>,
+  "resumen": "<resumen ejecutivo de la sesion en 3-5 lineas>",
+  "nivelCalidad": {
+    "nota": <numero del 1 al 10>,
+    "justificacion": "<justificacion de la nota considerando ejecucion, adecuacion al objetivo, gestion del esfuerzo, beneficio fisiologico y riesgo asumido>"
+  },
+  "analisisCritico": {
+    "puntosPositivos": ["<aspecto positivo 1 con explicacion>", "<aspecto positivo 2>", "<aspecto positivo 3>"],
+    "aspectosMejora": ["<aspecto a mejorar 1 con explicacion>", "<aspecto a mejorar 2>"],
+    "erroresDetectados": ["<error 1 con explicacion>", "<error 2>"],
+    "riesgos": ["<riesgo 1 de lesion, sobrecarga o estancamiento>", "<riesgo 2>"]
+  },
   "analisisRitmo": {
-    "texto": "<analisis detallado del ritmo: consistencia, estrategia (positive/negative/even split), km mas rapidos y lentos, donde se perdio o gano tiempo>",
-    "tipoSplit": "<even|positive|negative|unknown>"
+    "texto": "<analisis detallado del ritmo: consistencia, km mas rapidos/lentos, donde se perdio o gano tiempo>",
+    "tipoSplit": "<even|positive|negative|unknown>",
+    "nivelExigencia": "<muy_facil|facil|adecuado|exigente|excesivo>"
   },
   "analisisElevacion": {
     "disponible": <true|false>,
-    "texto": "<analisis de como manejo las subidas y bajadas, si perdio tiempo en cuestas, estrategia de esfuerzo>"
-  },
-  "eficiencia": {
-    "disponible": <true|false>,
-    "texto": "<analisis de eficiencia basado en los datos disponibles>"
+    "texto": "<analisis de manejo de subidas y bajadas>"
   },
   "frecuenciaCardiaca": {
     "disponible": <true|false>,
-    "texto": "<analisis de FC si esta disponible>"
+    "texto": "<analisis de FC>"
   },
-  "puntosFuertes": [
-    "<punto fuerte 1 con explicacion>",
-    "<punto fuerte 2 con explicacion>",
-    "<punto fuerte 3 con explicacion>"
-  ],
-  "puntosMejora": [
-    "<punto de mejora 1 con explicacion del porque>",
-    "<punto de mejora 2 con explicacion del porque>",
-    "<punto de mejora 3 con explicacion del porque>"
-  ],
+  "umbral": {
+    "disponible": <true|false>,
+    "texto": "<analisis de umbral>"
+  },
+  "economiaCarrera": {
+    "disponible": <true|false>,
+    "texto": "<analisis de economia de carrera>"
+  },
+  "tecnicaCarrera": {
+    "disponible": <true|false>,
+    "texto": "<analisis de tecnica de carrera>"
+  },
+  "cargaEntrenamiento": {
+    "texto": "<analisis de la carga del entrenamiento>"
+  },
+  "proyeccion": {
+    "disponible": <true|false>,
+    "texto": "<estimacion de potencial para 5K, 10K, 21K, 42K si hay datos>"
+  },
   "recomendaciones": [
-    "<recomendacion concreta 1: que hacer, como hacerlo y por que>",
-    "<recomendacion concreta 2: que hacer, como hacerlo y por que>",
-    "<recomendacion concreta 3: que hacer, como hacerlo y por que>",
-    "<recomendacion concreta 4: que hacer, como hacerlo y por que>"
+    "<recomendacion concreta 1: que hacer, como y por que>",
+    "<recomendacion concreta 2>",
+    "<recomendacion concreta 3>",
+    "<recomendacion concreta 4>"
   ],
-  "proximaSession": "<recomendacion especifica para la siguiente sesion de entrenamiento: tipo, duracion, intensidad, objetivo>"
+  "proximaSession": "<recomendacion especifica para la siguiente sesion: tipo, duracion, intensidad, objetivo>",
+  "proximosPasos": "<que tipo de entrenamiento recomiendas a continuacion y por que>"
 }
 
 DATOS A ANALIZAR:
@@ -240,9 +281,26 @@ ${userInfo}${profileStr}`;
       throw new Error(err.error || 'Error al conectar con el AI Coach');
     }
     const data = await res.json();
-    const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+    const text = data?.choices?.[0]?.message?.content;
     if (!text) throw new Error('La IA no genero una respuesta valida');
     return text;
+  }
+
+  const EXIGENCIA_LABELS = {
+    muy_facil: { label: 'Muy facil', color: '#22C55E', bg: 'rgba(34,197,94,0.1)' },
+    facil: { label: 'Facil', color: '#22D3EE', bg: 'rgba(34,211,238,0.1)' },
+    adecuado: { label: 'Adecuado', color: '#8B5CF6', bg: 'rgba(139,92,246,0.1)' },
+    exigente: { label: 'Exigente', color: '#FBBF24', bg: 'rgba(251,191,36,0.1)' },
+    excesivo: { label: 'Excesivamente exigente', color: '#FF5722', bg: 'rgba(255,87,34,0.1)' }
+  };
+
+  function exigenciaBadge(nivel) {
+    const e = EXIGENCIA_LABELS[nivel] || EXIGENCIA_LABELS.adecuado;
+    return `<span class="text-[10px] font-semibold px-2 py-0.5 rounded-full" style="background:${e.bg};color:${e.color}">${e.label}</span>`;
+  }
+
+  function sectionCard(title, text, color = '#A78BFA') {
+    return `<div class="card-glass p-5"><h3 class="text-white font-bold text-sm mb-3 flex items-center gap-2"><span class="w-2 h-2 rounded-full shrink-0" style="background:${color}"></span>${title}</h3><p class="text-[#94A3B8] text-sm leading-relaxed">${text}</p></div>`;
   }
 
   function renderDashboard(result, inputData) {
@@ -262,9 +320,46 @@ ${userInfo}${profileStr}`;
       </div>
 
       <div class="card-glass p-6 md:p-8">
-        <h3 class="text-white font-bold text-sm mb-3">Resumen General</h3>
+        <h3 class="text-white font-bold text-sm mb-3">Resumen Ejecutivo</h3>
         <p class="text-[#94A3B8] text-sm leading-relaxed">${r.resumen}</p>
       </div>`;
+
+    if (r.nivelCalidad) {
+      const nqColor = r.nivelCalidad.nota >= 8 ? '#22C55E' : r.nivelCalidad.nota >= 6 ? '#FBBF24' : '#FF5722';
+      html += `
+      <div class="card-glass p-6 md:p-8">
+        <div class="flex items-center gap-4 mb-3">
+          <div class="w-12 h-12 rounded-xl flex items-center justify-center font-black text-lg shrink-0" style="background:${nqColor}15;color:${nqColor}">${r.nivelCalidad.nota}</div>
+          <div>
+            <h3 class="text-white font-bold text-sm">Nivel de Calidad</h3>
+            <p class="text-[#64748B] text-[11px]">Ejecucion · Adecuacion · Gestion · Beneficio · Riesgo</p>
+          </div>
+        </div>
+        <p class="text-[#94A3B8] text-sm leading-relaxed">${r.nivelCalidad.justificacion}</p>
+      </div>`;
+    }
+
+    if (r.analisisCritico) {
+      html += `
+      <div class="grid sm:grid-cols-2 gap-3">
+        <div class="an-card green">
+          <h3> Puntos Positivos</h3>
+          <ul>${(r.analisisCritico.puntosPositivos || []).map(p => `<li>${p}</li>`).join('')}</ul>
+        </div>
+        <div class="an-card orange">
+          <h3> Aspectos a Mejorar</h3>
+          <ul>${(r.analisisCritico.aspectosMejora || []).map(p => `<li>${p}</li>`).join('')}</ul>
+        </div>
+        <div class="an-card yellow">
+          <h3> Errores Detectados</h3>
+          <ul>${(r.analisisCritico.erroresDetectados || ['No se detectaron errores significativos']).map(p => `<li>${p}</li>`).join('')}</ul>
+        </div>
+        <div class="an-card purple">
+          <h3> Riesgos</h3>
+          <ul>${(r.analisisCritico.riesgos || ['No se identificaron riesgos significativos']).map(p => `<li>${p}</li>`).join('')}</ul>
+        </div>
+      </div>`;
+    }
 
     if (inputData.source === 'gpx') {
       const g = inputData.gpx;
@@ -362,47 +457,50 @@ ${userInfo}${profileStr}`;
       </div>`;
     }
 
-    html += `
-      <div class="card-glass p-6 md:p-8">
-        <h3 class="text-white font-bold text-sm mb-4">Analisis de Ritmo</h3>
-        <div class="flex items-center gap-2 mb-3">
-          <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full ${r.analisisRitmo.tipoSplit === 'negative' ? 'bg-[#22C55E]/10 text-[#22C55E]' : r.analisisRitmo.tipoSplit === 'positive' ? 'bg-[#FF5722]/10 text-[#FF5722]' : 'bg-[#FBBF24]/10 text-[#FBBF24]'}">${r.analisisRitmo.tipoSplit === 'negative' ? 'Negative Split' : r.analisisRitmo.tipoSplit === 'positive' ? 'Positive Split' : r.analisisRitmo.tipoSplit === 'even' ? 'Even Split' : 'Split no determinado'}</span>
-        </div>
-        <p class="text-[#94A3B8] text-sm leading-relaxed">${r.analisisRitmo.texto}</p>
-      </div>`;
+    html += sectionCard('Analisis de Ritmo', r.analisisRitmo.texto, '#8B5CF6');
+    html += `<div class="flex flex-wrap gap-2 px-1 -mt-3">${exigenciaBadge(r.analisisRitmo.nivelExigencia)}${r.analisisRitmo.tipoSplit ? `<span class="text-[10px] font-semibold px-2 py-0.5 rounded-full ${r.analisisRitmo.tipoSplit === 'negative' ? 'bg-[#22C55E]/10 text-[#22C55E]' : r.analisisRitmo.tipoSplit === 'positive' ? 'bg-[#FF5722]/10 text-[#FF5722]' : 'bg-[#FBBF24]/10 text-[#FBBF24]'}">${r.analisisRitmo.tipoSplit === 'negative' ? 'Negative Split' : r.analisisRitmo.tipoSplit === 'positive' ? 'Positive Split' : r.analisisRitmo.tipoSplit === 'even' ? 'Even Split' : 'Split no determinado'}</span>` : ''}</div>`;
 
     if (r.analisisElevacion && r.analisisElevacion.disponible) {
-      html += `<div class="card-glass p-6 md:p-8"><h3 class="text-white font-bold text-sm mb-3">Estrategia de Elevacion</h3><p class="text-[#94A3B8] text-sm leading-relaxed">${r.analisisElevacion.texto}</p></div>`;
-    }
-    if (r.eficiencia && r.eficiencia.disponible) {
-      html += `<div class="card-glass p-6 md:p-8"><h3 class="text-white font-bold text-sm mb-3">Eficiencia y Biomecanica</h3><p class="text-[#94A3B8] text-sm leading-relaxed">${r.eficiencia.texto}</p></div>`;
+      html += sectionCard('Estrategia de Elevacion', r.analisisElevacion.texto, '#FF5722');
     }
     if (r.frecuenciaCardiaca && r.frecuenciaCardiaca.disponible) {
-      html += `<div class="card-glass p-6 md:p-8"><h3 class="text-white font-bold text-sm mb-3">Frecuencia Cardiaca</h3><p class="text-[#94A3B8] text-sm leading-relaxed">${r.frecuenciaCardiaca.texto}</p></div>`;
+      html += sectionCard('Frecuencia Cardiaca', r.frecuenciaCardiaca.texto, '#EF4444');
+    }
+    if (r.umbral && r.umbral.disponible) {
+      html += sectionCard('Analisis de Umbral', r.umbral.texto, '#22D3EE');
+    }
+    if (r.economiaCarrera && r.economiaCarrera.disponible) {
+      html += sectionCard('Economia de Carrera', r.economiaCarrera.texto, '#F59E0B');
+    }
+    if (r.tecnicaCarrera && r.tecnicaCarrera.disponible) {
+      html += sectionCard('Tecnica de Carrera', r.tecnicaCarrera.texto, '#EC4899');
+    }
+    if (r.cargaEntrenamiento && r.cargaEntrenamiento.texto) {
+      html += sectionCard('Carga del Entrenamiento', r.cargaEntrenamiento.texto, '#64748B');
+    }
+    if (r.proyeccion && r.proyeccion.disponible) {
+      html += sectionCard('Proyeccion Deportiva', r.proyeccion.texto, '#22C55E');
     }
 
     html += `
-      <div class="grid md:grid-cols-2 gap-4">
-        <div class="an-card green">
-          <h3> Puntos Fuertes</h3>
-          <ul>${r.puntosFuertes.map(p => `<li>${p}</li>`).join('')}</ul>
-        </div>
-        <div class="an-card orange">
-          <h3> Puntos a Mejorar</h3>
-          <ul>${r.puntosMejora.map(p => `<li>${p}</li>`).join('')}</ul>
-        </div>
-      </div>
-
-      <div class="an-card purple">
-        <h3> Recomendaciones Detalladas</h3>
-        <ul>${r.recomendaciones.map(p => `<li>${p}</li>`).join('')}</ul>
+      <div class="card-glass p-6 md:p-8">
+        <h3 class="text-white font-bold text-sm mb-4">Recomendaciones Detalladas</h3>
+        <ul class="space-y-2">${(r.recomendaciones || []).map(p => `<li class="flex items-start gap-3 text-[#94A3B8] text-sm leading-relaxed"><span class="w-1.5 h-1.5 rounded-full bg-[#A78BFA] shrink-0 mt-2"></span>${p}</li>`).join('')}</ul>
       </div>`;
 
     if (r.proximaSession) {
       html += `
       <div class="an-card cyan">
         <h3> Proxima Sesion Recomendada</h3>
-        <p>${r.proximaSession}</p>
+        <p class="text-[#94A3B8]">${r.proximaSession}</p>
+      </div>`;
+    }
+
+    if (r.proximosPasos) {
+      html += `
+      <div class="an-card purple">
+        <h3> Proximos Pasos</h3>
+        <p class="text-[#94A3B8]">${r.proximosPasos}</p>
       </div>`;
     }
 
@@ -462,7 +560,7 @@ ${userInfo}${profileStr}`;
       }
       const result = JSON.parse(jsonStr);
 
-      if (!result.puntuacion || !result.resumen || !result.puntosFuertes) {
+      if (!result.puntuacion || !result.resumen || !result.analisisCritico) {
         throw new Error('La respuesta no tiene la estructura esperada');
       }
 
