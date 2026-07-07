@@ -51,8 +51,9 @@
     .file-zone { border: 2px dashed rgba(139,92,246,0.2); border-radius: 1rem; padding: 2.5rem 1.5rem; text-align: center; cursor: pointer; transition: all 0.3s ease; background: rgba(139,92,246,0.03); }
     .file-zone:hover, .file-zone.dragover { border-color: #8B5CF6; background: rgba(139,92,246,0.06); }
     .file-zone.has-file { border-color: #22C55E; background: rgba(34,197,94,0.05); }
-    .score-ring { width: 120px; height: 120px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-direction: column; margin: 0 auto; position: relative; font-weight: 900; font-size: 2.5rem; line-height: 1; }
-    .score-ring::before { content: ''; position: absolute; width: 80px; height: 80px; border-radius: 50%; background: #0B0F19; top: 50%; left: 50%; transform: translate(-50%, -50%); }
+    .score-ring-svg { width: 130px; height: 130px; margin: 0 auto; position: relative; }
+    .score-ring-svg svg { width: 100%; height: 100%; }
+    .score-ring-text { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
     .an-card { border-radius: 1rem; padding: 1rem; border: 1px solid rgba(255,255,255,0.06); }
     .an-card h3 { font-size: 0.8125rem; font-weight: 700; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
     .an-card p, .an-card li { font-size: 0.8125rem; line-height: 1.6; }
@@ -129,6 +130,24 @@
               <svg class="w-5 h-5 text-[#22C55E] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
               <span id="fileInfoText" class="text-white text-sm font-medium"></span>
             </div>
+            <div id="gpxExtra" class="hidden mt-3 space-y-3">
+              <div>
+                <label class="form-label">Tipo de sesi&oacute;n</label>
+                <select id="gpxType" class="form-input">
+                  <option value="">Selecciona...</option>
+                  <option value="rodaje">Rodaje suave</option>
+                  <option value="tempo">Tempo / Umbral</option>
+                  <option value="intervalos">Intervalos / Series</option>
+                  <option value="larga">Rodaje largo</option>
+                  <option value="carrera">Carrera / Competencia</option>
+                  <option value="recuperacion">Recuperaci&oacute;n</option>
+                </select>
+              </div>
+              <div>
+                <label class="form-label">Notas / Sensaciones</label>
+                <textarea id="gpxNotes" class="form-input resize-none" rows="2" maxlength="300" placeholder="Ej: buenas sensaciones, ritmo controlado... (max 300 caracteres)"></textarea>
+              </div>
+            </div>
           </div>
 
           <div id="panel-manual" class="input-panel">
@@ -169,6 +188,10 @@
                 <option value="carrera">Carrera / Competencia</option>
                 <option value="recuperacion">Recuperaci&oacute;n</option>
               </select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Notas / Sensaciones</label>
+              <textarea id="manNotes" class="form-input resize-none" rows="2" maxlength="300" placeholder="Ej: me senti muy bien, ritmo comodo, buenas sensaciones... (max 300 caracteres)"></textarea>
             </div>
           </div>
 

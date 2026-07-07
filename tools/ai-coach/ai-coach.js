@@ -144,6 +144,11 @@ ${g.segments.map(s => `  Km ${s.km}: ${s.pace ? formatPace(s.pace) : 'N/A'} min/
         userInfo += `\n\nPERFIL DE ELEVACION (cada km):
 ${g.segments.map(s => `  Km ${s.km}: ${(s.elevGain || 0) > 0 ? '+' : ''}${(s.elevGain || 0).toFixed(0)}m`).join('\n')}`;
       }
+      if (data.type) {
+        const types = { carrera: 'Carrera/Competencia', rodaje: 'Rodaje suave', intervalos: 'Intervalos/Series', tempo: 'Tempo/Umbral', larga: 'Rodaje largo', recuperacion: 'Recuperacion' };
+        userInfo += `\n\nTipo de sesion: ${types[data.type] || data.type}`;
+      }
+      if (data.notes) userInfo += `\nNotas del corredor: "${data.notes}"`;
     } else {
       const m = data.manual;
       userInfo = `DATOS DE LA SESION (ingresados manualmente):
@@ -158,6 +163,7 @@ ${g.segments.map(s => `  Km ${s.km}: ${(s.elevGain || 0) > 0 ? '+' : ''}${(s.ele
         const types = { carrera: 'Carrera/Competencia', rodaje: 'Rodaje suave', intervalos: 'Intervalos/Series', tempo: 'Tempo/Umbral', larga: 'Rodaje largo', recuperacion: 'Recuperacion' };
         userInfo += `\n- Tipo de sesion: ${types[m.type] || m.type}`;
       }
+      if (m.notes) userInfo += `\n- Notas del corredor: "${m.notes}"`;
     }
 
     const profileInfo = [];
@@ -308,15 +314,22 @@ ${userInfo}${profileStr}`;
     let html = '';
 
     const scoreColor = r.puntuacion >= 8 ? '#22C55E' : r.puntuacion >= 6 ? '#FBBF24' : '#FF5722';
+    const scoreLabel = r.puntuacion >= 8 ? 'Rendimiento destacado' : r.puntuacion >= 6 ? 'Rendimiento solido' : 'Rendimiento con margen de mejora';
+    const circ = 2 * Math.PI * 52;
+    const offset = circ * (1 - r.puntuacion / 10);
     html += `
       <div class="card-glass p-6 md:p-8 text-center">
-        <div class="score-ring" style="background: conic-gradient(${scoreColor} ${r.puntuacion * 10}%, rgba(255,255,255,0.03) 0); border: 4px solid ${scoreColor}40;">
-          <span class="text-4xl font-black" style="color:${scoreColor}">${r.puntuacion}</span>
-          <span class="text-[10px] font-medium text-[#64748B] mt-0.5">/ 10</span>
+        <div class="score-ring-svg">
+          <svg viewBox="0 0 130 130">
+            <circle cx="65" cy="65" r="52" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="10"/>
+            <circle cx="65" cy="65" r="52" fill="none" stroke="${scoreColor}" stroke-width="10" stroke-dasharray="${circ}" stroke-dashoffset="${offset}" stroke-linecap="round" transform="rotate(-90 65 65)" style="transition: stroke-dashoffset 1s ease"/>
+          </svg>
+          <div class="score-ring-text">
+            <span class="text-4xl font-black" style="color:${scoreColor}">${r.puntuacion}</span>
+            <span class="text-[10px] font-medium text-[#64748B] -mt-1">/ 10</span>
+          </div>
         </div>
-        <p class="text-[#64748B] text-xs mt-2 font-medium">
-          ${r.puntuacion >= 8 ? 'Rendimiento destacado' : r.puntuacion >= 6 ? 'Rendimiento solido' : 'Rendimiento con margen de mejora'}
-        </p>
+        <p class="text-[#64748B] text-xs mt-3 font-medium">${scoreLabel}</p>
       </div>
 
       <div class="card-glass p-6 md:p-8">
@@ -520,7 +533,11 @@ ${userInfo}${profileStr}`;
     let inputData;
     if (state.inputMethod === 'gpx') {
       if (!state.gpxData) { showError('Selecciona un archivo GPX primero'); return; }
-      inputData = { source: 'gpx', gpx: state.gpxData };
+      inputData = {
+        source: 'gpx', gpx: state.gpxData,
+        type: $('gpxType').value || null,
+        notes: $('gpxNotes').value.trim().slice(0, 300) || null
+      };
     } else {
       const distRaw = $('manDist').value.replace(',', '.');
       const timeStr = $('manTime').value.trim();
@@ -538,7 +555,8 @@ ${userInfo}${profileStr}`;
           dist, time: timeStr, totalMin, pace: formatPace(totalMin / dist),
           elev: $('manElev').value.replace(',', '.') || null, hr: $('manHr').value.replace(',', '.') || null,
           cad: $('manCad').value.replace(',', '.') || null, rpe: $('manRpe').value.replace(',', '.') || null,
-          type: $('manType').value || null
+          type: $('manType').value || null,
+          notes: $('manNotes').value.trim().slice(0, 300) || null
         }
       };
     }
@@ -592,9 +610,13 @@ ${userInfo}${profileStr}`;
     $('inputSection').classList.remove('hidden');
     state.gpxData = null;
     fileInfo.classList.add('hidden');
+    $('gpxExtra').classList.add('hidden');
     dropZone.classList.remove('has-file');
     $('fileInfoText').textContent = '';
     fileInput.value = '';
+    $('gpxType').value = '';
+    $('gpxNotes').value = '';
+    $('manNotes').value = '';
   }
 
   function init() {
@@ -632,6 +654,7 @@ ${userInfo}${profileStr}`;
           dropZone.classList.add('has-file');
           $('fileInfoText').textContent = `${file.name} (${state.gpxData.totalDistKm.toFixed(2)} km, ${state.gpxData.totalTimeStr}, ${state.gpxData.avgPaceStr} min/km)`;
           fileInfo.classList.remove('hidden');
+          $('gpxExtra').classList.remove('hidden');
         } catch (err) { showError('Error al leer GPX: ' + err.message); }
       };
       reader.readAsText(file);
