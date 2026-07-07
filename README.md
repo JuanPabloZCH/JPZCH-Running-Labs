@@ -57,7 +57,7 @@ Ecosistema digital gratuito para corredores. Suite de 13 herramientas web progre
     └── vo2max-calculator/      Calculadora VO2Max
 ```
 
-## Principios de Diseno
+## Principios de Diseño
 
 - Dark Mode premium por defecto (`#0B0F19`)
 - Mobile-First: los runners usan el movil en pista/gimnasio
