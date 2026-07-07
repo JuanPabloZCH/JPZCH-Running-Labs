@@ -86,151 +86,34 @@
   <div id="navbar-placeholder"></div>
 
   <section class="hero-ai pt-24 md:pt-28">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full py-14 md:py-20 relative z-10">
-      <div class="max-w-3xl mx-auto text-center">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 w-full py-16 md:py-24 relative z-10">
+      <div class="text-center">
         <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#8B5CF6]/10 border border-[#8B5CF6]/20 text-[#8B5CF6] text-xs font-semibold mb-5">
           <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
           <span>AI Coach</span>
         </div>
-        <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black leading-[1.1] tracking-tight mb-4">
+        <h1 class="text-4xl sm:text-5xl md:text-6xl font-black leading-[1.1] tracking-tight mb-4">
           <span class="text-white">AI</span>
           <span class="text-gradient-purple"> Coach</span>
         </h1>
-        <p class="text-[#94A3B8] text-sm sm:text-base md:text-lg leading-relaxed max-w-2xl mx-auto">
-          Entrenador de running con inteligencia artificial. Sube tu GPX o ingresa tus datos y recibe un análisis super detallado con observaciones, puntos de mejora y recomendaciones personalizadas.
+        <p class="text-[#94A3B8] text-base sm:text-lg leading-relaxed max-w-2xl mx-auto mb-10">
+          Entrenador de running con inteligencia artificial para analizar tus carreras, identificar patrones y recibir recomendaciones personalizadas.
         </p>
-      </div>
-    </div>
-  </section>
 
-  <section class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
-    <div id="inputSection" class="card-glass p-6 md:p-8 mb-6 fade-up glow-purple" style="animation-delay:0.1s">
-
-      <div class="flex flex-wrap gap-2 mb-6" id="inputTabs">
-        <button class="input-tab active" data-panel="gpx">
-          <span class="inline-block mr-1.5">🗺️</span> Archivo GPX
-        </button>
-        <button class="input-tab" data-panel="manual">
-          <span class="inline-block mr-1.5">📝</span> Datos manuales
-        </button>
-        <button class="input-tab" data-panel="help">
-          <span class="inline-block mr-1.5">❓</span> ¿Cómo obtener GPX?
-        </button>
-      </div>
-
-      <div class="input-panel active" id="panel-gpx">
-        <div id="fileDropZone" class="file-zone">
-          <svg class="w-10 h-10 mx-auto mb-3 text-[#8B5CF6]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
-          <p class="text-[#94A3B8] text-sm font-medium mb-1">Arrastra tu archivo GPX aquí o haz clic para seleccionar</p>
-          <p class="text-[#475569] text-xs">Archivos .gpx de tu reloj, Strava o cualquier app de running</p>
-          <input type="file" id="gpxFileInput" accept=".gpx" class="hidden">
-        </div>
-        <div id="fileInfo" class="hidden mt-3 flex items-center gap-3 p-3 rounded-xl bg-[#22C55E]/5 border border-[#22C55E]/15">
-          <svg class="w-5 h-5 text-[#22C55E] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-          <span id="fileInfoText" class="text-sm text-[#22C55E] font-medium"></span>
-        </div>
-      </div>
-
-      <div class="input-panel" id="panel-manual">
-        <div class="grid sm:grid-cols-2 gap-4">
-          <div>
-            <label class="form-label">Distancia (km)</label>
-            <input type="number" id="manDist" class="form-input" placeholder="Ej: 10" step="0.01" min="0">
+        <div class="max-w-md mx-auto card-glass p-8 md:p-10">
+          <div class="w-16 h-16 mx-auto mb-5 rounded-2xl bg-gradient-to-br from-[#8B5CF6]/20 to-[#7C3AED]/10 border border-[#8B5CF6]/20 flex items-center justify-center">
+            <svg class="w-8 h-8 text-[#8B5CF6]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>
           </div>
-          <div>
-            <label class="form-label">Tiempo (hh:mm:ss)</label>
-            <input type="text" id="manTime" class="form-input" placeholder="Ej: 0:45:30">
-          </div>
-          <div>
-            <label class="form-label">Desnivel positivo (m)</label>
-            <input type="number" id="manElev" class="form-input" placeholder="Ej: 120" step="1" min="0">
-          </div>
-          <div>
-            <label class="form-label">FC media (lpm, opcional)</label>
-            <input type="number" id="manHr" class="form-input" placeholder="Ej: 155" step="1" min="30" max="250">
-          </div>
-          <div>
-            <label class="form-label">Cadencia media (SPM, opcional)</label>
-            <input type="number" id="manCad" class="form-input" placeholder="Ej: 175" step="1" min="120" max="220">
-          </div>
-          <div>
-            <label class="form-label">Esfuerzo percibido (1-10, opcional)</label>
-            <input type="number" id="manRpe" class="form-input" placeholder="Ej: 7" step="1" min="1" max="10">
+          <h2 class="text-white font-bold text-xl mb-2">En desarrollo</h2>
+          <p class="text-[#94A3B8] text-sm leading-relaxed mb-6">
+            Esta herramienta se encuentra en fase de desarrollo. Pronto podr&aacute;s subir tus archivos GPX o ingresar tus datos manualmente y recibir an&aacute;lisis detallados con inteligencia artificial.
+          </p>
+          <div class="flex items-center justify-center gap-2 text-[#FBBF24] text-xs font-semibold">
+            <span class="w-2 h-2 rounded-full bg-[#FBBF24] animate-pulse"></span>
+            <span>Pr&oacute;ximamente disponible</span>
           </div>
         </div>
-        <div class="mt-4">
-          <label class="form-label">Tipo de sesión (opcional)</label>
-          <select id="manType" class="form-input">
-            <option value="">Selecciona...</option>
-            <option value="carrera">Carrera / Competencia</option>
-            <option value="rodaje">Rodaje suave</option>
-            <option value="intervalos">Intervalos / Series</option>
-            <option value="tempo">Tempo / Umbral</option>
-            <option value="larga">Rodaje largo</option>
-            <option value="recuperacion">Recuperación</option>
-          </select>
-        </div>
       </div>
-
-      <div class="input-panel" id="panel-help">
-        <div class="space-y-4 text-sm text-[#94A3B8] leading-relaxed">
-          <div class="p-4 rounded-xl bg-white/5 border border-white/5">
-            <h3 class="text-white font-semibold text-sm mb-2">Desde Strava</h3>
-            <ol class="list-decimal list-inside space-y-1 text-[#94A3B8]">
-              <li>Entra a tu actividad en Strava (web o app)</li>
-              <li>Haz clic en los 3 puntos (...) y selecciona "Exportar GPX"</li>
-              <li>Descarga el archivo y súbelo aquí</li>
-            </ol>
-          </div>
-          <div class="p-4 rounded-xl bg-white/5 border border-white/5">
-            <h3 class="text-white font-semibold text-sm mb-2">Desde Garmin / Coros / Suunto / Polar</h3>
-            <ol class="list-decimal list-inside space-y-1 text-[#94A3B8]">
-              <li>Conecta tu reloj al ordenador vía USB</li>
-              <li>Busca la carpeta "GARMIN" / "ACTIVITY" y copia el archivo .gpx o .fit</li>
-              <li>Si es .fit, conviértelo a GPX usando <a href="https://www.gpsvisualizer.com" target="_blank" rel="noopener" class="text-[#8B5CF6] hover:underline">GPS Visualizer</a></li>
-            </ol>
-          </div>
-          <div class="p-4 rounded-xl bg-white/5 border border-white/5">
-            <h3 class="text-white font-semibold text-sm mb-2">Desde tu celular (sin reloj)</h3>
-            <ol class="list-decimal list-inside space-y-1 text-[#94A3B8]">
-              <li>Usa apps como Strava, Nike Run Club, Adidas Running o Pumatrac</li>
-              <li>Después de correr, busca la opción "Exportar" o "Compartir como GPX"</li>
-              <li>Algunas apps permiten exportar directamente; otras requieren usar la web</li>
-              <li>Si no encuentras la opción, puedes llenar el formulario manual con tus datos aproximados</li>
-            </ol>
-          </div>
-          <p class="text-[#475569] text-xs italic">No importa si tus datos no son perfectos. El análisis se adapta a la información disponible. Un GPX completo da el mejor resultado, pero el formulario manual también entrega observaciones valiosas.</p>
-        </div>
-      </div>
-
-      <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-white/5">
-        <p class="text-[#64748B] text-xs flex items-center gap-2">
-          <svg class="w-3.5 h-3.5 text-[#22C55E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
-          <span>Sin API key requerida &mdash; funciona autom&aacute;ticamente</span>
-        </p>
-        <button id="analyzeBtn" class="px-8 py-3 rounded-xl font-bold text-sm text-white bg-gradient-to-r from-[#8B5CF6] to-[#7C3AED] hover:from-[#7C3AED] hover:to-[#6D28D9] transition-all duration-300 shrink-0" style="box-shadow: 0 4px 20px rgba(139,92,246,0.25);">
-          Analizar carrera
-        </button>
-      </div>
-    </div>
-
-    <div id="loadingSection" class="hidden card-glass p-8 text-center fade-up" style="animation-delay:0.1s">
-      <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-[#8B5CF6]/10 border border-[#8B5CF6]/20 flex items-center justify-center pulsate">
-        <svg class="w-8 h-8 text-[#8B5CF6]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
-      </div>
-      <h3 class="text-white font-bold text-lg mb-2">Analizando tu carrera<span class="loading-dots"></span></h3>
-      <p class="text-[#64748B] text-sm">La IA está procesando tus datos. Esto puede tomar unos segundos...</p>
-    </div>
-
-    <div id="resultSection" class="hidden space-y-5 fade-up" style="animation-delay:0.15s"></div>
-
-    <div id="errorSection" class="hidden card-glass p-6 text-center fade-up" style="animation-delay:0.1s">
-      <div class="w-14 h-14 mx-auto mb-3 rounded-2xl bg-[#FF5722]/10 border border-[#FF5722]/20 flex items-center justify-center">
-        <svg class="w-7 h-7 text-[#FF5722]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4.5c-.77-.833-2.694-.833-3.464 0L3.34 16.5c-.77.833.192 2.5 1.732 2.5z"/></svg>
-      </div>
-      <h3 class="text-white font-bold text-base mb-1">Error al analizar</h3>
-      <p id="errorMsg" class="text-[#FF5722] text-sm"></p>
-      <button id="retryBtn" class="mt-4 px-6 py-2.5 rounded-xl font-bold text-sm text-white bg-[#8B5CF6] hover:bg-[#7C3AED] transition-all">Intentar de nuevo</button>
     </div>
   </section>
 
