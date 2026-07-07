@@ -522,21 +522,22 @@ ${userInfo}${profileStr}`;
       if (!state.gpxData) { showError('Selecciona un archivo GPX primero'); return; }
       inputData = { source: 'gpx', gpx: state.gpxData };
     } else {
-      const dist = parseFloat($('manDist').value);
+      const distRaw = $('manDist').value.replace(',', '.');
       const timeStr = $('manTime').value.trim();
-      if (!dist || dist <= 0) { showError('Ingresa una distancia valida'); return; }
-      if (!timeStr) { showError('Ingresa un tiempo valido'); return; }
-      const parts = timeStr.split(':').map(s => parseFloat(s) || 0);
+      const dist = parseFloat(distRaw);
+      if (!dist || dist <= 0) { showError('Ingresa una distancia valida (ej: 10.5 km)'); return; }
+      if (!timeStr) { showError('Ingresa un tiempo valido (ej: 45:30)'); return; }
+      const parts = timeStr.split(':').map(s => parseFloat(s.replace(',', '.')) || 0);
       let totalMin = 0;
       if (parts.length === 3) totalMin = parts[0] * 60 + parts[1] + parts[2] / 60;
       else if (parts.length === 2) totalMin = parts[0] + parts[1] / 60;
-      else { showError('Formato de tiempo invalido. Usa hh:mm:ss o mm:ss'); return; }
+      else { showError('Formato de tiempo invalido. Usa hh:mm:ss o mm:ss (ej: 1:45:30)'); return; }
       inputData = {
         source: 'manual',
         manual: {
           dist, time: timeStr, totalMin, pace: formatPace(totalMin / dist),
-          elev: $('manElev').value || null, hr: $('manHr').value || null,
-          cad: $('manCad').value || null, rpe: $('manRpe').value || null,
+          elev: $('manElev').value.replace(',', '.') || null, hr: $('manHr').value.replace(',', '.') || null,
+          cad: $('manCad').value.replace(',', '.') || null, rpe: $('manRpe').value.replace(',', '.') || null,
           type: $('manType').value || null
         }
       };
