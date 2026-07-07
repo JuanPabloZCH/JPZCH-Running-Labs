@@ -23,7 +23,7 @@ const JPZCH_NAVBAR = `
             <svg class="w-3.5 h-3.5 transition-transform duration-300 group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
           </button>
           <div class="nav-dropdown absolute top-full left-0 w-64 opacity-0 invisible group-hover:opacity-100 group-hover:visible">
-            <div class="bg-[#131A2B]/95 backdrop-blur-xl rounded-xl border border-white/10 p-2 shadow-2xl shadow-black/50">
+            <div class="bg-[#131A2B]/95 backdrop-blur-xl rounded-xl border border-white/10 p-2 shadow-2xl shadow-black/50 max-h-[70vh] overflow-y-auto">
               <a href="/JPZCH-Running-Labs/tools/ai-coach/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-white hover:bg-white/5 transition-colors">
                 <span class="w-2 h-2 rounded-full bg-[#CCFF00] shrink-0"></span>
                 <span class="font-medium">AI Coach</span>
@@ -99,7 +99,7 @@ const JPZCH_NAVBAR = `
             <svg class="w-3.5 h-3.5 transition-transform duration-300 group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
           </button>
           <div class="nav-dropdown absolute top-full left-0 w-64 opacity-0 invisible group-hover:opacity-100 group-hover:visible">
-            <div class="bg-[#131A2B]/95 backdrop-blur-xl rounded-xl border border-white/10 p-2 shadow-2xl shadow-black/50">
+            <div class="bg-[#131A2B]/95 backdrop-blur-xl rounded-xl border border-white/10 p-2 shadow-2xl shadow-black/50 max-h-[70vh] overflow-y-auto">
               <div class="px-3 py-2 text-[11px] font-medium text-[#475569] uppercase tracking-wider">Información</div>
               <a href="/JPZCH-Running-Labs/recursos/tabla-de-ritmos/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#94A3B8] hover:text-white hover:bg-white/5 transition-colors">
                 <svg class="w-4 h-4 text-[#CCFF00] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
@@ -134,7 +134,7 @@ const JPZCH_NAVBAR = `
             <svg class="w-3.5 h-3.5 transition-transform duration-300 group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
           </button>
           <div class="nav-dropdown absolute top-full left-0 w-52 opacity-0 invisible group-hover:opacity-100 group-hover:visible">
-            <div class="bg-[#131A2B]/95 backdrop-blur-xl rounded-xl border border-white/10 p-2 shadow-2xl shadow-black/50">
+            <div class="bg-[#131A2B]/95 backdrop-blur-xl rounded-xl border border-white/10 p-2 shadow-2xl shadow-black/50 max-h-[70vh] overflow-y-auto">
               <a href="/JPZCH-Running-Labs/acerca/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#94A3B8] hover:text-white hover:bg-white/5 transition-colors">
                 <svg class="w-4 h-4 text-[#CCFF00] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                 Acerca de
@@ -173,8 +173,9 @@ const JPZCH_NAVBAR = `
     </div>
   </div>
 
-  <div id="mobileMenu" class="md:hidden hidden px-4 pb-4 pt-2 relative z-[101]">
-    <div class="bg-[#131A2B] rounded-2xl border border-white/10 overflow-hidden">
+  <div id="mobileMenuOverlay" class="md:hidden hidden fixed inset-0 bg-black/60 z-[100]"></div>
+  <div id="mobileMenu" class="md:hidden hidden fixed inset-x-0 top-16 bottom-0 z-[101] overflow-y-auto">
+    <div class="bg-[#131A2B] border-t border-white/10 overflow-y-auto pb-8">
       <a href="/JPZCH-Running-Labs/" class="flex items-center gap-3 px-4 py-3 text-white hover:bg-white/5 transition-colors">
         <svg class="w-5 h-5 text-[#CCFF00]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
         <span class="font-medium">Inicio</span>

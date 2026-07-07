@@ -1,4 +1,4 @@
-const CACHE = 'jpzch-v2';
+const CACHE = 'jpzch-v3';
 
 // URLs relativas al SW (se resuelven automáticamente para local y GitHub Pages)
 const PRECACHE_URLS = [
