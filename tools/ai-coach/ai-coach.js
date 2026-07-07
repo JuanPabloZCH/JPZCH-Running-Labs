@@ -1,28 +1,24 @@
 (function() {
   'use strict';
 
-  /* ── STATE ── */
+  const PROXY_URL = 'https://ai-coach-proxy.jpzch.workers.dev';
+
   let state = {
     inputMethod: 'gpx',
     gpxData: null,
-    apiKey: localStorage.getItem('gemini_api_key') || '',
     analyzing: false
   };
 
-  /* ── DOM refs ── */
   const $ = id => document.getElementById(id);
   const fileInput = $('gpxFileInput');
   const dropZone = $('fileDropZone');
   const fileInfo = $('fileInfo');
   const analyzeBtn = $('analyzeBtn');
-  const apiKeyInput = $('apiKeyInput');
-  const keyStatus = $('keyStatus');
   const loadingSection = $('loadingSection');
   const resultSection = $('resultSection');
   const errorSection = $('errorSection');
   const errorMsg = $('errorMsg');
 
-  /* ── HAVERSINE (distancia entre coordenadas) ── */
   function haversine(lat1, lon1, lat2, lon2) {
     const R = 6371000;
     const toRad = deg => deg * Math.PI / 180;
@@ -32,7 +28,6 @@
     return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   }
 
-  /* ── GPX PARSER ── */
   function parseGPX(xmlText) {
     const parser = new DOMParser();
     const xml = parser.parseFromString(xmlText, 'text/xml');
@@ -129,7 +124,6 @@
     return `${m}:${String(s).padStart(2,'0')}`;
   }
 
-  /* ── BUILD PROMPT ── */
   function buildPrompt(data) {
     const profile = JPZCH_Store ? JPZCH_Store.getProfile() : {};
     let userInfo = '';
@@ -180,7 +174,7 @@ ${g.segments.map(s => `  Km ${s.km}: ${(s.elevGain || 0) > 0 ? '+' : ''}${(s.ele
 
     const profileStr = profileInfo.length ? `\n\nPERFIL DEL CORREDOR:\n${profileInfo.join('\n')}` : '';
 
-    const prompt = `Eres un entrenador de running con 30 anos de experiencia entrenando desde corredores populares hasta atletas de elite. Tu especialidad es el analisis tecnico, fisiologico y estrategico profundo de sesiones de entrenamiento y carreras. Eres metodico, detallista y tienes un enfoque cientifico basado en evidencia.
+    return `Eres un entrenador de running con 30 anos de experiencia entrenando desde corredores populares hasta atletas de elite. Tu especialidad es el analisis tecnico, fisiologico y estrategico profundo de sesiones de entrenamiento y carreras. Eres metodico, detallista y tienes un enfoque cientifico basado en evidencia.
 
 INSTRUCCIONES:
 - Analiza los datos proporcionados de forma SUPER DETALLADA.
@@ -233,30 +227,17 @@ Debes responder UNICAMENTE con un objeto JSON valido. Sin markdown, sin texto ad
 
 DATOS A ANALIZAR:
 ${userInfo}${profileStr}`;
-
-    return prompt;
   }
 
-  /* ── GEMINI API CALL ── */
   async function callGemini(prompt) {
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${state.apiKey}`;
-    const res = await fetch(url, {
+    const res = await fetch(PROXY_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        contents: [{ parts: [{ text: prompt }] }],
-        generationConfig: {
-          temperature: 0.3,
-          maxOutputTokens: 4096,
-          topK: 1,
-          topP: 1
-        }
-      })
+      body: JSON.stringify({ prompt })
     });
     if (!res.ok) {
-      const err = await res.text();
-      if (res.status === 403 || res.status === 400) throw new Error('API Key invalida o sin permisos. Verifica tu key en aistudio.google.com');
-      throw new Error(`Error de API: ${err.slice(0, 200)}`);
+      const err = await res.json();
+      throw new Error(err.error || 'Error al conectar con el AI Coach');
     }
     const data = await res.json();
     const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
@@ -264,12 +245,10 @@ ${userInfo}${profileStr}`;
     return text;
   }
 
-  /* ── RENDER DASHBOARD ── */
   function renderDashboard(result, inputData) {
     const r = result;
     let html = '';
 
-    // Score + Summary
     const scoreColor = r.puntuacion >= 8 ? '#22C55E' : r.puntuacion >= 6 ? '#FBBF24' : '#FF5722';
     html += `
       <div class="card-glass p-6 md:p-8 text-center">
@@ -287,7 +266,6 @@ ${userInfo}${profileStr}`;
         <p class="text-[#94A3B8] text-sm leading-relaxed">${r.resumen}</p>
       </div>`;
 
-    // Quick stats
     if (inputData.source === 'gpx') {
       const g = inputData.gpx;
       html += `
@@ -310,7 +288,6 @@ ${userInfo}${profileStr}`;
         </div>
       </div>`;
 
-      // Mini pace chart
       const paces = g.segments.map(s => s.pace).filter(p => p);
       if (paces.length) {
         const maxPace = Math.max(...paces);
@@ -341,7 +318,6 @@ ${userInfo}${profileStr}`;
         </div>`;
       }
 
-      // Mini elevation chart
       if (g.segments.some(s => s.elevGain !== null)) {
         const elevs = g.segments.map(s => s.elevGain || 0);
         const maxElev = Math.max(...elevs.map(Math.abs));
@@ -386,7 +362,6 @@ ${userInfo}${profileStr}`;
       </div>`;
     }
 
-    // Analysis cards
     html += `
       <div class="card-glass p-6 md:p-8">
         <h3 class="text-white font-bold text-sm mb-4">Analisis de Ritmo</h3>
@@ -399,16 +374,13 @@ ${userInfo}${profileStr}`;
     if (r.analisisElevacion && r.analisisElevacion.disponible) {
       html += `<div class="card-glass p-6 md:p-8"><h3 class="text-white font-bold text-sm mb-3">Estrategia de Elevacion</h3><p class="text-[#94A3B8] text-sm leading-relaxed">${r.analisisElevacion.texto}</p></div>`;
     }
-
     if (r.eficiencia && r.eficiencia.disponible) {
       html += `<div class="card-glass p-6 md:p-8"><h3 class="text-white font-bold text-sm mb-3">Eficiencia y Biomecanica</h3><p class="text-[#94A3B8] text-sm leading-relaxed">${r.eficiencia.texto}</p></div>`;
     }
-
     if (r.frecuenciaCardiaca && r.frecuenciaCardiaca.disponible) {
       html += `<div class="card-glass p-6 md:p-8"><h3 class="text-white font-bold text-sm mb-3">Frecuencia Cardiaca</h3><p class="text-[#94A3B8] text-sm leading-relaxed">${r.frecuenciaCardiaca.texto}</p></div>`;
     }
 
-    // Strengths & Improvements
     html += `
       <div class="grid md:grid-cols-2 gap-4">
         <div class="an-card green">
@@ -419,16 +391,13 @@ ${userInfo}${profileStr}`;
           <h3> Puntos a Mejorar</h3>
           <ul>${r.puntosMejora.map(p => `<li>${p}</li>`).join('')}</ul>
         </div>
-      </div>`;
+      </div>
 
-    // Recommendations
-    html += `
       <div class="an-card purple">
         <h3> Recomendaciones Detalladas</h3>
         <ul>${r.recomendaciones.map(p => `<li>${p}</li>`).join('')}</ul>
       </div>`;
 
-    // Next session
     if (r.proximaSession) {
       html += `
       <div class="an-card cyan">
@@ -437,7 +406,6 @@ ${userInfo}${profileStr}`;
       </div>`;
     }
 
-    // New analysis button
     html += `
       <div class="text-center pt-2">
         <button id="newAnalysisBtn" class="px-6 py-2.5 rounded-xl font-bold text-sm text-white bg-[#8B5CF6] hover:bg-[#7C3AED] transition-all">Nuevo analisis</button>
@@ -448,10 +416,8 @@ ${userInfo}${profileStr}`;
     resultSection.querySelector('#newAnalysisBtn').addEventListener('click', () => resetUI());
   }
 
-  /* ── MAIN ANALYZE ── */
   async function analyze() {
     if (state.analyzing) return;
-    if (!state.apiKey) { showError('Guarda tu API key de Gemini primero'); return; }
 
     let inputData;
     if (state.inputMethod === 'gpx') {
@@ -470,14 +436,9 @@ ${userInfo}${profileStr}`;
       inputData = {
         source: 'manual',
         manual: {
-          dist,
-          time: timeStr,
-          totalMin,
-          pace: formatPace(totalMin / dist),
-          elev: $('manElev').value || null,
-          hr: $('manHr').value || null,
-          cad: $('manCad').value || null,
-          rpe: $('manRpe').value || null,
+          dist, time: timeStr, totalMin, pace: formatPace(totalMin / dist),
+          elev: $('manElev').value || null, hr: $('manHr').value || null,
+          cad: $('manCad').value || null, rpe: $('manRpe').value || null,
           type: $('manType').value || null
         }
       };
@@ -495,14 +456,12 @@ ${userInfo}${profileStr}`;
       const prompt = buildPrompt(inputData);
       const raw = await callGemini(prompt);
 
-      // Parse JSON from response
       let jsonStr = raw.trim();
       if (jsonStr.startsWith('```')) {
         jsonStr = jsonStr.replace(/^```(?:json)?\s*/, '').replace(/\s*```$/, '');
       }
       const result = JSON.parse(jsonStr);
 
-      // Validate
       if (!result.puntuacion || !result.resumen || !result.puntosFuertes) {
         throw new Error('La respuesta no tiene la estructura esperada');
       }
@@ -519,7 +478,6 @@ ${userInfo}${profileStr}`;
     }
   }
 
-  /* ── UI HELPERS ── */
   function showError(msg) {
     errorMsg.textContent = msg;
     errorSection.classList.remove('hidden');
@@ -540,30 +498,7 @@ ${userInfo}${profileStr}`;
     fileInput.value = '';
   }
 
-  /* ── INIT ── */
   function init() {
-    // API Key
-    if (state.apiKey) {
-      apiKeyInput.value = state.apiKey;
-      keyStatus.textContent = 'Key guardada';
-      keyStatus.className = 'text-[#22C55E] text-[11px] mt-1';
-      analyzeBtn.disabled = false;
-    } else {
-      keyStatus.textContent = 'Necesitas una API key gratis de Gemini para usar el AI Coach';
-      keyStatus.className = 'text-[#FF5722] text-[11px] mt-1';
-    }
-
-    // Save API Key
-    $('saveKeyBtn').addEventListener('click', () => {
-      const key = apiKeyInput.value.trim();
-      if (!key) { keyStatus.textContent = 'Ingresa una API key'; keyStatus.className = 'text-[#FF5722] text-[11px] mt-1'; return; }
-      localStorage.setItem('gemini_api_key', key);
-      state.apiKey = key;
-      keyStatus.textContent = 'Key guardada correctamente';
-      keyStatus.className = 'text-[#22C55E] text-[11px] mt-1';
-      analyzeBtn.disabled = false;
-    });
-
     // Input tabs
     document.querySelectorAll('.input-tab').forEach(tab => {
       tab.addEventListener('click', () => {
@@ -580,13 +515,8 @@ ${userInfo}${profileStr}`;
     fileInput.addEventListener('change', e => {
       if (e.target.files[0]) handleFile(e.target.files[0]);
     });
-
     dropZone.addEventListener('click', () => fileInput.click());
-
-    dropZone.addEventListener('dragover', e => {
-      e.preventDefault();
-      dropZone.classList.add('dragover');
-    });
+    dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('dragover'); });
     dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
     dropZone.addEventListener('drop', e => {
       e.preventDefault();
@@ -595,11 +525,7 @@ ${userInfo}${profileStr}`;
     });
 
     function handleFile(file) {
-      if (!file.name.endsWith('.gpx')) {
-        keyStatus.textContent = 'Solo archivos .gpx son soportados';
-        keyStatus.className = 'text-[#FF5722] text-[11px] mt-1';
-        return;
-      }
+      if (!file.name.endsWith('.gpx')) { showError('Solo archivos .gpx son soportados'); return; }
       const reader = new FileReader();
       reader.onload = e => {
         try {
@@ -607,20 +533,12 @@ ${userInfo}${profileStr}`;
           dropZone.classList.add('has-file');
           $('fileInfoText').textContent = `${file.name} (${state.gpxData.totalDistKm.toFixed(2)} km, ${state.gpxData.totalTimeStr}, ${state.gpxData.avgPaceStr} min/km)`;
           fileInfo.classList.remove('hidden');
-          keyStatus.textContent = 'GPX cargado correctamente';
-          keyStatus.className = 'text-[#22C55E] text-[11px] mt-1';
-        } catch (err) {
-          keyStatus.textContent = `Error al leer GPX: ${err.message}`;
-          keyStatus.className = 'text-[#FF5722] text-[11px] mt-1';
-        }
+        } catch (err) { showError('Error al leer GPX: ' + err.message); }
       };
       reader.readAsText(file);
     }
 
-    // Analyze button
     analyzeBtn.addEventListener('click', analyze);
-
-    // Retry button
     $('retryBtn').addEventListener('click', analyze);
   }
 
