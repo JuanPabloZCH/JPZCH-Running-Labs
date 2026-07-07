@@ -51,20 +51,32 @@ const JPZCH_Components = (() => {
     const mobileOverlay = document.getElementById('mobileMenuOverlay');
 
     let menuOpen = false;
+    mobileMenu.style.display = 'none';
+    if (mobileOverlay) mobileOverlay.style.display = 'none';
 
-    function toggleMenu(close) {
-      menuOpen = close === true ? false : close === false ? true : !menuOpen;
-      mobileMenu.classList.toggle('hidden', !menuOpen);
-      if (mobileOverlay) mobileOverlay.classList.toggle('hidden', !menuOpen);
-      document.body.style.overflow = menuOpen ? 'hidden' : '';
-      menuBtn.innerHTML = menuOpen
-        ? '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>'
-        : '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>';
+    function showMenu() {
+      menuOpen = true;
+      mobileMenu.style.display = 'block';
+      if (mobileOverlay) mobileOverlay.style.display = 'block';
+      document.body.style.overflow = 'hidden';
+      menuBtn.innerHTML = '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>';
+    }
+
+    function hideMenu() {
+      menuOpen = false;
+      mobileMenu.style.display = 'none';
+      if (mobileOverlay) mobileOverlay.style.display = 'none';
+      document.body.style.overflow = '';
+      menuBtn.innerHTML = '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>';
+    }
+
+    function toggleMenu() {
+      if (menuOpen) hideMenu(); else showMenu();
     }
 
     if (menuBtn && mobileMenu) {
-      menuBtn.addEventListener('click', (e) => { e.stopPropagation(); toggleMenu(); });
-      if (mobileOverlay) mobileOverlay.addEventListener('click', () => toggleMenu(true));
+      menuBtn.addEventListener('click', toggleMenu);
+      if (mobileOverlay) mobileOverlay.addEventListener('click', hideMenu);
     }
 
     const profileBtns = document.querySelectorAll('#profileBtn, #profileBtnMobile');
