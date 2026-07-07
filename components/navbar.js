@@ -27,6 +27,7 @@ const JPZCH_NAVBAR = `
               <a href="/JPZCH-Running-Labs/tools/ai-coach/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-white hover:bg-white/5 transition-colors">
                 <span class="w-2 h-2 rounded-full bg-[#CCFF00] shrink-0"></span>
                 <span class="font-medium">AI Coach</span>
+                <span class="ml-auto text-[10px] font-semibold text-[#22C55E] bg-[#22C55E]/10 px-2 py-0.5 rounded-full">Disponible</span>
               </a>
               <a href="/JPZCH-Running-Labs/tools/cadence-analyzer/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-white hover:bg-white/5 transition-colors">
                 <span class="w-2 h-2 rounded-full bg-[#CCFF00] shrink-0"></span>
@@ -191,6 +192,7 @@ const JPZCH_NAVBAR = `
           <a href="/JPZCH-Running-Labs/tools/ai-coach/" class="flex items-center gap-3 px-8 py-3 text-white hover:bg-white/5 transition-colors">
             <span class="w-2 h-2 rounded-full bg-[#CCFF00] shrink-0"></span>
             <span class="text-sm">AI Coach</span>
+            <span class="ml-auto text-[10px] font-semibold text-[#22C55E] bg-[#22C55E]/10 px-2 py-0.5 rounded-full">Disponible</span>
           </a>
           <a href="/JPZCH-Running-Labs/tools/cadence-analyzer/" class="flex items-center gap-3 px-8 py-3 text-white hover:bg-white/5 transition-colors">
             <span class="w-2 h-2 rounded-full bg-[#CCFF00] shrink-0"></span>
