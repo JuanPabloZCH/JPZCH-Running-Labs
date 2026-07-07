@@ -3,11 +3,12 @@ const JPZCH_App = (() => {
     {
       id: 'ai-coach',
       name: 'AI Coach',
-      description: 'Analiza tus carreras con inteligencia artificial. Sube un GPX o ingresa datos manualmente y recibe un análisis detallado con recomendaciones personalizadas entrenador.',
+      description: 'Analiza tus carreras con inteligencia artificial. Sube un GPX o ingresa datos manualmente y recibe un análisis detallado con recomendaciones personalizadas.',
       category: 'analizadores',
       icon: 'sparkles',
-      status: 'available',
-      accent: '#8B5CF6',
+      status: 'development',
+      statusBadge: 'En desarrollo',
+      accent: '#CCFF00',
       url: '/tools/ai-coach/',
       features: ['GPX', 'Manual', 'IA', 'Dashboard']
     },
@@ -269,7 +270,7 @@ const JPZCH_App = (() => {
     sorted.forEach((tool, i) => {
       const card = document.getElementById(`card-${tool.id}`);
       if (!card) return;
-      if (tool.status === 'available') {
+      if (tool.status === 'available' || tool.status === 'development') {
         card.addEventListener('click', () => {
           window.location.href = toolUrl(tool);
         });
@@ -279,11 +280,13 @@ const JPZCH_App = (() => {
 
   function renderCard(tool, index) {
     const isAvailable = tool.status === 'available';
+    const isClickable = tool.status === 'available' || tool.status === 'development';
+    const badgeText = tool.statusBadge || (isAvailable ? 'Disponible' : 'Próximamente');
     const statusClass = isAvailable ? 'available' : 'coming-soon';
     return `
-      <div id="card-${tool.id}" class="tool-card ${!isAvailable ? 'coming-soon' : ''} group animate-fade-in-up" style="animation-delay: ${index * 60}ms">
+      <div id="card-${tool.id}" class="tool-card ${!isClickable ? 'coming-soon' : ''} group animate-fade-in-up" style="animation-delay: ${index * 60}ms">
         <div class="flex items-start gap-4 mb-4">
-          <div class="tool-card-icon" style="background: ${isAvailable ? `${tool.accent}15` : 'rgba(255,255,255,0.03)'}; color: ${isAvailable ? tool.accent : '#475569'}; border: 1px solid ${isAvailable ? `${tool.accent}20` : 'rgba(255,255,255,0.04)'}">
+          <div class="tool-card-icon" style="background: ${isAvailable || tool.status === 'development' ? `${tool.accent}15` : 'rgba(255,255,255,0.03)'}; color: ${isAvailable || tool.status === 'development' ? tool.accent : '#475569'}; border: 1px solid ${isAvailable || tool.status === 'development' ? `${tool.accent}20` : 'rgba(255,255,255,0.04)'}">
             ${TOOL_ICONS[tool.icon] || TOOL_ICONS.timer}
           </div>
           <div class="flex-1 min-w-0">
@@ -295,17 +298,17 @@ const JPZCH_App = (() => {
         </div>
         <div class="flex items-center justify-between">
           <div class="flex flex-wrap gap-1.5">
-            ${tool.features.map(f => `<span class="text-[11px] font-medium px-2 py-0.5 rounded-md" style="background: ${isAvailable ? `${tool.accent}10` : 'rgba(255,255,255,0.03)'}; color: ${isAvailable ? tool.accent : '#475569'}">${f}</span>`).join('')}
+            ${tool.features.map(f => `<span class="text-[11px] font-medium px-2 py-0.5 rounded-md" style="background: ${isAvailable || tool.status === 'development' ? `${tool.accent}10` : 'rgba(255,255,255,0.03)'}; color: ${isAvailable || tool.status === 'development' ? tool.accent : '#475569'}">${f}</span>`).join('')}
           </div>
           <span class="status-badge ${statusClass} flex-shrink-0 ml-2">
             <span class="pulse-dot"></span>
-            ${isAvailable ? 'Disponible' : 'Próximamente'}
+            ${badgeText}
           </span>
         </div>
-        ${isAvailable ? `
+        ${isClickable ? `
           <div class="mt-4 pt-3 border-t border-white/5 flex items-center justify-end">
             <span class="text-xs font-medium text-[${tool.accent}] flex items-center gap-1">
-              Abrir
+              ${tool.status === 'development' ? 'Ver proyecto' : 'Abrir'}
               <svg class="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
             </span>
           </div>
