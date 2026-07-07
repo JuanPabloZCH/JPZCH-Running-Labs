@@ -50,18 +50,26 @@ const JPZCH_Components = (() => {
     const mobileMenu = document.getElementById('mobileMenu');
     const mobileOverlay = document.getElementById('mobileMenuOverlay');
 
-    function toggleMenu(force) {
-      const isOpen = force !== undefined ? force : mobileMenu.classList.contains('hidden');
-      mobileMenu.classList.toggle('hidden', isOpen);
-      if (mobileOverlay) mobileOverlay.classList.toggle('hidden', isOpen);
-      document.body.style.overflow = isOpen ? '' : 'hidden';
+    function toggleMenu(forceClose) {
+      if (forceClose === true) {
+        mobileMenu.classList.add('hidden');
+        if (mobileOverlay) mobileOverlay.classList.add('hidden');
+      } else if (forceClose === false) {
+        mobileMenu.classList.remove('hidden');
+        if (mobileOverlay) mobileOverlay.classList.remove('hidden');
+      } else {
+        mobileMenu.classList.toggle('hidden');
+        if (mobileOverlay) mobileOverlay.classList.toggle('hidden');
+      }
+      const isOpen = !mobileMenu.classList.contains('hidden');
+      document.body.style.overflow = isOpen ? 'hidden' : '';
       menuBtn.innerHTML = isOpen
-        ? '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>'
-        : '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>';
+        ? '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>'
+        : '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>';
     }
 
     if (menuBtn && mobileMenu) {
-      menuBtn.addEventListener('click', () => toggleMenu(false));
+      menuBtn.addEventListener('click', () => toggleMenu());
       if (mobileOverlay) mobileOverlay.addEventListener('click', () => toggleMenu(true));
     }
 

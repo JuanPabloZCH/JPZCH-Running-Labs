@@ -183,6 +183,15 @@ const JPZCH_App = (() => {
     setupSearchEvents();
     setupGsapAnimations();
     loadUserGreeting();
+    setupScrollIndicator();
+  }
+
+  function setupScrollIndicator() {
+    const el = document.getElementById('heroScrollIndicator');
+    if (!el) return;
+    const hide = () => { el.classList.add('opacity-0', 'pointer-events-none'); };
+    const onScroll = () => { if (window.scrollY > 10) { hide(); window.removeEventListener('scroll', onScroll); } };
+    window.addEventListener('scroll', onScroll, { passive: true });
   }
 
   /* ── Hero Particles ── */
