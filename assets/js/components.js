@@ -50,6 +50,8 @@ const JPZCH_Components = (() => {
     const mobileMenu = document.getElementById('mobileMenu');
     const mobileOverlay = document.getElementById('mobileMenuOverlay');
 
+    if (!menuBtn || !mobileMenu) return;
+
     let menuOpen = false;
     mobileMenu.style.display = 'none';
     if (mobileOverlay) mobileOverlay.style.display = 'none';
@@ -74,10 +76,9 @@ const JPZCH_Components = (() => {
       if (menuOpen) hideMenu(); else showMenu();
     }
 
-    if (menuBtn && mobileMenu) {
-      menuBtn.addEventListener('click', toggleMenu);
-      if (mobileOverlay) mobileOverlay.addEventListener('click', hideMenu);
-    }
+    menuBtn.addEventListener('click', toggleMenu);
+    menuBtn.addEventListener('touchstart', function(e) { e.preventDefault(); toggleMenu(); }, { passive: false });
+    if (mobileOverlay) mobileOverlay.addEventListener('click', hideMenu);
 
     const profileBtns = document.querySelectorAll('#profileBtn, #profileBtnMobile');
     profileBtns.forEach(btn => {
