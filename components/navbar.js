@@ -173,8 +173,10 @@ const JPZCH_NAVBAR = `
       </div>
     </div>
   </div>
+  <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
+</nav>
 
-  <div id="mobileMenuOverlay" class="md:hidden hidden fixed inset-0 bg-black/60 z-[100]"></div>
+<div id="mobileMenuOverlay" class="md:hidden hidden fixed inset-0 bg-black/60 z-[100]"></div>
   <div id="mobileMenu" class="md:hidden hidden fixed inset-x-0 top-16 bottom-0 z-[101] overflow-y-auto">
     <div class="bg-[#131A2B] border-t border-white/10 overflow-y-auto pb-8">
       <a href="/JPZCH-Running-Labs/" class="flex items-center gap-3 px-4 py-3 text-white hover:bg-white/5 transition-colors">
@@ -300,7 +302,4 @@ const JPZCH_NAVBAR = `
       </div>
     </div>
   </div>
-
-  <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
-</nav>
 `;
